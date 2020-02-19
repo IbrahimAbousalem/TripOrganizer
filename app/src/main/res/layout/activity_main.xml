@@ -60,13 +60,13 @@
         android:layout_marginBottom="@dimen/d_20"
         >
         <ImageView
-            android:id="@+id/fbBtn"
+            android:id="@+id/facebookImageView"
             android:src="@drawable/ic_fb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/d_18"/>
         <ImageView
-            android:id="@+id/googleBtn"
+            android:id="@+id/googleImageView"
             android:src="@drawable/ic_google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

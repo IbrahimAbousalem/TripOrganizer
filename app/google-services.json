@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "527957523613-q59vmihroqldioiv6gbhl4qdpjg4jbeh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iti.mobile.triporganizer",
+            "certificate_hash": "351c34b0087c8229f73508e474719bfc85449af1"
+          }
+        },
+        {
           "client_id": "527957523613-lp3ajg58rgmesat45v289e6g68tm5pr8.apps.googleusercontent.com",
           "client_type": 3
         }
