@@ -3,16 +3,16 @@ package com.iti.mobile.triporganizer.data.entities;
 public class User {
 
     private String userName;
-    private String profilePic;
+    private String profilePicUrl;
     private String email;
     private String id;
 
     public User() {
     }
 
-    public User(String userName, String profilePic, String email, String id) {
+    public User(String userName, String profilePicUrl, String email, String id) {
         this.userName = userName;
-        this.profilePic = profilePic;
+        this.profilePicUrl = profilePicUrl;
         this.email = email;
         this.id = id;
     }
@@ -25,12 +25,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilePicUrl() {
+        return profilePicUrl;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
     }
 
     public String getEmail() {

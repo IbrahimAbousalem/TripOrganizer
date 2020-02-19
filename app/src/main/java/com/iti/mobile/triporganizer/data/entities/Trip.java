@@ -1,19 +1,23 @@
 package com.iti.mobile.triporganizer.data.entities;
 
+import java.util.Date;
+
 public class Trip {
 
     private String id;
     private String userId;
-    private String startPoint;
-    private String endPoint;
-    private String date;
+    private long startPoint;
+    private long endPoint;
+    private Date date;
     private String type;
     private String status;
+    private Trip roundTrip;
+    private boolean isRound;
 
     public Trip() {
     }
 
-    public Trip(String id, String userId, String startPoint, String endPoint, String date, String type, String status) {
+    public Trip(String id, String userId, long startPoint, long endPoint, Date date, String type, String status, Trip roundTrip, boolean isRound) {
         this.id = id;
         this.userId = userId;
         this.startPoint = startPoint;
@@ -21,6 +25,8 @@ public class Trip {
         this.date = date;
         this.type = type;
         this.status = status;
+        this.roundTrip = roundTrip;
+        this.isRound = isRound;
     }
 
     public String getId() {
@@ -39,27 +45,27 @@ public class Trip {
         this.userId = userId;
     }
 
-    public String getStartPoint() {
+    public long getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(String startPoint) {
+    public void setStartPoint(long startPoint) {
         this.startPoint = startPoint;
     }
 
-    public String getEndPoint() {
+    public long getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(String endPoint) {
+    public void setEndPoint(long endPoint) {
         this.endPoint = endPoint;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -77,5 +83,21 @@ public class Trip {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Trip getRoundTrip() {
+        return roundTrip;
+    }
+
+    public void setRoundTrip(Trip roundTrip) {
+        this.roundTrip = roundTrip;
+    }
+
+    public boolean isRound() {
+        return isRound;
+    }
+
+    public void setRound(boolean round) {
+        isRound = round;
     }
 }

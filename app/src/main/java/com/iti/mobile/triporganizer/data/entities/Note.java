@@ -1,7 +1,6 @@
 package com.iti.mobile.triporganizer.data.entities;
 
 public class Note {
-
     private String message;
     private String tripId;
     private String status;
