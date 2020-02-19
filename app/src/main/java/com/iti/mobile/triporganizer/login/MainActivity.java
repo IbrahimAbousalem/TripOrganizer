@@ -1,5 +1,6 @@
 package com.iti.mobile.triporganizer.login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -15,6 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.data.viewmodel.AuthViewModel;
@@ -22,6 +35,8 @@ import com.iti.mobile.triporganizer.data.viewmodel.AuthViewModel;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
+    public static final String CURRENT_USER = "currentUser";
+
     //ViewModelProviderFactory factory;
     private EditText userEmailEt;
     private EditText passwordEt;
@@ -32,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView signUpTv;
 
     private AuthViewModel authViewModel;
+
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setUpViews();
        // authViewModel = ViewModelProvider(this, factory).get(AuthViewModel.class);
         authViewModel= ViewModelProviders.of(this).get(AuthViewModel.class);
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
     }
     public void setUpViews(){
         userEmailEt=findViewById(R.id.userEmailEt);
@@ -54,6 +81,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signUpTv=findViewById(R.id.signUpTv);
         signUpTv.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                authViewModel.signInWithGoogleVM(account).observe(this,currentUserId->{
+                    if(!currentUserId.isEmpty()){
+                        updateUi(currentUserId);
+                    }else{
+                        updateUi("");
+                    }
+                });
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+            }
+        }
     }
 
     @Override
@@ -77,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+    private void signInWithGoogleView() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
     private void updateUi(String currentUserId) {
         if(!currentUserId.isEmpty()){
             gotoHomeActivity(currentUserId);
@@ -92,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void gotoHomeActivity(String currentUserId) {
         Log.i(TAG,"Current user id is "+currentUserId);
+        Intent intent=new Intent(MainActivity.this,TestHomeActivity.class);
+        intent.putExtra(CURRENT_USER,currentUserId);
+        startActivity(intent);
         //TODO:Need to send currentUserId to home activity to later retrieve trips attached to this id
     }
 
@@ -110,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 signInWithFacebook();
                 break;
             case R.id.googleImageView:
-                signInWithGoogle();
+                signInWithGoogleView();
                 break;
             case R.id.signUpTv:
                 goToSignUpActivity();
@@ -120,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void goToSignUpActivity() {
-    }
-    private void signInWithGoogle() {
     }
     private void signInWithFacebook() {
     }

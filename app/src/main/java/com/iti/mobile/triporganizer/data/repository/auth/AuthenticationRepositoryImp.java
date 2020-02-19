@@ -2,6 +2,7 @@ package com.iti.mobile.triporganizer.data.repository.auth;
 
 import androidx.lifecycle.LiveData;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.iti.mobile.triporganizer.data.firebase.AuthenticationFirebase;
 
 public class AuthenticationRepositoryImp implements AuthenticationRepository{
@@ -17,7 +18,17 @@ public class AuthenticationRepositoryImp implements AuthenticationRepository{
     }
 
     @Override
+    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account) {
+        return authenticationFirebase.signInWithGoogleFunc(account);
+    }
+
+    @Override
     public LiveData<String> getCurrentUserId() {
         return authenticationFirebase.getCurrentUserId();
+    }
+
+    @Override
+    public void signoutFunc() {
+        authenticationFirebase.signOutFunc();
     }
 }

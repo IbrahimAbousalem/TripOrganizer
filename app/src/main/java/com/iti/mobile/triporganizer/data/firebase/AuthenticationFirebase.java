@@ -6,11 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class AuthenticationFirebase {
     private FirebaseAuth firebaseAuth;
@@ -48,6 +51,27 @@ public class AuthenticationFirebase {
         return currentUserId;
     }
 
+    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
+        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+        MutableLiveData<String> currentUserId=new MutableLiveData<>();
+        AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
+        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Log.i(TAG, "signInWithGoogle:success");
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    currentUserId.postValue(user.getUid());
+
+                }else{
+                    Log.i(TAG, "signInWithGoogle:failure", task.getException());
+                    currentUserId.postValue("");
+                }
+            }
+        });
+        return currentUserId;
+    }
+
     public LiveData<String> getCurrentUserId(){
         MutableLiveData<String> currentUserId= new MutableLiveData<>();
         firebaseUser=firebaseAuth.getCurrentUser();
@@ -57,5 +81,12 @@ public class AuthenticationFirebase {
              currentUserId.postValue("");
         }
         return currentUserId;
+    }
+
+    public void signOutFunc(){
+        firebaseUser=firebaseAuth.getCurrentUser();
+        if(firebaseUser!=null){
+            FirebaseAuth.getInstance().signOut();
+        }
     }
 }
