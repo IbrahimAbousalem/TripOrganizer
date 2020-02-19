@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TripOrganizer</string>
+    <string name="signin">Sign In</string>
+    <string name="email">Enter Email</string>
+    <string name="pass">Enter Password</string>
+    <string name="fpass">Forgot Password?</string>
+    <string name="connect">or connect using</string>
+    <string name="donthave">Don\'t have an account?!</string>
+    <string name="signup">Sign Up</string>
 </resources>
