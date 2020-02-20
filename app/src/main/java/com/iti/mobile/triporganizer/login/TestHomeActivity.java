@@ -10,13 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.iti.mobile.triporganizer.R;
-import com.iti.mobile.triporganizer.data.viewmodel.AuthViewModel;
 
 public class TestHomeActivity extends AppCompatActivity {
 
     private Button signout_btn;
     private TextView user_tv;
-    private AuthViewModel authViewModel;
+    private LoginViewModel loginViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +25,11 @@ public class TestHomeActivity extends AppCompatActivity {
         Intent intent=getIntent();
         String currentUserId=intent.getStringExtra(MainActivity.CURRENT_USER);
         user_tv.setText("Current user is "+currentUserId);
-        authViewModel= ViewModelProviders.of(this).get(AuthViewModel.class);
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         signout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authViewModel.signOutVM();
+                loginViewModel.signOutVM();
                 finish();
             }
         });

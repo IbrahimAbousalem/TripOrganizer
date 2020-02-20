@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.iti.mobile.triporganizer.data.firebase.AuthenticationFirebase;
 
-public class AuthenticationRepositoryImp implements AuthenticationRepository{
-    AuthenticationFirebase authenticationFirebase;
+import javax.inject.Inject;
 
-    public AuthenticationRepositoryImp() {
-        authenticationFirebase=AuthenticationFirebase.getInstance();
+public class AuthenticationRepositoryImp implements AuthenticationRepository{
+    private AuthenticationFirebase authenticationFirebase;
+
+    @Inject
+    public AuthenticationRepositoryImp(AuthenticationFirebase fireAuth){
+        this.authenticationFirebase = fireAuth;
     }
 
     @Override
