@@ -14,6 +14,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
+import com.iti.mobile.triporganizer.data.entities.User;
 
 public class AuthenticationFirebase {
     private FirebaseAuth firebaseAuth;
@@ -31,8 +33,8 @@ public class AuthenticationFirebase {
         return INSTANCE;
     }
 
-    public LiveData<String> signInWithEmailAndPasswordFunc(String email, String password) {
-        MutableLiveData<String> currentUserId=new MutableLiveData<>();
+    public LiveData<User> signInWithEmailAndPasswordFunc(String email, String password) {
+        MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
         firebaseAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -40,20 +42,21 @@ public class AuthenticationFirebase {
                         if(task.isSuccessful()){
                             Log.i(TAG, "signInWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            currentUserId.postValue(user.getUid());
+                            User currentUser=new User(user.getDisplayName(),user.getPhotoUrl().toString(),user.getEmail(),user.getProviderId());
+                            currentUserLiveData.postValue(currentUser);
 
                         }else{
                             Log.i(TAG, "signInWithEmail:failure", task.getException());
-                            currentUserId.postValue("");
+                            currentUserLiveData.postValue(null);
                         }
                     }
                 });
-        return currentUserId;
+        return currentUserLiveData;
     }
 
-    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
+    public LiveData<User> signInWithGoogleFunc(GoogleSignInAccount account){
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-        MutableLiveData<String> currentUserId=new MutableLiveData<>();
+        MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
         AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
         firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -61,15 +64,19 @@ public class AuthenticationFirebase {
                 if(task.isSuccessful()){
                     Log.i(TAG, "signInWithGoogle:success");
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-                    currentUserId.postValue(user.getUid());
+                    User currentUser=null;
+                    for (UserInfo userInfo:user.getProviderData()){
+                       currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getProviderId());
+                    }
+                    currentUserLiveData.postValue(currentUser);
 
                 }else{
                     Log.i(TAG, "signInWithGoogle:failure", task.getException());
-                    currentUserId.postValue("");
+                    currentUserLiveData.postValue(null);
                 }
             }
         });
-        return currentUserId;
+        return currentUserLiveData;
     }
 
     public LiveData<String> getCurrentUserId(){

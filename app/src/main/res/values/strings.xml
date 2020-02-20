@@ -9,4 +9,6 @@
     <string name="signup">Sign Up</string>
     <string name="enteremail">You have to enter an email</string>
     <string name="enterpassword">You have to enter a password</string>
+    <string name="facebook_app_id">497010691251023</string>
+    <string name="fb_login_protocol_scheme">fb497010691251023</string>
 </resources>
