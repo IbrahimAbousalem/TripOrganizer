@@ -1,6 +1,5 @@
 package com.iti.mobile.triporganizer.login;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -25,29 +23,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
 
-import java.util.Objects;
+import java.util.Arrays;
 
 import javax.inject.Inject;
-
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     public static final String CURRENT_USER = "currentUser";
+    private static final int RC_SIGN_IN = 9001;
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -61,9 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView googleImgView;
     private TextView signUpTv;
 
-    private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
-
     private CallbackManager mCallbackManager;
 
     @Override
@@ -71,13 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpViews();
-
         ((TripOrganizerApp)getApplication()).getComponent().newControllerComponent(new ControllerModule(this)).inject(this);
-
         loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
-
-        configureGoogle();
-        configureFacebook();
     }
 
     private void configureGoogle() {
@@ -89,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void configureFacebook() {
-        FacebookSdk.sdkInitialize(this);
+      //  FacebookSdk.sdkInitialize(this);
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -97,19 +81,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i("Success", "Login");
                 loginViewModel.signInWithEFacebookVM(loginResult.getAccessToken());
             }
-
             @Override
             public void onCancel() {
                 Log.i("Cancel", "Cancel");
             }
-
             @Override
             public void onError(FacebookException error) {
                 Log.i("Error", "error");
             }
         });
     }
-
 
     public void setUpViews(){
         userEmailEt=findViewById(R.id.userEmailEt);
@@ -148,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.w(TAG, "Google sign in failed", e);
             }
         }
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        //mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -173,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
     private void signInWithGoogleView() {
+        configureGoogle();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -223,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void goToSignUpActivity() {
     }
     private void signInWithFacebookView() {
+        configureFacebook();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
     }
     private void forgetPassword() {

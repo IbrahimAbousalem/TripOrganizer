@@ -2,6 +2,7 @@ package com.iti.mobile.triporganizer.dagger.module.controller;
 
 import com.iti.mobile.triporganizer.dagger.Scope.ViewModelKey;
 import com.iti.mobile.triporganizer.login.LoginViewModel;
+import com.iti.mobile.triporganizer.main.TripsViewModel;
 import com.iti.mobile.triporganizer.register.RegisterViewModel;
 
 import androidx.lifecycle.ViewModel;
@@ -21,4 +22,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RegisterViewModel.class)
     public abstract ViewModel bindRegisterViewModel(RegisterViewModel registerModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TripsViewModel.class)
+    public abstract ViewModel bindTripsViewModel(TripsViewModel tripsModel);
 }

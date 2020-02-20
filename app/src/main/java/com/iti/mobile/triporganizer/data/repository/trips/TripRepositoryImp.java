@@ -5,9 +5,12 @@ import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.firebase.TripsFirebase;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class TripRepositoryImp implements TripsRepository {
     TripsFirebase tripsFirebase;
 
+    @Inject
     public TripRepositoryImp(TripsFirebase tripsFirebase){
         this.tripsFirebase = tripsFirebase;
     }
