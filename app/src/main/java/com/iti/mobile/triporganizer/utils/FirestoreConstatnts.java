@@ -1,16 +1,11 @@
 package com.iti.mobile.triporganizer.utils;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.iti.mobile.triporganizer.data.entities.Trip;
-import com.iti.mobile.triporganizer.data.firebase.FirestoreDB;
-
-import java.util.Date;
 
 public class FirestoreConstatnts {
 
-    private static final String TRIPS_COLLECTION = "trips";
-    private static final String NOTES_COLLECTION = "notes";
-    private static final String USERS_COLLECTION = "users";
+    public static final String TRIPS_COLLECTION = "Trips";
+    public static final String NOTES_COLLECTION = "Notes";
+    public static final String USERS_COLLECTION = "Users";
 
     public static final String id = "id";
     public static final String userId = "userId";
@@ -24,7 +19,4 @@ public class FirestoreConstatnts {
     public static final String message = "message";
     public static final String tripId = "tripId";
 
-    public static final CollectionReference usersReference = FirestoreDB.getInstance().getDB().collection(USERS_COLLECTION);
-    public static final CollectionReference tripsReference = FirestoreDB.getInstance().getDB().collection(TRIPS_COLLECTION);
-    public static final CollectionReference notesReference = FirestoreDB.getInstance().getDB().collection(NOTES_COLLECTION);
 }

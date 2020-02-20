@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.firebase.NotesFirebase;
 import java.util.List;
+
+import javax.inject.Inject;
+
 public class NotesRepositoryImp implements NotesRepository{
 
     NotesFirebase notesFirebase;
+    @Inject
     public NotesRepositoryImp(NotesFirebase notesFirebase){
         this.notesFirebase = notesFirebase;
     }
+
     @Override
     public boolean addNote(Note note) {
-
         return notesFirebase.addNote(note);
     }
 

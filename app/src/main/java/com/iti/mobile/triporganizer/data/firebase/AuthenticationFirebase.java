@@ -18,10 +18,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.User;
 import javax.inject.Inject;
 
+import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.USERS_COLLECTION;
 
+@ApplicationScope
 public class AuthenticationFirebase {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -33,23 +36,24 @@ public class AuthenticationFirebase {
         this.firebaseAuth = auth;
         this.db = db;
     }
+
+    //TODO: Return String to show the status
     public LiveData<User> signInWithEmailAndPasswordFunc(String email, String password) {
         MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
-        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.i(TAG, "signInWithEmail:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            User currentUser=new User(user.getDisplayName(),user.getPhotoUrl().toString(),user.getEmail(),user.getUid(),user.getProviderId());
-                            currentUserLiveData.postValue(currentUser);
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                Log.i(TAG, "signInWithEmail:success");
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                //TODO: I removed User Photo
+                User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
+                saveToDatabase(currentUser);
+                currentUserLiveData.postValue(currentUser);
 
-                        }else{
-                            Log.i(TAG, "signInWithEmail:failure", task.getException());
-                            currentUserLiveData.postValue(null);
-                        }
-                    }
-                });
+            }else{
+                Log.i(TAG, "signInWithEmail:failure", task.getException());
+                currentUserLiveData.postValue(null);
+            }
+        });
         return currentUserLiveData;
     }
 
@@ -57,22 +61,20 @@ public class AuthenticationFirebase {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
         MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
         AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
-        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Log.i(TAG, "signInWithGoogle:success");
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    User currentUser=null;
-                    for (UserInfo userInfo:user.getProviderData()){
-                       currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
-                    }
-                    currentUserLiveData.postValue(currentUser);
-
-                }else{
-                    Log.i(TAG, "signInWithGoogle:failure", task.getException());
-                    currentUserLiveData.postValue(null);
+        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                Log.i(TAG, "signInWithGoogle:success");
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                User currentUser=null;
+                for (UserInfo userInfo:user.getProviderData()){
+                   currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
+                saveToDatabase(currentUser);
+                currentUserLiveData.postValue(currentUser);
+
+            }else{
+                Log.i(TAG, "signInWithGoogle:failure", task.getException());
+                currentUserLiveData.postValue(null);
             }
         });
         return currentUserLiveData;
@@ -83,22 +85,20 @@ public class AuthenticationFirebase {
         Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            User currentUser=null;
-                            for (UserInfo userInfo:user.getProviderData()){
-                                currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
-                            }
-                            currentUserLiveData.postValue(currentUser);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            currentUserLiveData.postValue(null);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        User currentUser=null;
+                        for (UserInfo userInfo:user.getProviderData()){
+                            currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                         }
+                        saveToDatabase(currentUser);
+                        currentUserLiveData.postValue(currentUser);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        currentUserLiveData.postValue(null);
                     }
                 });
         return currentUserLiveData;
@@ -116,7 +116,8 @@ public class AuthenticationFirebase {
              }else{
 
              }
-            currentUser.postValue(new User(firebaseUser.getDisplayName(),firebaseUser.getPhotoUrl().toString(),firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
+             //TODO : i Commented the user image.
+            currentUser.postValue(new User(firebaseUser.getDisplayName(),"",firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
         }else{
              currentUser.postValue(null);
         }
@@ -126,7 +127,12 @@ public class AuthenticationFirebase {
     public void signOutFunc(){
         firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null){
-            FirebaseAuth.getInstance().signOut();
+            firebaseAuth.signOut();
         }
+    }
+
+    public void saveToDatabase(User user){
+        db.collection(USERS_COLLECTION).document(user.getId()).set(user);
+        //TODO: add onSuccess and on Failure
     }
 }

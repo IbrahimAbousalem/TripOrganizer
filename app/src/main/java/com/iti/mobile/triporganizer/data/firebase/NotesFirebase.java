@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.utils.FirestoreConstatnts;
 
@@ -11,24 +13,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.notesReference;
-import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.tripsReference;
+import javax.inject.Inject;
 
+import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.NOTES_COLLECTION;
+import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.TRIPS_COLLECTION;
+
+@ApplicationScope
 public class NotesFirebase {
 
+    private FirebaseFirestore db;
+
+    @Inject
+    public NotesFirebase(FirebaseFirestore db) {
+        this.db =db;
+    }
+
     public boolean addNote(Note note) {
-        DocumentReference reference = notesReference.document();
+        DocumentReference reference = db.collection(NOTES_COLLECTION).document();
         note.setId(reference.getId());
         return reference.set(note).isSuccessful();
     }
 
     public boolean deleteNote(Note note) {
-        DocumentReference reference = notesReference.document(note.getId());
+        DocumentReference reference = db.collection(NOTES_COLLECTION).document(note.getId());
         return reference.delete().isSuccessful();
     }
 
     public boolean updateNote(Note note) {
-        DocumentReference reference = tripsReference.document(note.getId());
+        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(note.getId());
         Map<String, Object> mTrip = new HashMap<>();
         mTrip.put(FirestoreConstatnts.id, reference.getId());
         mTrip.put(FirestoreConstatnts.message, note.getMessage());
@@ -39,7 +51,7 @@ public class NotesFirebase {
 
     public LiveData<List<Note>> getNotesForTrip(String tripId) {
         MutableLiveData<List<Note>> listLiveData = new MutableLiveData<>();
-        notesReference.whereEqualTo(FirestoreConstatnts.tripId, tripId).get().addOnCompleteListener(task -> {
+        db.collection(NOTES_COLLECTION).whereEqualTo(FirestoreConstatnts.tripId, tripId).get().addOnCompleteListener(task -> {
             List<Note> notes = task.getResult().toObjects(Note.class);
             listLiveData.postValue(notes);
         });
