@@ -39,7 +39,7 @@ public class NotesFirebase {
 
     public LiveData<List<Note>> getNotesForTrip(String tripId) {
         MutableLiveData<List<Note>> listLiveData = new MutableLiveData<>();
-        tripsReference.whereEqualTo(FirestoreConstatnts.tripId,tripId).get().addOnCompleteListener(task -> {
+        notesReference.whereEqualTo(FirestoreConstatnts.tripId, tripId).get().addOnCompleteListener(task -> {
             List<Note> notes = task.getResult().toObjects(Note.class);
             listLiveData.postValue(notes);
         });

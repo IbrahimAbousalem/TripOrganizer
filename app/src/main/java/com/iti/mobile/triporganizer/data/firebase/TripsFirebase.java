@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.FirestoreConstatnts;
 
@@ -11,9 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.notesReference;
 import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.tripsReference;
 
 public class TripsFirebase {
+    NotesFirebase notesFirebase;
+
+    public TripsFirebase(NotesFirebase notesFirebase) {
+        this.notesFirebase = notesFirebase;
+    }
+
     public boolean addTrip(Trip trip) {
         DocumentReference reference = tripsReference.document();
         trip.setId(reference.getId());
@@ -23,6 +31,13 @@ public class TripsFirebase {
 
     public boolean deleteTrip(Trip trip) {
         DocumentReference reference = tripsReference.document(trip.getId());
+        //delete related notes
+        notesReference.whereEqualTo(FirestoreConstatnts.tripId, trip.getId()).get().addOnCompleteListener(task -> {
+            List<Note> notes = task.getResult().toObjects(Note.class);
+            for (Note note : notes){
+                notesFirebase.deleteNote(note);
+            }
+        });
         return reference.delete().isSuccessful();
     }
 
