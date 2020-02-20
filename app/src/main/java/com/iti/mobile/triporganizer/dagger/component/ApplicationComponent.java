@@ -12,6 +12,6 @@ import dagger.Component;
 @ApplicationScope
 @Component(modules = {ApplicationModule.class, FirebaseModule.class, ViewModelFactoryModule.class})
 public interface ApplicationComponent {
-    ControllerComponent newActivityComponent(ControllerModule module);
+    ControllerComponent newControllerComponent(ControllerModule module);
     void inject(TripOrganizerApp application);
 }

@@ -5,6 +5,8 @@ buildscript {
         room_version = "2.2.3"
         lifecycle_version = "2.2.0"
         dagger_version = "2.23.1"
+        nav_version = "2.3.0-alpha01"
+        firestore_version = "21.4.0"
     }
     repositories {
         google()

@@ -2,29 +2,39 @@ package com.iti.mobile.triporganizer.data.repository.auth;
 
 import androidx.lifecycle.LiveData;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.data.firebase.AuthenticationFirebase;
 
-public class AuthenticationRepositoryImp implements AuthenticationRepository{
-    AuthenticationFirebase authenticationFirebase;
+import javax.inject.Inject;
 
-    public AuthenticationRepositoryImp() {
-        authenticationFirebase=AuthenticationFirebase.getInstance();
+public class AuthenticationRepositoryImp implements AuthenticationRepository{
+    private AuthenticationFirebase authenticationFirebase;
+
+    @Inject
+    public AuthenticationRepositoryImp(AuthenticationFirebase fireAuth){
+        this.authenticationFirebase = fireAuth;
     }
 
     @Override
-    public LiveData<String> signInWithEmailAndPasswordFunc(String email, String password) {
+    public LiveData<User> signInWithEmailAndPasswordFunc(String email, String password) {
         return authenticationFirebase.signInWithEmailAndPasswordFunc(email,password);
     }
 
     @Override
-    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account) {
+    public LiveData<User> signInWithGoogleFunc(GoogleSignInAccount account) {
         return authenticationFirebase.signInWithGoogleFunc(account);
     }
 
     @Override
-    public LiveData<String> getCurrentUserId() {
-        return authenticationFirebase.getCurrentUserId();
+    public LiveData<User> signInWithFacebookFunc(AccessToken accessToken) {
+        return authenticationFirebase.signInWithFacebookFunc(accessToken);
+    }
+
+    @Override
+    public LiveData<User> getCurrentUser() {
+        return authenticationFirebase.getCurrentUser();
     }
 
     @Override
