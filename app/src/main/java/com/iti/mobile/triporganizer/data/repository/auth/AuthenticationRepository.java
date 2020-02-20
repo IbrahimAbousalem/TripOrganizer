@@ -8,10 +8,10 @@ import com.iti.mobile.triporganizer.data.entities.User;
 
 public interface AuthenticationRepository {
 
-    public LiveData<User> signInWithEmailAndPasswordFunc(String email, String password);
-    public LiveData<User> signInWithGoogleFunc(GoogleSignInAccount account);
-    public LiveData<User> signInWithFacebookFunc(AccessToken accessToken);
-    public LiveData<User> getCurrentUser();
-    public void signoutFunc();
+    LiveData<User> signInWithEmailAndPasswordFunc(String email, String password);
+    LiveData<User> signInWithGoogleFunc(GoogleSignInAccount account);
+    LiveData<User> signInWithFacebookFunc(AccessToken accessToken);
+    LiveData<User> getCurrentUser();
+    void signoutFunc();
 
 }
