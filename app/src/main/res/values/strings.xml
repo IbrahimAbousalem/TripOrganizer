@@ -9,4 +9,7 @@
     <string name="signup">Sign Up</string>
     <string name="enteremail">You have to enter an email</string>
     <string name="enterpassword">You have to enter a password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

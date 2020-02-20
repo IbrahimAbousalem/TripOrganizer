@@ -1,12 +1,10 @@
 package com.iti.mobile.triporganizer.login;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,30 +12,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
-import com.iti.mobile.triporganizer.data.viewmodel.AuthViewModel;
+import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     public static final String CURRENT_USER = "currentUser";
 
-    //ViewModelProviderFactory factory;
+    @Inject
+    ViewModelProviderFactory providerFactory;
+    LoginViewModel loginViewModel;
+
     private EditText userEmailEt;
     private EditText passwordEt;
     private TextView forgetPasswordTv;
@@ -45,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView facebookImageView;
     private ImageView googleImgView;
     private TextView signUpTv;
-
-    private AuthViewModel authViewModel;
 
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
@@ -56,8 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpViews();
-       // authViewModel = ViewModelProvider(this, factory).get(AuthViewModel.class);
-        authViewModel= ViewModelProviders.of(this).get(AuthViewModel.class);
+        ((TripOrganizerApp)getApplication()).getComponent().newControllerComponent(new ControllerModule(this)).inject(this);
+
+        loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                authViewModel.signInWithGoogleVM(account).observe(this,currentUserId->{
+                loginViewModel.signInWithGoogleVM(account).observe(this, currentUserId->{
                     if(!currentUserId.isEmpty()){
                         updateUi(currentUserId);
                     }else{
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        authViewModel.getCurrentUserId().observe(this,currentUserId->{
+        loginViewModel.getCurrentUserId().observe(this, currentUserId->{
             if(!currentUserId.isEmpty()){
                 updateUi(currentUserId);
             }else{
@@ -119,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void signInWithEmailAndPasswordViewModel(String email,String password){
-        authViewModel.signInWithEmailAndPasswordVM(email,password).observe(this,currentUserId->{
+        loginViewModel.signInWithEmailAndPasswordVM(email,password).observe(this, currentUserId->{
             if(!currentUserId.isEmpty()){
                 updateUi(currentUserId);
             }else{
@@ -146,9 +144,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void gotoHomeActivity(String currentUserId) {
         Log.i(TAG,"Current user id is "+currentUserId);
-        Intent intent=new Intent(MainActivity.this,TestHomeActivity.class);
-        intent.putExtra(CURRENT_USER,currentUserId);
-        startActivity(intent);
+      //  Intent intent=new Intent(MainActivity.this,TestHomeActivity.class);
+       // intent.putExtra(CURRENT_USER,currentUserId);
+       // startActivity(intent);
         //TODO:Need to send currentUserId to home activity to later retrieve trips attached to this id
     }
 
