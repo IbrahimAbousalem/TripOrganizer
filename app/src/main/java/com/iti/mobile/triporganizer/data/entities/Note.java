@@ -4,14 +4,16 @@ public class Note {
     private String message;
     private String tripId;
     private String status;
+    private String id;
 
     public Note() {
     }
 
-    public Note(String message, String tripId, String status) {
+    public Note(String message, String tripId, String status, String id) {
         this.message = message;
         this.tripId = tripId;
         this.status = status;
+        this.id = id;
     }
 
     public String getMessage() {
@@ -36,5 +38,13 @@ public class Note {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
