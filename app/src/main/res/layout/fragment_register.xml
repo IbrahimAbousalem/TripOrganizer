@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/d_32"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/d_16"
         android:layout_marginEnd="@dimen/d_32"
         android:hint="@string/email"
         android:padding="@dimen/d_2"
@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_et"
-            android:padding="@dimen/d_16"
+            android:padding="@dimen/d_8"
             android:paddingBottom="25dp"
             android:inputType="text"
 
@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_et"
-            android:padding="@dimen/d_16"
+            android:padding="@dimen/d_8"
             android:inputType="numberPassword"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -137,7 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_et"
-            android:padding="@dimen/d_16"
+            android:padding="@dimen/d_8"
             android:inputType="numberPassword"
             android:hint="@string/confirm_password"
 
