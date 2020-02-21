@@ -3,6 +3,7 @@ package com.iti.mobile.triporganizer.register;
 
 import android.os.Bundle;
 
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -48,15 +49,11 @@ public class RegisterFragment extends Fragment {
     private boolean userIsExist = false ;
 
 
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         setUpViews(view);
           initFireStore();
@@ -96,8 +93,7 @@ public class RegisterFragment extends Fragment {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Log.d(TAG, document.getId() + " => " + document.getData());
                                         if (document.getData().containsValue(email)) {
-
-                                            Toast.makeText(getActivity(),"This email is already exist before",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getContext(),"This email is already exist before",Toast.LENGTH_LONG).show();
                                             return;
                                         } else {
 
@@ -159,7 +155,6 @@ public class RegisterFragment extends Fragment {
     private  boolean isValidEmail(String email) {
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
-
 
 
 

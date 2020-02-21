@@ -1,6 +1,8 @@
 package com.iti.mobile.triporganizer.data.entities;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String userName;
     private String profilePicUrl;
@@ -9,14 +11,18 @@ public class User {
     private String password;
 
 
+    //login-method
+    private String provider_id;
+
     public User() {
     }
 
-    public User(String userName, String profilePicUrl, String email, String id) {
+    public User(String userName, String profilePicUrl, String email, String id,String provider_id) {
         this.userName = userName;
         this.profilePicUrl = profilePicUrl;
         this.email = email;
         this.id = id;
+        this.provider_id=provider_id;
     }
 
     public String getUserName() {
@@ -37,6 +43,14 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getProvider_id() {
+        return provider_id;
+    }
+
+    public void setProvider_id(String provider_id) {
+        this.provider_id = provider_id;
     }
 
     public void setEmail(String email) {

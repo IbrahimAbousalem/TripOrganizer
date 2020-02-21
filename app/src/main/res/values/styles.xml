@@ -11,8 +11,6 @@
     <style name="edittext">
         <item name="android:textColor">@color/lighttxt</item>
         <item name="android:background">@drawable/rounded_et</item>
-        <item name="android:layout_marginLeft">@dimen/d_50</item>
-        <item name="android:layout_marginRight">@dimen/d_50</item>
         <item name="android:layout_marginBottom">@dimen/d_20</item>
         <item name="android:padding">@dimen/d_20</item>
         <item name="android:drawablePadding">@dimen/d_10</item>
@@ -21,15 +19,31 @@
     <style name="signinup_btn">
         <item name="android:background">@drawable/rounded_btn</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:layout_marginLeft">@dimen/d_60</item>
-        <item name="android:layout_marginRight">@dimen/d_60</item>
         <item name="android:layout_marginBottom">@dimen/d_18</item>
         <item name="android:padding">@dimen/d_10</item>
     </style>
 
+
     <style name="HintText" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="white_btn">
+        <item name="android:background">@drawable/rounded_btn_no_clr</item>
+        <item name="android:textColor">@color/darktxt</item>
+        <item name="android:paddingLeft">@dimen/d_20</item>
+        <item name="android:paddingRight">@dimen/d_20</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="tripName">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 </resources>
