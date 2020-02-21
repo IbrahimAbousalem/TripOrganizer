@@ -4,6 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+
     defaultConfig {
         applicationId "com.iti.mobile.triporganizer"
         minSdkVersion 19
@@ -12,6 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -38,6 +40,7 @@ dependencies {
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
 
     //Navigation Component
@@ -66,4 +69,10 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //fireStore
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation "androidx.multidex:multidex:2.0.1"
 }

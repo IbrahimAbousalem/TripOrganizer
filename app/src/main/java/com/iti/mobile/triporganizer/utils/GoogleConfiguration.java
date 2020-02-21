@@ -3,8 +3,11 @@ package com.iti.mobile.triporganizer.utils;
 import android.content.Context;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mobile.triporganizer.R;
 
 import java.lang.ref.WeakReference;
@@ -37,4 +40,10 @@ public class GoogleConfiguration {
     public GoogleSignInClient getGoogleClient(){
         return mGoogleSignInClient;
     }
+
+    public AuthCredential getGoogleAuthCredential(GoogleSignInAccount googleSignInAccount) {
+        String googleTokenId = googleSignInAccount.getIdToken();
+        return GoogleAuthProvider.getCredential(googleTokenId, null);
+    }
+
 }

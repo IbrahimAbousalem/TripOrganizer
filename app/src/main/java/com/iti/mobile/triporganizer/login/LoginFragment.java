@@ -30,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
@@ -126,9 +127,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                loginViewModel.signInWithGoogleVM(account).observe(this, currentUser -> {
-                    if (currentUser != null) {
-                        updateUi(currentUser);
+                AuthCredential credential = googleConfiguration.getGoogleAuthCredential(account);
+                loginViewModel.signInWithGoogle(credential).observe(this,user -> {
+                    if (user != null) {
+                        updateUi(user);
                     } else {
                         updateUi(null);
                     }

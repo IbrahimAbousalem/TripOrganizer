@@ -23,6 +23,13 @@
         <item name="android:padding">@dimen/d_10</item>
     </style>
 
+
+    <style name="HintText" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+
     <style name="white_btn">
         <item name="android:background">@drawable/rounded_btn_no_clr</item>
         <item name="android:textColor">@color/darktxt</item>
@@ -38,4 +45,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+
+
+
 </resources>

@@ -7,6 +7,13 @@
     <string name="connect">or connect using</string>
     <string name="donthave">Don\'t have an account?!</string>
     <string name="signup">Sign Up</string>
+
+    <string name="confirm_password">Enter Confirm Password</string>
+    <string name="have_account">Already have an account?! <b><i><font color='#5A425C'>Sign In</font></i></b></string>
+    <string name="valid_email">Enter valid Email</string>
+    <string name="valid_confirm_password">Confirm Password is not equal Password</string>
+    <string name="valid_password">Enter password Length equal 4</string>
+
     <string name="enteremail">You have to enter an email</string>
     <string name="enterpassword">You have to enter a password</string>
     <string name="start">Start</string>
@@ -14,4 +21,11 @@
     <string name="facebook_app_id">497010691251023</string>
     <string name="fb_login_protocol_scheme">fb497010691251023</string>
     <string name="hello_blank_fragment">Hello Login Fragment</string>
+
+    <string name="user_name">Enter User Name</string>
+
+
+    <string name="next_trip">Next Trip</string>
+    <string name="upcoming_trips">Upcoming Trips</string>
+
 </resources>

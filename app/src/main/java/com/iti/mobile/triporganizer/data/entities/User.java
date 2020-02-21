@@ -8,6 +8,8 @@ public class User implements Serializable {
     private String profilePicUrl;
     private String email;
     private String id;
+    private String password;
+
 
     //login-method
     private String provider_id;
@@ -61,5 +63,13 @@ public class User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
