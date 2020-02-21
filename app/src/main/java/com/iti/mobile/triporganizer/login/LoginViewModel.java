@@ -1,10 +1,12 @@
 package com.iti.mobile.triporganizer.login;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
 import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepository;
 import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepositoryImp;
@@ -13,7 +15,7 @@ import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
     AuthenticationRepository authenticationRepositoryImp;
-
+    LiveData<User> authenticatedUserLiveData =new MutableLiveData<>();
     @Inject
     public LoginViewModel(AuthenticationRepository repo){
         this.authenticationRepositoryImp = repo;
@@ -36,6 +38,10 @@ public class LoginViewModel extends ViewModel {
     }
     public void signOutVM(){
         authenticationRepositoryImp.signoutFunc();
+    }
+
+    public void signInWithGoogle(AuthCredential googleAuthCredential) {
+        authenticatedUserLiveData = authenticationRepositoryImp.firebaseSignInWithGoogle(googleAuthCredential);
     }
 
 }

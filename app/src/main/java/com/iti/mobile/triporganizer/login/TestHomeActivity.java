@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
+import com.iti.mobile.triporganizer.base.MainActivity;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
 
@@ -36,7 +37,7 @@ public class TestHomeActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
 
         Intent intent=getIntent();
-        User currentUser=(User)intent.getSerializableExtra(MainActivity.CURRENT_USER);
+        User currentUser=(User)intent.getSerializableExtra("currentUser");
 
         user_tv.setText("Current user is id is "+currentUser.getId()
                 +"\n Current User name is "+currentUser.getUserName()

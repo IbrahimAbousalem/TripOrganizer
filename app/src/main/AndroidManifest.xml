@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.TestHomeActivity"/>
-        <activity android:name=".login.MainActivity">
+        <activity android:name=".base.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,6 +1,7 @@
 package com.iti.mobile.triporganizer.dagger.module.controller;
 
 import com.iti.mobile.triporganizer.dagger.Scope.ViewModelKey;
+import com.iti.mobile.triporganizer.history.HistoryViewModel;
 import com.iti.mobile.triporganizer.login.LoginViewModel;
 import com.iti.mobile.triporganizer.main.TripsViewModel;
 import com.iti.mobile.triporganizer.register.RegisterViewModel;
@@ -27,4 +28,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TripsViewModel.class)
     public abstract ViewModel bindTripsViewModel(TripsViewModel tripsModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryViewModel.class)
+    public abstract ViewModel bindHistoryViewModel(HistoryViewModel historyModel);
 }

@@ -135,4 +135,23 @@ public class AuthenticationFirebase {
         db.collection(USERS_COLLECTION).document(user.getId()).set(user);
         //TODO: add onSuccess and on Failure
     }
+
+    public MutableLiveData<User> signInWithGoogle(AuthCredential googleAuthCredential) {
+        MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
+        firebaseAuth.signInWithCredential(googleAuthCredential).addOnCompleteListener(authTask -> {
+            if (authTask.isSuccessful()) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                User currentUser=null;
+                for (UserInfo userInfo:user.getProviderData()){
+                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+                }
+                saveToDatabase(currentUser);
+                authenticatedUserMutableLiveData.postValue(currentUser);
+            } else {
+               Log.e("Error", authTask.getException().getMessage());
+            }
+        });
+        return authenticatedUserMutableLiveData;
+    }
+
 }
