@@ -6,4 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".register.RegisterActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frame_layout"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,7 +38,7 @@
         android:layout_marginRight="@dimen/d_50"
         android:layout_marginBottom="@dimen/d_18"/>
     <Button
-        android:id="@+id/signInBtn"
+        android:id="@+id/signupBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signin"
