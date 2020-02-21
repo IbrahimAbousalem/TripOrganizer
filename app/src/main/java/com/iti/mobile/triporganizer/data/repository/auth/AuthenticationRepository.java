@@ -12,6 +12,7 @@ public interface AuthenticationRepository {
     LiveData<User> signInWithGoogleFunc(GoogleSignInAccount account);
     LiveData<User> signInWithFacebookFunc(AccessToken accessToken);
     LiveData<User> getCurrentUser();
+    LiveData<String> registerUser(User user, String password);
     void signoutFunc();
 
 }

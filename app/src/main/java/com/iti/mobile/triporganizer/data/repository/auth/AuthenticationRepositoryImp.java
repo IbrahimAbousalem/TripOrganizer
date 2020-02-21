@@ -38,6 +38,11 @@ public class AuthenticationRepositoryImp implements AuthenticationRepository{
     }
 
     @Override
+    public LiveData<String> registerUser(User user, String password) {
+        return authenticationFirebase.register(user, password);
+    }
+
+    @Override
     public void signoutFunc() {
         authenticationFirebase.signOutFunc();
     }

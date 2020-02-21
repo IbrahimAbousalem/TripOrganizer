@@ -29,6 +29,7 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
+import com.iti.mobile.triporganizer.register.RegisterActivity;
 
 import java.util.Arrays;
 
@@ -199,10 +200,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.signUpTv:
                 goToSignUpActivity();
                 break;
+
+
         }
     }
 
     private void goToSignUpActivity() {
+        Intent intent = new Intent(this,RegisterActivity.class);
+        startActivity(intent);
     }
     private void signInWithFacebookView() {
         configureFacebook();

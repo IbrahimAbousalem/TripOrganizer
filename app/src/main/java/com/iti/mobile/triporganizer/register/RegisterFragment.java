@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,15 +26,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
+import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 public class RegisterFragment extends Fragment {
 
@@ -40,13 +50,18 @@ public class RegisterFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
     private TextInputLayout emailTextInputLayout;
     private TextInputEditText emailEditText;
+    private TextInputLayout userNameInputLayout;
+    private TextInputEditText userNameEditText;
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordEditText;
     private TextInputLayout confirmPasswordTextInputLayout;
     private TextInputEditText confirmPasswordEditText;
     private Button signUpButton;
     private TextView goToSignInTV;
-    private boolean userIsExist = false ;
+    private boolean userIsExist = false;
+    @Inject
+    ViewModelProviderFactory providerFactory;
+    private RegisterViewModel registerViewModel ;
 
 
     @Override
@@ -55,107 +70,73 @@ public class RegisterFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_register, container, false);
+        ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         setUpViews(view);
-          initFireStore();
 
+        initFireStore();
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = emailEditText.getText().toString();
-                if(!isValidEmail(email)){
+                String userName = userNameEditText.getText().toString();
+
+                if (!isValidEmail(email)) {
                     emailTextInputLayout.setError(getString(R.string.valid_email));
                     return;
                 }
                 String password = passwordEditText.getText().toString();
-                if (password.length() <= 3){
+                if (password.length() <= 3) {
                     passwordTextInputLayout.setError(getString(R.string.valid_password));
                     return;
                 }
                 String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                if (!password.equals(confirmPassword)){
+                if (!password.equals(confirmPassword)) {
                     confirmPasswordTextInputLayout.setError(getString(R.string.valid_confirm_password));
                     return;
                 }
-                Map<String, Object> user = new HashMap<>();
-
-                user.put("email", email);
-                user.put("password", password);
-
-
-                firebaseFirestore.collection("users")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
-                                        if (document.getData().containsValue(email)) {
-                                            Toast.makeText(getContext(),"This email is already exist before",Toast.LENGTH_LONG).show();
-                                            return;
-                                        } else {
-
-                                            firebaseFirestore.collection("users")
-                                                    .add(user)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            Log.e(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.e(TAG, "Error adding document", e);
-
-                                                }
-                                            });
-                                            return;
-                                        }
-
-
-                                    }
-                                } else {
-                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                }
-                            }
-                        });
-
-
-
-
-
-
-
-
-
-
-            }
-        });
+                User user = new User(userName, "", email, "", "");
+                registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
+                    if(s.equals("Register Successfully")){
+                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }});
+                goToSignInTV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                });
         return view;
     }
 
+
+
     private void setUpViews(View view) {
-         emailTextInputLayout = view.findViewById(R.id.emailTextInputLayout);
-         emailEditText = view.findViewById(R.id.emailEditText);
-        passwordTextInputLayout= view.findViewById(R.id.passwordTextInputLayout);
-         passwordEditText= view.findViewById(R.id.passwordEditText);
-         confirmPasswordTextInputLayout= view.findViewById(R.id.confirmPasswordTextInputLayout);
-         confirmPasswordEditText= view.findViewById(R.id.confirmPasswordEditText);
-         signUpButton= view.findViewById(R.id.signupBtn);
-         goToSignInTV= view.findViewById(R.id.goToSignInTV);
+        userNameInputLayout = view.findViewById(R.id.userNameInputLayout);
+        userNameEditText = view.findViewById(R.id.userNameEditText);
+        emailTextInputLayout = view.findViewById(R.id.emailTextInputLayout);
+        emailEditText = view.findViewById(R.id.emailEditText);
+        passwordTextInputLayout = view.findViewById(R.id.passwordTextInputLayout);
+        passwordEditText = view.findViewById(R.id.passwordEditText);
+        confirmPasswordTextInputLayout = view.findViewById(R.id.confirmPasswordTextInputLayout);
+        confirmPasswordEditText = view.findViewById(R.id.confirmPasswordEditText);
+        signUpButton = view.findViewById(R.id.signupBtn);
+        goToSignInTV = view.findViewById(R.id.goToSignInTV);
+        registerViewModel = new ViewModelProvider(this, providerFactory).get(RegisterViewModel.class);
     }
 
     private void initFireStore() {
-
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
-    private  boolean isValidEmail(String email) {
+    private boolean isValidEmail(String email) {
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
-
 
 
 }
