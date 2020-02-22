@@ -3,13 +3,13 @@ package com.iti.mobile.triporganizer.data.entities;
 public class Note {
     private String message;
     private String tripId;
-    private String status;
+    private boolean status;
     private String id;
 
     public Note() {
     }
 
-    public Note(String message, String tripId, String status, String id) {
+    public Note(String message, String tripId, boolean status, String id) {
         this.message = message;
         this.tripId = tripId;
         this.status = status;
@@ -32,11 +32,11 @@ public class Note {
         this.tripId = tripId;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

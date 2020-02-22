@@ -10,7 +10,10 @@ public class FirestoreConstatnts {
     public static final String id = "id";
     public static final String userId = "userId";
     public static final String startPoint = "startPoint";
+    public static final String startAddressName = "startAddressName";
+    public static final String endAddressName = "endAddressName";
     public static final String endPoint = "endPoint";
+    public static final String locationData = "locationData";
     public static final String date = "date";
     public static final String type = "type";
     public static final String status = "status";

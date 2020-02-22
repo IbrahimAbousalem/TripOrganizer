@@ -1,6 +1,5 @@
-package com.iti.mobile.triporganizer.home;
+package com.iti.mobile.triporganizer.main;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -102,7 +102,7 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
             startBtn = itemView.findViewById(R.id.startBtn);
             viewBtn = itemView.findViewById(R.id.viewBtn);
-
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_historyFragment));
         }
 
 
@@ -112,7 +112,7 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
         private void setTripDateTv(String tripDate) {
             tripDateTv.setText(tripDate);
         }
-         private void setTripTimeTv(String time) {
+        private void setTripTimeTv(String time) {
             tripTimeTv.setText(time);
         }
         public void setTripLocTv(String location) {
@@ -120,13 +120,15 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
         }
     }
     private class TripsViewHolder extends RecyclerView.ViewHolder{
-        private TextView tripNameTv, tripDateTv, tripLocTv, statusTv;
+        private TextView tripNameTv, tripDateTv, tripLocTv;
+        private Button statusTv;
         private TripsViewHolder(@NonNull View itemView) {
             super(itemView);
             tripNameTv = itemView.findViewById(R.id.tripNameTv);
             tripDateTv = itemView.findViewById(R.id.tripDateTv);
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
-            statusTv = itemView.findViewById(R.id.statusTv);
+            statusTv = itemView.findViewById(R.id.statusBtn);
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_historyFragment));
         }
 
         private void setTripNameTv(String tripName) {
@@ -144,14 +146,16 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
     }
     private class UpcomingTripsTextViewHolder extends RecyclerView.ViewHolder{
         private TextView upcomig_textView;
-        private TextView tripNameTv, tripDateTv, tripLocTv, statusTv;
+        private TextView tripNameTv, tripDateTv, tripLocTv;
+        private Button statusTv;
         private UpcomingTripsTextViewHolder(@NonNull View itemView) {
             super(itemView);
             upcomig_textView = itemView.findViewById(R.id.upcomig_textView);
             tripNameTv = itemView.findViewById(R.id.tripNameTv);
             tripDateTv = itemView.findViewById(R.id.tripDateTv);
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
-            statusTv = itemView.findViewById(R.id.statusTv);
+            statusTv = itemView.findViewById(R.id.statusBtn);
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_historyFragment));
         }
         private void setTripNameTv(String tripName) {
             tripNameTv.setText(tripName);

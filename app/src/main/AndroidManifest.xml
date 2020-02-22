@@ -15,14 +15,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".dialog.TestDialogActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".register.RegisterActivity"></activity>
-        <activity android:name=".home.HomeActivity" />
+
+
+
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -44,8 +41,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
         <activity android:name=".login.TestHomeActivity" />
-        <activity android:name=".login.MainActivity">
+        <activity android:name=".base.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

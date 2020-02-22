@@ -3,9 +3,11 @@ package com.iti.mobile.triporganizer.dagger.component;
 import com.iti.mobile.triporganizer.dagger.Scope.ActivityScope;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.dagger.module.controller.ViewModelModule;
+import com.iti.mobile.triporganizer.history.HistoryFragment;
 import com.iti.mobile.triporganizer.login.LoginFragment;
-import com.iti.mobile.triporganizer.login.MainActivity;
+import com.iti.mobile.triporganizer.base.MainActivity;
 import com.iti.mobile.triporganizer.login.TestHomeActivity;
+import com.iti.mobile.triporganizer.main.HomeFragment;
 import com.iti.mobile.triporganizer.register.RegisterFragment;
 
 import dagger.Subcomponent;
@@ -16,5 +18,7 @@ public interface ControllerComponent {
     void inject(MainActivity main);
     void inject(LoginFragment login);
     void inject(RegisterFragment register);
+    void inject(HistoryFragment history);
+    void inject(HomeFragment home);
     void inject(TestHomeActivity test);
 }
