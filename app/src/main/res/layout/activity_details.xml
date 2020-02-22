@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".details.DetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/bkImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_bk_white_48dp" />
+
+        <Button
+            android:id="@+id/editBtn"
+            style="@style/viewedit_btn"
+            android:drawableLeft="@drawable/ic_edit_gray_24dp"
+            android:drawablePadding="@dimen/d_5"
+            android:text="@string/edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/viewBtn"
+            app:layout_constraintTop_toTopOf="@+id/viewBtn" />
+
+        <Button
+            android:id="@+id/viewBtn"
+            style="@style/viewedit_btn"
+            android:layout_marginTop="12dp"
+            android:drawableLeft="@drawable/ic_view_gray_24dp"
+            android:text="@string/view"
+            app:layout_constraintEnd_toStartOf="@+id/editBtn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bkImageView" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deleteFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/deatilsFragmentContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deatilsFragmentContainer"
+            app:srcCompat="@drawable/ic_delete_white_24dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/deatilsFragmentContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewBtn" />
+
+        <CheckBox
+            android:id="@+id/selectTripCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:buttonTint="@color/colorAccent"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            app:layout_constraintBottom_toTopOf="@+id/deatilsFragmentContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/deatilsFragmentContainer"
+            app:layout_constraintVertical_bias="0.625" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

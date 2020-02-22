@@ -6,4 +6,5 @@
     <color name="lightborder">#D6CDCD</color>
     <color name="lighttxt">#C3BBC3</color>
     <color name="darktxt">#8D8585</color>
+    <color name="whiteclr">#ffffff</color>
 </resources>

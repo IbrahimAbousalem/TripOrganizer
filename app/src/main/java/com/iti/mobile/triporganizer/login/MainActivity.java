@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,14 +28,22 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
+import com.iti.mobile.triporganizer.details.DetailsActivity;
 
 import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import static com.iti.mobile.triporganizer.utils.Flags.TRIP_TYPE_SINGLE;
+import static com.iti.mobile.triporganizer.utils.Flags.VIEW_TRIP_FLAG;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
+
+    public static final String TRIP_TAG = "ADD";
+    public static final String TRIP_TYPE = "TYPE";
+
     public static final String CURRENT_USER = "currentUser";
     private static final int RC_SIGN_IN = 9001;
 
@@ -60,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpViews();
-        ((TripOrganizerApp)getApplication()).getComponent().newControllerComponent(new ControllerModule(this)).inject(this);
+        ((TripOrganizerApp) getApplication()).getComponent().newControllerComponent(new ControllerModule(this)).inject(this);
         loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
     }
 
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void configureFacebook() {
-      //  FacebookSdk.sdkInitialize(this);
+        //  FacebookSdk.sdkInitialize(this);
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -81,10 +88,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i("Success", "Login");
                 loginViewModel.signInWithEFacebookVM(loginResult.getAccessToken());
             }
+
             @Override
             public void onCancel() {
                 Log.i("Cancel", "Cancel");
             }
+
             @Override
             public void onError(FacebookException error) {
                 Log.i("Error", "error");
@@ -92,18 +101,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void setUpViews(){
-        userEmailEt=findViewById(R.id.userEmailEt);
-        passwordEt=findViewById(R.id.passwordEt);
-        forgetPasswordTv=findViewById(R.id.forgetPasswordTv);
+    public void setUpViews() {
+        userEmailEt = findViewById(R.id.userEmailEt);
+        passwordEt = findViewById(R.id.passwordEt);
+        forgetPasswordTv = findViewById(R.id.forgetPasswordTv);
         forgetPasswordTv.setOnClickListener(this);
-        signInBtn=findViewById(R.id.signInBtn);
+        signInBtn = findViewById(R.id.signInBtn);
         signInBtn.setOnClickListener(this);
-        facebookImageView =findViewById(R.id.facebookImageView);
+        facebookImageView = findViewById(R.id.facebookImageView);
         facebookImageView.setOnClickListener(this);
-        googleImgView=findViewById(R.id.googleImageView);
+        googleImgView = findViewById(R.id.googleImageView);
         googleImgView.setOnClickListener(this);
-        signUpTv=findViewById(R.id.signUpTv);
+        signUpTv = findViewById(R.id.signUpTv);
         signUpTv.setOnClickListener(this);
 
     }
@@ -117,10 +126,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                loginViewModel.signInWithGoogleVM(account).observe(this, currentUser->{
-                    if(currentUser!=null){
+                loginViewModel.signInWithGoogleVM(account).observe(this, currentUser -> {
+                    if (currentUser != null) {
                         updateUi(currentUser);
-                    }else{
+                    } else {
                         updateUi(null);
                     }
                 });
@@ -135,60 +144,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-       loginViewModel.getCurrentUser().observe(this, currentUser->{
-            if(currentUser!=null){
+        loginViewModel.getCurrentUser().observe(this, currentUser -> {
+            if (currentUser != null) {
                 updateUi(currentUser);
-            }else{
+            } else {
                 updateUi(null);
             }
         });
     }
 
-    private void signInWithEmailAndPasswordViewModel(String email,String password){
-        loginViewModel.signInWithEmailAndPasswordVM(email,password).observe(this, currentUser->{
-            if(currentUser!=null){
+    private void signInWithEmailAndPasswordViewModel(String email, String password) {
+        loginViewModel.signInWithEmailAndPasswordVM(email, password).observe(this, currentUser -> {
+            if (currentUser != null) {
                 updateUi(currentUser);
-            }else{
+            } else {
                 updateUi(null);
             }
         });
     }
+
     private void signInWithGoogleView() {
         configureGoogle();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
     private void updateUi(User currentUser) {
-        if(currentUser!=null){
+        if (currentUser != null) {
             gotoHomeActivity(currentUser);
-        }else{
+        } else {
             displayError();
         }
     }
 
     private void displayError() {
-        Log.i(TAG,"Login Failed !");
+        Log.i(TAG, "Login Failed !");
         //TODO:RESPOND TO DIFFERENT EXCEPTION
     }
 
     private void gotoHomeActivity(User currentUser) {
-        Log.i(TAG,"Current user name is "+currentUser.getUserName()+"   ,id is"+currentUser.getId());
-        Intent intent=new Intent(MainActivity.this,TestHomeActivity.class);
-        intent.putExtra(CURRENT_USER,currentUser);
+        Log.i(TAG, "Current user name is " + currentUser.getUserName() + "   ,id is" + currentUser.getId());
+        Intent intent = new Intent(MainActivity.this, TestHomeActivity.class);
+        intent.putExtra(CURRENT_USER, currentUser);
         startActivity(intent);
         //TODO:Need to send currentUser to home activity to later retrieve trips attached to this user
     }
 
     @Override
     public void onClick(View v) {
-        String email=userEmailEt.getText().toString();
-        String password=passwordEt.getText().toString();
-        switch (v.getId()){
+        String email = userEmailEt.getText().toString();
+        String password = passwordEt.getText().toString();
+        switch (v.getId()) {
             case R.id.forgetPasswordTv:
                 forgetPassword();
                 break;
             case R.id.signInBtn:
-                signInWithEmailAndPasswordView(email,password);
+                signInWithEmailAndPasswordView(email, password);
                 break;
             case R.id.facebookImageView:
                 signInWithFacebookView();
@@ -204,25 +215,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void goToSignUpActivity() {
     }
+
     private void signInWithFacebookView() {
         configureFacebook();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
     }
+
     private void forgetPassword() {
+        //JUST FOr TEST GO TO DETAILS ACTIVITY
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+        intent.putExtra(TRIP_TAG, VIEW_TRIP_FLAG);
+        //TODO:NEED TO HANDLE IT WITH DATES-->POJO NEEDS TO HAVE 2 OBJECTS OF DATES!
+        intent.putExtra(TRIP_TYPE, TRIP_TYPE_SINGLE);
+
+        startActivity(intent);
     }
-    private void signInWithEmailAndPasswordView(String email,String password) {
-        isValidData(email,password);
-        if(isValidData(email,password)){
-            signInWithEmailAndPasswordViewModel(userEmailEt.getText().toString(),passwordEt.getText().toString());
+
+    private void signInWithEmailAndPasswordView(String email, String password) {
+        isValidData(email, password);
+        if (isValidData(email, password)) {
+            signInWithEmailAndPasswordViewModel(userEmailEt.getText().toString(), passwordEt.getText().toString());
         }
     }
 
     private boolean isValidData(String email, String password) {
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             userEmailEt.setError(getString(R.string.enteremail));
             return false;
         }
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             passwordEt.setError(getString(R.string.enterpassword));
             return false;
         }
