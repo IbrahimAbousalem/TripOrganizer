@@ -131,8 +131,48 @@ public class AuthenticationFirebase {
         }
     }
 
+    public MutableLiveData<String> register(User user, String password) {
+        MutableLiveData<String> registerUser = new MutableLiveData<>();
+        firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                    if(currentUser!= null){
+                        user.setId(currentUser.getUid());
+                        user.setProvider_id(currentUser.getProviderId());
+                        saveToDatabase(user);
+                        registerUser.postValue("Register Successfully");
+                    }
+                }else{
+                    registerUser.postValue(task.getException().getMessage());
+                }
+            }
+        });
+        return registerUser;
+    }
+
     public void saveToDatabase(User user){
         db.collection(USERS_COLLECTION).document(user.getId()).set(user);
         //TODO: add onSuccess and on Failure
     }
+
+    public MutableLiveData<User> signInWithGoogle(AuthCredential googleAuthCredential) {
+        MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
+        firebaseAuth.signInWithCredential(googleAuthCredential).addOnCompleteListener(authTask -> {
+            if (authTask.isSuccessful()) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                User currentUser=null;
+                for (UserInfo userInfo:user.getProviderData()){
+                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+                }
+                saveToDatabase(currentUser);
+                authenticatedUserMutableLiveData.postValue(currentUser);
+            } else {
+               Log.e("Error", authTask.getException().getMessage());
+            }
+        });
+        return authenticatedUserMutableLiveData;
+    }
+
 }

@@ -1,13 +1,13 @@
 package com.iti.mobile.triporganizer.login;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.facebook.AccessToken;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
 import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepository;
-import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepositoryImp;
 
 import javax.inject.Inject;
 
@@ -23,10 +23,6 @@ public class LoginViewModel extends ViewModel {
         return authenticationRepositoryImp.signInWithEmailAndPasswordFunc(email,password);
     }
 
-    public LiveData<User> signInWithGoogleVM(GoogleSignInAccount account){
-        return authenticationRepositoryImp.signInWithGoogleFunc(account);
-    }
-
     public LiveData<User> signInWithEFacebookVM(AccessToken accessToken){
         return authenticationRepositoryImp.signInWithFacebookFunc(accessToken);
     }
@@ -36,6 +32,10 @@ public class LoginViewModel extends ViewModel {
     }
     public void signOutVM(){
         authenticationRepositoryImp.signoutFunc();
+    }
+
+    public LiveData<User> signInWithGoogle(AuthCredential googleAuthCredential) {
+        return authenticationRepositoryImp.firebaseSignInWithGoogle(googleAuthCredential);
     }
 
 }

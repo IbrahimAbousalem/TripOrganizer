@@ -2,6 +2,7 @@ package com.iti.mobile.triporganizer.app;
 
 import android.app.Application;
 
+import com.google.firebase.FirebaseApp;
 import com.iti.mobile.triporganizer.dagger.component.ApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.component.DaggerApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.module.application.ApplicationModule;

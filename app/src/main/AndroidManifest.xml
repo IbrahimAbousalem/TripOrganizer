@@ -14,8 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".details.DetailsActivity"></activity>
-        <activity android:name=".home.HomeActivity" />
+
+        <!--<activity android:name=".home.HomeActivity" />-->
+
+        <activity android:name=".dialog.TestDialogActivity">
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -38,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.TestHomeActivity" />
-        <activity android:name=".login.MainActivity">
+        <activity android:name=".base.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

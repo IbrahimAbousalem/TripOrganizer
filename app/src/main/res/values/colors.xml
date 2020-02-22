@@ -7,4 +7,11 @@
     <color name="lighttxt">#C3BBC3</color>
     <color name="darktxt">#8D8585</color>
     <color name="whiteclr">#ffffff</color>
+    <color name="lightBlue">#03A9F4</color>
+    <color name="white_bacground">#FFFFFF</color>
+    <color name="purple_bacground">#5A425C</color>
+    <color name="gray_border">#707070</color>
+    <color name="icon_gray_background">#8D8585</color>
+    <color name="icon_orange_background">#F97C51</color>
+    <color name="text_black">#000000</color>
 </resources>

@@ -53,13 +53,18 @@ public class TripsFirebase {
     public boolean updateTrip(Trip trip) {
         DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getId());
         Map<String, Object> mTrip = new HashMap<>();
+        Map<String, Object> mLocation = new HashMap<>();
+        mLocation.put(FirestoreConstatnts.endPoint, trip.getLocationData().getEndPoint());
+        mLocation.put(FirestoreConstatnts.endAddressName, trip.getLocationData().getEndAddressName());
+        mLocation.put(FirestoreConstatnts.startPoint, trip.getLocationData().getStartPoint());
+        mLocation.put(FirestoreConstatnts.startAddressName, trip.getLocationData().getStartAddressName());
+
         mTrip.put(FirestoreConstatnts.id, reference.getId());
         mTrip.put(FirestoreConstatnts.type, trip.getType());
+        mTrip.put(FirestoreConstatnts.locationData, mLocation);
         mTrip.put(FirestoreConstatnts.date, trip.getDate());
-        mTrip.put(FirestoreConstatnts.endPoint, trip.getEndPoint());
         mTrip.put(FirestoreConstatnts.isRound, trip.isRound());
         mTrip.put(FirestoreConstatnts.userId, trip.getUserId());
-        mTrip.put(FirestoreConstatnts.startPoint, trip.getStartPoint());
         mTrip.put(FirestoreConstatnts.roundTrip, trip.getRoundTrip());
         mTrip.put(FirestoreConstatnts.status, trip.getStatus());
         return reference.update(mTrip).isSuccessful();

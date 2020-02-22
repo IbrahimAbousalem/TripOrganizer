@@ -2,12 +2,14 @@ package com.iti.mobile.triporganizer.data.entities;
 
 import java.util.Date;
 
+import androidx.annotation.Nullable;
+
 public class Trip {
 
     private String id;
     private String userId;
-    private long startPoint;
-    private long endPoint;
+    private String tripName;
+    private LocationData locationData;
     private Date date;
     private String type;
     private String status;
@@ -17,11 +19,11 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(String id, String userId, long startPoint, long endPoint, Date date, String type, String status, Trip roundTrip, boolean isRound) {
+    public Trip(String id, String userId, String tripName, LocationData locationData, Date date, String type, String status, Trip roundTrip, boolean isRound) {
         this.id = id;
         this.userId = userId;
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
+        this.tripName = tripName;
+        this.locationData = locationData;
         this.date = date;
         this.type = type;
         this.status = status;
@@ -45,20 +47,20 @@ public class Trip {
         this.userId = userId;
     }
 
-    public long getStartPoint() {
-        return startPoint;
+    public String getTripName() {
+        return tripName;
     }
 
-    public void setStartPoint(long startPoint) {
-        this.startPoint = startPoint;
+    public void setTripName(String tripName) {
+        this.tripName = tripName;
     }
 
-    public long getEndPoint() {
-        return endPoint;
+    public LocationData getLocationData() {
+        return locationData;
     }
 
-    public void setEndPoint(long endPoint) {
-        this.endPoint = endPoint;
+    public void setLocationData(LocationData locationData) {
+        this.locationData = locationData;
     }
 
     public Date getDate() {
@@ -99,5 +101,16 @@ public class Trip {
 
     public void setRound(boolean round) {
         isRound = round;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Trip data = (Trip) obj;
+        if(!tripName.equals(data.getTripName()) || roundTrip != data.getRoundTrip()
+            || !locationData.equals(data.locationData) || !date.equals(data.getDate())
+            || !type.equals(data.getType()) || !status.equals(data.getStatus())){
+            return  false;
+        }
+        return true;
     }
 }
