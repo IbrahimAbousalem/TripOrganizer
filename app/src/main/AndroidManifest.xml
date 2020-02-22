@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.iti.mobile.triporganizer">
 
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".app.TripOrganizerApp"
@@ -16,13 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".dialog.TestDialogActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".register.RegisterActivity">
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".home.HomeActivity"></activity>
+        <activity android:name=".register.RegisterActivity"></activity>
+        <activity android:name=".home.HomeActivity" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -39,9 +44,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.TestHomeActivity"/>
+        <activity android:name=".login.TestHomeActivity" />
         <activity android:name=".login.MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
