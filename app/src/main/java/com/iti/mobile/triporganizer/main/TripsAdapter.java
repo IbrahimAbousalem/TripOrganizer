@@ -26,6 +26,7 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
     public TripsAdapter() {
         super(diffCallback);
     }
+
     private static final DiffUtil.ItemCallback<Trip> diffCallback = new DiffUtil.ItemCallback<Trip>() {
         @Override
         public boolean areItemsTheSame(@NonNull Trip oldItem, @NonNull Trip newItem) {
