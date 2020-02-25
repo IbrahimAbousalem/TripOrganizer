@@ -58,5 +58,5 @@
         android:id="@+id/detailsFragment"
         android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
         android:label="activity_details"
-        tools:layout="@layout/activity_details" />
+        tools:layout="@layout/fragment_details" />
 </navigation>

@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "527957523613",
-    "firebase_url": "https://triporganizer-fdde2.firebaseio.com",
-    "project_id": "triporganizer-fdde2",
-    "storage_bucket": "triporganizer-fdde2.appspot.com"
+    "project_number": "466314870678",
+    "firebase_url": "https://triporganizerapp-3a4df.firebaseio.com",
+    "project_id": "triporganizerapp-3a4df",
+    "storage_bucket": "triporganizerapp-3a4df.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:527957523613:android:72ae89e7199080264ee874",
+        "mobilesdk_app_id": "1:466314870678:android:581a233acc59a47ae4e7b7",
         "android_client_info": {
-          "package_name": "com.abousalem.firebasemvvmdemo"
+          "package_name": "com.example.testfirebase"
         }
       },
       "oauth_client": [
         {
-          "client_id": "527957523613-u0jucfcn2vo8bia5k351pe47bvuprksl.apps.googleusercontent.com",
+          "client_id": "466314870678-erdko0qnk9pu9onhrn0rt2r4i0126srd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.abousalem.firebasemvvmdemo",
-            "certificate_hash": "c6b263d3e1d6a65ec4e3f4a3a9e2a95483216887"
+            "package_name": "com.example.testfirebase",
+            "certificate_hash": "351c34b0087c8229f73508e474719bfc85449af1"
           }
         },
         {
-          "client_id": "527957523613-lp3ajg58rgmesat45v289e6g68tm5pr8.apps.googleusercontent.com",
+          "client_id": "466314870678-3f28em664grqmhnak7keup44ous89mqh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDDv_qTCW8_e7RuVOrlH84IlpmqFls8OfY"
+          "current_key": "AIzaSyBTHdyfDo5msZD9NdzbGIK2Lpkh0Yyti78"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "527957523613-lp3ajg58rgmesat45v289e6g68tm5pr8.apps.googleusercontent.com",
+              "client_id": "466314870678-3f28em664grqmhnak7keup44ous89mqh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,14 +45,14 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:527957523613:android:6e49b2e4fd98cfbc4ee874",
+        "mobilesdk_app_id": "1:466314870678:android:2429102982cf4face4e7b7",
         "android_client_info": {
           "package_name": "com.iti.mobile.triporganizer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "527957523613-q59vmihroqldioiv6gbhl4qdpjg4jbeh.apps.googleusercontent.com",
+          "client_id": "466314870678-4j479c9m10dmuthsmc6vgt00nc1gfvoo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.iti.mobile.triporganizer",
@@ -60,20 +60,20 @@
           }
         },
         {
-          "client_id": "527957523613-lp3ajg58rgmesat45v289e6g68tm5pr8.apps.googleusercontent.com",
+          "client_id": "466314870678-3f28em664grqmhnak7keup44ous89mqh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDDv_qTCW8_e7RuVOrlH84IlpmqFls8OfY"
+          "current_key": "AIzaSyBTHdyfDo5msZD9NdzbGIK2Lpkh0Yyti78"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "527957523613-lp3ajg58rgmesat45v289e6g68tm5pr8.apps.googleusercontent.com",
+              "client_id": "466314870678-3f28em664grqmhnak7keup44ous89mqh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

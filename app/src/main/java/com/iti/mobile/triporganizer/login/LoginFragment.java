@@ -28,9 +28,12 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
@@ -62,7 +65,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private TextView forgetPasswordTv;
     private Button signInBtn;
     private ImageView facebookImageView;
-    private ImageView googleImgView;
+    private SignInButton googleImgView;
     private TextView signUpTv;
 
     private GoogleConfiguration googleConfiguration;
@@ -111,6 +114,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
 //Google----------------------------------------------------------
+
     private void signInWithGoogleView() {
         googleConfiguration = GoogleConfiguration.getInstance(getActivity());
         googleConfiguration.configureGoogle();
@@ -120,15 +124,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 AuthCredential credential = googleConfiguration.getGoogleAuthCredential(account);
-                loginViewModel.signInWithGoogle(credential).observe(this,user -> {
+                loginViewModel.signInWithGoogle(credential).observe(this, user -> {
                     if (user != null) {
                         updateUi(user);
                     } else {
@@ -140,7 +144,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
-    //google esht8lt?   No
+
+//    @Override
+//    public void startActivityForResult(Intent intent, int requestCode) {
+//        super.startActivityForResult(intent, requestCode);
+//        if (requestCode == RC_SIGN_IN) {
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
+//            try {
+//                // Google Sign In was successful, authenticate with Firebase
+//                GoogleSignInAccount account = task.getResult(ApiException.class);
+//                AuthCredential credential = googleConfiguration.getGoogleAuthCredential(account);
+//                loginViewModel.signInWithGoogle(credential).observe(this,user -> {
+//                    if (user != null) {
+//                        updateUi(user);
+//                    } else {
+//                        updateUi(null);
+//                    }
+//                });
+//            } catch (ApiException e) {
+//                Log.w(TAG, "Google sign in failed", e);
+//            }
+//        }
+//    }
+
 //----------------------------------------------------------------------------------------
 
 //Facebook------------------------------------------------------------------------
@@ -195,6 +221,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 //Sign UP------------------------------------------------------------
     private void goToSignUpActivity() {
+        controller.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 //---------------------------------------------------------------
 
@@ -240,4 +267,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         signUpTv = view.findViewById(R.id.signUpTv);
         signUpTv.setOnClickListener(this);
     }
+
+
 }

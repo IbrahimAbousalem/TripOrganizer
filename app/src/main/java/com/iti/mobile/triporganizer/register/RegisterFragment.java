@@ -47,7 +47,6 @@ import javax.inject.Inject;
 public class RegisterFragment extends Fragment {
 
     private static final String TAG = "RegisterFragment";
-    private FirebaseFirestore firebaseFirestore;
     private TextInputLayout emailTextInputLayout;
     private TextInputEditText emailEditText;
     private TextInputLayout userNameInputLayout;
@@ -73,38 +72,34 @@ public class RegisterFragment extends Fragment {
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         setUpViews(view);
 
-        initFireStore();
+        signUpButton.setOnClickListener(v -> {
+            String email = emailEditText.getText().toString();
+            String userName = userNameEditText.getText().toString();
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String userName = userNameEditText.getText().toString();
+            if (!isValidEmail(email)) {
+                emailTextInputLayout.setError(getString(R.string.valid_email));
+                return;
+            }
+            String password = passwordEditText.getText().toString();
+            if (password.length() <= 3) {
+                passwordTextInputLayout.setError(getString(R.string.valid_password));
+                return;
+            }
+            String confirmPassword = confirmPasswordEditText.getText().toString();
 
-                if (!isValidEmail(email)) {
-                    emailTextInputLayout.setError(getString(R.string.valid_email));
-                    return;
+            if (!password.equals(confirmPassword)) {
+                confirmPasswordTextInputLayout.setError(getString(R.string.valid_confirm_password));
+                return;
+            }
+            User user = new User(userName, "", email, "", "");
+            registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
+                if(s.equals("Register Successfully")){
+                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
                 }
-                String password = passwordEditText.getText().toString();
-                if (password.length() <= 3) {
-                    passwordTextInputLayout.setError(getString(R.string.valid_password));
-                    return;
-                }
-                String confirmPassword = confirmPasswordEditText.getText().toString();
-
-                if (!password.equals(confirmPassword)) {
-                    confirmPasswordTextInputLayout.setError(getString(R.string.valid_confirm_password));
-                    return;
-                }
-                User user = new User(userName, "", email, "", "");
-                registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
-                    if(s.equals("Register Successfully")){
-                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }});
+            });
+        });
                 goToSignInTV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -128,10 +123,6 @@ public class RegisterFragment extends Fragment {
         signUpButton = view.findViewById(R.id.signupBtn);
         goToSignInTV = view.findViewById(R.id.goToSignInTV);
         registerViewModel = new ViewModelProvider(this, providerFactory).get(RegisterViewModel.class);
-    }
-
-    private void initFireStore() {
-        firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     private boolean isValidEmail(String email) {
