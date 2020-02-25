@@ -1,33 +1,36 @@
 package com.iti.mobile.triporganizer.details;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iti.mobile.triporganizer.R;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.iti.mobile.triporganizer.utils.Flags.EDIT_TRIP_FLAG;
@@ -46,9 +49,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private ImageView bkImageView;
     private FloatingActionButton deleteFabBtn;
 
+    private AutocompleteSupportFragment startPointAutocompleteFragment;
+    private AutocompleteSupportFragment endPointAutocompleteFragment;
+    private EditText startPointETFrag;
+    private EditText endPointEtFrag;
+
     private EditText tripTitleEt;
-    private EditText endPointEt;
-    private EditText startPointEt;
     private EditText date1Et;
     private EditText timeEt1;
     private EditText dateEt2;
@@ -63,9 +69,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private RecyclerView notes_recyclerview;
     private List<String> notesList;
 
+    NavController controller;
     NoteAdapter noteAdapter;
     private int tripTypeChoice;
     private int tripActionChoice;
+
+    private PlacesClient placesClient;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -76,7 +85,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         tripTypeChoice=TRIP_TYPE_SINGLE;
         tripActionChoice=VIEW_TRIP_FLAG;
-
+        controller = Navigation.findNavController(view);
         switch (tripActionChoice) {
             case VIEW_TRIP_FLAG:
                 viewTrip(tripTypeChoice, tripActionChoice);
@@ -128,8 +137,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         deleteFabBtn = root.findViewById(R.id.deleteFab);
         deleteFabBtn.setOnClickListener(this);
         tripTitleEt = root.findViewById(R.id.tripTitleEt);
-        startPointEt = root.findViewById(R.id.startPointEt);
-        endPointEt = root.findViewById(R.id.endPointEt);
         date1Et = root.findViewById(R.id.date1Et);
         dateEt2 = root.findViewById(R.id.dateEt2);
         timeEt1 = root.findViewById(R.id.timeEt1);
@@ -144,6 +151,53 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         roundBtn.setOnClickListener(this);
         addNoteImageView = root.findViewById(R.id.addNoteImageView);
         addNoteImageView.setOnClickListener(this);
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), getString(R.string.google_places_api_key));
+        }
+        placesClient = Places.createClient(getContext());
+        startPointAutocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.startAutoCompleteFragment);
+        endPointAutocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.endAutoCompleteFragment);
+        startPointETFrag=startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_edit_text);
+        endPointEtFrag=endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_edit_text);
+        handleStartPointPlacesSelected(startPointAutocompleteFragment);
+        handleEndPointPlacesSelected(endPointAutocompleteFragment);
+    }
+
+    private void handleStartPointPlacesSelected(AutocompleteSupportFragment startPointAutocompleteFragment) {
+        startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        startPointAutocompleteFragment.setHint(getString(R.string.estart_point));
+        startPointAutocompleteFragment.setCountry("EG");
+        startPointAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
+
+    private void handleEndPointPlacesSelected(AutocompleteSupportFragment endPointAutocompleteFragment) {
+        endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        endPointAutocompleteFragment.setHint(getString(R.string.estart_point));
+        endPointAutocompleteFragment.setCountry("EG");
+        endPointAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
     }
 
     @Override
@@ -176,7 +230,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void deleteTrip() {
-
+        //controller.navigate(R.id.action_detailsFragment_to_autoCompleteFragment);
     }
 
     private void viewTrip(int tripTypeChoice, int tripActionChoice) {
@@ -197,8 +251,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private void disableEditText() {
         tripTitleEt.setEnabled(false);
-        startPointEt.setEnabled(false);
-        endPointEt.setEnabled(false);
+        //startPointETFrag.setEnabled(false);
+        //endPointEtFrag.setEnabled(false);
         date1Et.setEnabled(false);
         timeEt1.setEnabled(false);
         dateEt2.setEnabled(false);
@@ -209,8 +263,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private void enableEditText() {
         tripTitleEt.setEnabled(true);
-        startPointEt.setEnabled(true);
-        endPointEt.setEnabled(true);
+        //startPointETFrag.setEnabled(true);
+        //endPointEtFrag.setEnabled(true);
         date1Et.setEnabled(true);
         timeEt1.setEnabled(true);
         dateEt2.setEnabled(true);

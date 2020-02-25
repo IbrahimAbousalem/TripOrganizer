@@ -59,21 +59,22 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:19.2.0"
     implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation "com.google.firebase:firebase-firestore:$firestore_version"
+    //implementation 'com.google.firebase:firebase-firestore:21.4.0'
 
     //fb
-    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'com.facebook.android:facebook-login:5.15.3'
 
     //Material Design
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'com.google.android.material:material:1.1.0'
 
+    //GooglePlaces
+    implementation 'com.google.android.libraries.places:places:2.2.0'
+
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    //fireStore
-    implementation 'com.google.firebase:firebase-firestore:21.4.0'
 
     implementation "androidx.multidex:multidex:2.0.1"
 }

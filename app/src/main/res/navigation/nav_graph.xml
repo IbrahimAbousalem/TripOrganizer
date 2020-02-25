@@ -58,5 +58,14 @@
         android:id="@+id/detailsFragment"
         android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
         android:label="activity_details"
-        tools:layout="@layout/activity_details" />
+        tools:layout="@layout/activity_details" >
+        <action
+            android:id="@+id/action_detailsFragment_to_autoCompleteFragment"
+            app:destination="@id/autoCompleteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/autoCompleteFragment"
+        android:name="com.iti.mobile.triporganizer.details.AutoCompleteFragment"
+        android:label="fragment_auto_complete"
+        tools:layout="@layout/fragment_auto_complete" />
 </navigation>

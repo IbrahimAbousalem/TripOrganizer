@@ -195,6 +195,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 //Sign UP------------------------------------------------------------
     private void goToSignUpActivity() {
+        controller.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 //---------------------------------------------------------------
 
