@@ -1,8 +1,10 @@
 package com.iti.mobile.triporganizer.data.room_entity;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -13,12 +15,14 @@ public class Note {
     @PrimaryKey
     private int id;
     private String message;
+    @ColumnInfo(name = "tripId", index = true)
     private int tripId;
     private boolean status;
 
     public Note() {
     }
 
+    @Ignore
     public Note(String message, int tripId, boolean status, int id) {
         this.message = message;
         this.tripId = tripId;

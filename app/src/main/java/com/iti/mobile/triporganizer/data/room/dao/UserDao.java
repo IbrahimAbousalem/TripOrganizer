@@ -1,4 +1,4 @@
-package com.iti.mobile.triporganizer.data.room;
+package com.iti.mobile.triporganizer.data.room.dao;
 
 import com.iti.mobile.triporganizer.data.room_entity.User;
 
