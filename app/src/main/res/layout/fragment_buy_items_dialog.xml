@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+
+    tools:context=".dialog.BuyItemsDialog">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="@dimen/d_16"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="@dimen/d_16"
+        android:background="@drawable/rounded_card_no_clr_thick_stroke"
+        android:padding="@dimen/d_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d_32"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/buy_items"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d_16"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/d_8"
+            android:weightSum="3"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/d_16"
+                android:layout_marginEnd="@dimen/d_16"
+                android:layout_marginBottom="16dp"
+                android:text="@string/start"
+                style="@style/signinup_btn"
+                />
+
+            <Button
+                android:id="@+id/laterButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_16"
+                android:layout_marginEnd="@dimen/d_16"
+                android:layout_marginBottom="16dp"
+                android:text="@string/later"
+                style="@style/signinup_btn"
+             />
+
+            <Button
+                android:id="@+id/cancelButton"
+                style="@style/signinup_btn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_16"
+                android:layout_marginEnd="@dimen/d_16"
+                android:layout_marginBottom="16dp"
+                android:text="@string/cancel" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="@dimen/d_4"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/ic_reminder"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -103,7 +103,7 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
             startBtn = itemView.findViewById(R.id.startBtn);
             viewBtn = itemView.findViewById(R.id.viewBtn);
-            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_historyFragment));
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_detailsFragment));
         }
 
 
@@ -129,7 +129,7 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
             tripDateTv = itemView.findViewById(R.id.tripDateTv);
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
             statusTv = itemView.findViewById(R.id.statusBtn);
-            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_historyFragment));
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_detailsFragment));
         }
 
         private void setTripNameTv(String tripName) {

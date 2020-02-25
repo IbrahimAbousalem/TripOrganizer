@@ -17,7 +17,26 @@
     <string name="enteremail">You have to enter an email</string>
     <string name="enterpassword">You have to enter a password</string>
     <string name="start">Start</string>
+
+    <string name="edit">Edit</string>
     <string name="view">View</string>
+    <string name="title">Title</string>
+    <string name="start_point">Start Point</string>
+    <string name="end_point">End Point</string>
+    <string name="single">Single</string>
+    <string name="round">Round</string>
+    <string name="date1">Date1</string>
+    <string name="time1">Time1</string>
+    <string name="date2">Date2</string>
+    <string name="time2">Time2</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="notes">Notes</string>
+    <string name="etitle">Enter Trip Name</string>
+    <string name="estart_point">Enter Start Point</string>
+    <string name="eend_point">Enter End Point</string>
+    <string name="edate">Pick Date</string>
+    <string name="etime">Pick Time</string>
     <string name="facebook_app_id">497010691251023</string>
     <string name="fb_login_protocol_scheme">fb497010691251023</string>
     <string name="hello_blank_fragment">Hello Login Fragment</string>
@@ -27,5 +46,11 @@
 
     <string name="next_trip">Next Trip</string>
     <string name="upcoming_trips">Upcoming Trips</string>
+    <string name="buy_items">Buy items from supermarket</string>
+    <string name="later">LATER</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_trip">Are you sure to delete trip ?!</string>
+    <string name="no">No</string>
+    <string name="delete">Delete</string>
 
 </resources>
