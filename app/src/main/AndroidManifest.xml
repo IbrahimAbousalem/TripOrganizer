@@ -4,6 +4,7 @@
     package="com.iti.mobile.triporganizer">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".app.TripOrganizerApp"
@@ -14,11 +15,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".alarm.SetAlarmDummyActivity">
 
-        <!--<activity android:name=".home.HomeActivity" />-->
-
-        <activity android:name=".dialog.TestDialogActivity">
         </activity>
+
+        <receiver
+            android:name=".alarm.AlarmBroadCastReceiver"
+            android:enabled="true"
+            android:exported="false" >
+
+        </receiver>
+
+        <service
+            android:name=".alarm.AlarmService"
+            android:enabled="true"
+            android:exported="true"
+             ></service> <!-- <activity android:name=".home.HomeActivity" /> -->
+        <activity android:name=".dialog.TestDialogActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
