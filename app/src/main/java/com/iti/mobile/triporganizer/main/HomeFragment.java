@@ -8,21 +8,30 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
+import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.login.LoginViewModel;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class HomeFragment extends Fragment {
     public static final String TAG = "HomeFragment";
     private RecyclerView tripsRecyclerView;
     private NavController controller;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +63,8 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
     }
+
+
 
     private void initViews(View view) {
         tripsRecyclerView = view.findViewById(R.id.tripsRecyclerView);

@@ -16,13 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -30,11 +31,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
-import com.iti.mobile.triporganizer.base.MainActivity;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
@@ -42,6 +43,8 @@ import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
 import java.util.Arrays;
 
 import javax.inject.Inject;
+
+import static android.view.View.VISIBLE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +60,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
 
-    private EditText userEmailEt;
-    private EditText passwordEt;
+    private TextInputEditText userEmailEt;
+    private TextInputEditText passwordEt;
     private TextView forgetPasswordTv;
     private Button signInBtn;
+    private ProgressBar progressBar;
     private ImageView facebookImageView;
     private ImageView googleImgView;
     private TextView signUpTv;
@@ -110,9 +114,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void showProgressBar(){
+        progressBar.setVisibility(VISIBLE);
+    }
+    private void hideProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
 //Google----------------------------------------------------------
+
     private void signInWithGoogleView() {
-        googleConfiguration = GoogleConfiguration.getInstance(getActivity());
+        googleConfiguration = GoogleConfiguration.getInstance(getActivity().getApplicationContext());
         googleConfiguration.configureGoogle();
         mGoogleSignInClient = googleConfiguration.getGoogleClient();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -120,15 +131,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 AuthCredential credential = googleConfiguration.getGoogleAuthCredential(account);
-                loginViewModel.signInWithGoogle(credential).observe(this,user -> {
+                showProgressBar();
+                loginViewModel.signInWithGoogle(credential).observe(this, user -> {
                     if (user != null) {
                         updateUi(user);
                     } else {
@@ -140,8 +152,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
-    //google esht8lt?   No
-//----------------------------------------------------------------------------------------
 
 //Facebook------------------------------------------------------------------------
     private void signInWithFacebookView() {
@@ -149,7 +159,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
     }
     private void configureFacebook() {
-      //  FacebookSdk.sdkInitialize(this);
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -172,6 +182,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //Normal SignIn ------------------------------------------------------------------------------------------
     private void signInWithEmailAndPasswordView(String email, String password) {
         if(isValidData(email,password)){
+            showProgressBar();
             signInWithEmailAndPasswordViewModel(userEmailEt.getText().toString(),passwordEt.getText().toString());
         }
     }
@@ -213,8 +224,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateUi(User currentUser) {
+        hideProgressBar();
         if (currentUser != null) {
-            controller.navigate(R.id.action_loginFragment_to_homeFragment);
+           // controller.navigate(R.id.action_loginFragment_to_homeFragment);
+            getActivity().startActivity(new Intent(getActivity(), TestHomeActivity.class) );
             //sendData?
             //gotoHomeActivity(currentUser);
         } else {
@@ -234,6 +247,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         forgetPasswordTv.setOnClickListener(this);
         signInBtn = view.findViewById(R.id.signInBtn);
         signInBtn.setOnClickListener(this);
+        progressBar=view.findViewById(R.id.progressBar);
         facebookImageView = view.findViewById(R.id.facebookImageView);
         facebookImageView.setOnClickListener(this);
         googleImgView = view.findViewById(R.id.googleImageView);
@@ -241,4 +255,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         signUpTv = view.findViewById(R.id.signUpTv);
         signUpTv.setOnClickListener(this);
     }
+
+
 }

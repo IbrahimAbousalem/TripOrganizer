@@ -20,6 +20,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.User;
+
 import javax.inject.Inject;
 
 import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.USERS_COLLECTION;
@@ -30,6 +31,8 @@ public class AuthenticationFirebase {
     private FirebaseUser firebaseUser;
     private static final String TAG = "AuthenticationFirebase";
     private FirebaseFirestore db;
+
+
 
     @Inject
     public AuthenticationFirebase(FirebaseAuth auth, FirebaseFirestore db) {
