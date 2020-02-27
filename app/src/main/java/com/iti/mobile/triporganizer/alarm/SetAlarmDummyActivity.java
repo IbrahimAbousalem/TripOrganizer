@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -16,12 +17,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 
 public class SetAlarmDummyActivity extends AppCompatActivity {
-    private AlarmService alarmService;
+
     private Button setAlarm,cancelAlarm,stopSound;
-    private AlarmManager alarmManager;
-    private PendingIntent pendingIntent;
+    private  AlarmManager alarmManager;
+    private  PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,17 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
 
 
         enableReceiver();
+        Trip trip = new Trip();
+        trip.setId("1234");
 
-        bindService(new Intent(SetAlarmDummyActivity.this, AlarmService.class),serviceConnection, Context.BIND_AUTO_CREATE);
 
 
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent alarmIntent = new Intent(this, AlarmBroadCastReceiver.class);
+        alarmIntent.setData(Uri.parse("custom://" + trip.getId()));
+        alarmIntent.setAction(trip.getId());
+
         //request code for pending intent must be unique on application level
         pendingIntent = PendingIntent.getBroadcast(this, 101, alarmIntent, 0);
 
@@ -50,9 +56,11 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
             cancelAlarm();
         });
         stopSound.setOnClickListener((view)->{
+            /*
             if (alarmService !=null){
                 alarmService.stopRingTone();
             }
+             */
         });
 
     }
@@ -75,18 +83,7 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
     }
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            AlarmService.MyBinder myBinder = (AlarmService.MyBinder) iBinder;
-            alarmService = myBinder.getService();
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
-        }
-    };
 
     private void startAlarm() {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, 5*1000, pendingIntent);
