@@ -16,11 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.iti.mobile.triporganizer.R;
-import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,19 +46,7 @@ public class HistoryFragment extends Fragment {
         //Dagger
         //ViewModel
         controller = Navigation.findNavController(view);
-        data = new ArrayList<>();
-        data.add(new Trip("21212", "2121qwewq","Trip 1", new LocationData("Cairo", 212121, "Giza",544545),
-                new Date(),"type", "Done", null, false));
-        data.add(new Trip("21212", "2121qwewq","Trip 2", new LocationData("Cairo", 212121, "Giza",544545),
-                new Date(),"type", "Canceled", null, false));
-        data.add(new Trip("21212", "2121qwewq","Trip 3", new LocationData("Cairo", 212121, "Giza",544545),
-                new Date(),"type", "Done", null, false));
-        data.add(new Trip("21212", "2121qwewq","Trip 4", new LocationData("Cairo", 212121, "Giza",544545),
-                new Date(),"type", "Done", null, false));
-        adapter.submitList(data);
     }
-
-
 
     private void initView(View view) {
         historyRecycleView = view.findViewById(R.id.historyRecyclerRV);

@@ -3,12 +3,21 @@ package com.iti.mobile.triporganizer.data.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "users")
 public class User implements Parcelable {
 
+    @NonNull
+    @PrimaryKey
+    private String id;
     private String userName;
     private String profilePicUrl;
     private String email;
-    private String id;
+    @Ignore
     private String password;
 
     //login-method
@@ -17,7 +26,8 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(String userName, String profilePicUrl, String email, String id,String provider_id) {
+    @Ignore
+    public User(String userName, String profilePicUrl, String email, String id, String provider_id) {
         this.userName = userName;
         this.profilePicUrl = profilePicUrl;
         this.email = email;
@@ -34,7 +44,7 @@ public class User implements Parcelable {
         provider_id = in.readString();
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
             return new User(in);
@@ -105,3 +115,4 @@ public class User implements Parcelable {
         dest.writeString(provider_id);
     }
 }
+

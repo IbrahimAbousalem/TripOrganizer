@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -37,16 +22,16 @@
         style="@style/edittext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/d_32"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="@dimen/d_32"
+        android:layout_marginEnd="24dp"
         android:hint="@string/user_name"
         android:padding="@dimen/d_2"
+        app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:startIconDrawable="@drawable/ic_user_24px"
-        app:hintTextAppearance="@style/HintText">
+        app:startIconDrawable="@drawable/ic_user_24px">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userNameEditText"
@@ -54,10 +39,9 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/d_8"
             android:inputType="text"
-
-
-            />
+            android:paddingBottom="25dp" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTextInputLayout"
         android:layout_width="match_parent"
@@ -68,12 +52,11 @@
         android:layout_marginEnd="@dimen/d_32"
         android:hint="@string/email"
         android:padding="@dimen/d_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintEnd_toEndOf="@+id/userNameInputLayout"
+        app:layout_constraintStart_toStartOf="@+id/userNameInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/userNameInputLayout"
-        app:startIconDrawable="@drawable/ic_user_24px"
-        app:hintTextAppearance="@style/HintText">
+        app:startIconDrawable="@drawable/ic_user_24px">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
@@ -83,8 +66,7 @@
             android:paddingBottom="25dp"
             android:inputType="textEmailAddress"
 
-
-            />
+/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -92,17 +74,14 @@
         style="@style/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/d_32"
-        android:layout_marginTop="@dimen/d_16"
-        android:layout_marginEnd="@dimen/d_32"
+        android:layout_marginTop="8dp"
         android:hint="@string/pass"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:hintTextAppearance="@style/HintText"
+        app:layout_constraintEnd_toEndOf="@+id/emailTextInputLayout"
+        app:layout_constraintStart_toStartOf="@+id/emailTextInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/emailTextInputLayout"
-        app:startIconDrawable="@drawable/ic_lock_24dp"
         app:passwordToggleEnabled="true"
-        app:hintTextAppearance="@style/HintText">
+        app:startIconDrawable="@drawable/ic_lock_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
@@ -119,27 +98,22 @@
         style="@style/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/d_32"
-        android:layout_marginTop="@dimen/d_16"
-        android:layout_marginEnd="@dimen/d_32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"
-        app:startIconDrawable="@drawable/ic_lock_24dp"
-        app:passwordToggleEnabled="true"
+        android:layout_marginTop="8dp"
         app:hintTextAppearance="@style/HintText"
-        >
+        app:layout_constraintEnd_toEndOf="@+id/passwordTextInputLayout"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/passwordTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"
+        app:passwordToggleEnabled="true"
+        app:startIconDrawable="@drawable/ic_lock_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirmPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/d_8"
-            android:inputType="numberPassword"
             android:hint="@string/confirm_password"
-
-
+            android:inputType="numberPassword"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,7 +127,6 @@
         android:layout_marginEnd="@dimen/d_24"
         android:text="@string/signup"
         android:textSize="18sp"
-
         app:layout_constraintEnd_toEndOf="@+id/confirmPasswordTextInputLayout"
         app:layout_constraintStart_toStartOf="@+id/confirmPasswordTextInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextInputLayout" />

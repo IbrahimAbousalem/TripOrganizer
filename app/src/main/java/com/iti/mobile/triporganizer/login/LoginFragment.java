@@ -38,6 +38,7 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
+import com.iti.mobile.triporganizer.databinding.FragmentLoginBinding;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
 
 import java.util.Arrays;
@@ -59,6 +60,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Inject
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
+    private FragmentLoginBinding binding;
 
     private TextInputEditText userEmailEt;
     private TextInputEditText passwordEt;
@@ -79,7 +81,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
@@ -93,8 +97,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        String email = userEmailEt.getText().toString();
-        String password = passwordEt.getText().toString();
+        String email = binding.userEmailEt.getText().toString();
+        String password = binding.passwordEt.getText().toString();
         switch (v.getId()) {
             case R.id.forgetPasswordTv:
                 forgetPassword();
@@ -152,6 +156,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
+//----------------------------------------------------------------------------------------
 
 //Facebook------------------------------------------------------------------------
     private void signInWithFacebookView() {
@@ -213,11 +219,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //Utils-----------------------------------------------------------------
     private boolean isValidData(String email, String password) {
         if(email.isEmpty()){
-            userEmailEt.setError(getString(R.string.enteremail));
+            binding.userEmailEt.setError(getString(R.string.enteremail));
             return false;
         }
         if(password.isEmpty()){
-            passwordEt.setError(getString(R.string.enterpassword));
+            binding.passwordEt.setError(getString(R.string.enterpassword));
             return false;
         }
         return true;
@@ -241,20 +247,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setUpViews(View view) {
-        userEmailEt = view.findViewById(R.id.userEmailEt);
-        passwordEt = view.findViewById(R.id.passwordEt);
-        forgetPasswordTv = view.findViewById(R.id.forgetPasswordTv);
-        forgetPasswordTv.setOnClickListener(this);
-        signInBtn = view.findViewById(R.id.signInBtn);
-        signInBtn.setOnClickListener(this);
-        progressBar=view.findViewById(R.id.progressBar);
-        facebookImageView = view.findViewById(R.id.facebookImageView);
-        facebookImageView.setOnClickListener(this);
-        googleImgView = view.findViewById(R.id.googleImageView);
-        googleImgView.setOnClickListener(this);
-        signUpTv = view.findViewById(R.id.signUpTv);
-        signUpTv.setOnClickListener(this);
+        binding.forgetPasswordTv.setOnClickListener(this);
+        binding.signInBtn.setOnClickListener(this);
+        binding.facebookImageView.setOnClickListener(this);
+        binding.googleImageView.setOnClickListener(this);
+        binding.signUpTv.setOnClickListener(this);
+//        userEmailEt = view.findViewById(R.id.userEmailEt);
+//        passwordEt = view.findViewById(R.id.passwordEt);
+//        forgetPasswordTv = view.findViewById(R.id.forgetPasswordTv);
+//        forgetPasswordTv.setOnClickListener(this);
+//        signInBtn = view.findViewById(R.id.signInBtn);
+//        signInBtn.setOnClickListener(this);
+//        progressBar=view.findViewById(R.id.progressBar);
+//        facebookImageView = view.findViewById(R.id.facebookImageView);
+//        facebookImageView.setOnClickListener(this);
+//        googleImgView = view.findViewById(R.id.googleImageView);
+//        googleImgView.setOnClickListener(this);
+//        signUpTv = view.findViewById(R.id.signUpTv);
+//        signUpTv.setOnClickListener(this);
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

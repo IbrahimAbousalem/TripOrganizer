@@ -36,7 +36,7 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
 
         enableReceiver();
         Trip trip = new Trip();
-        trip.setId("1234");
+        trip.setId(1234);
 
 
 
@@ -44,7 +44,7 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
 
         Intent alarmIntent = new Intent(this, AlarmBroadCastReceiver.class);
         alarmIntent.setData(Uri.parse("custom://" + trip.getId()));
-        alarmIntent.setAction(trip.getId());
+        alarmIntent.setAction(String.valueOf(trip.getId()));
 
         //request code for pending intent must be unique on application level
         pendingIntent = PendingIntent.getBroadcast(this, 101, alarmIntent, 0);

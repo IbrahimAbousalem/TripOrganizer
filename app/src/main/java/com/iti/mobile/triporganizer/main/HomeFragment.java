@@ -1,6 +1,7 @@
 package com.iti.mobile.triporganizer.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+import com.iti.mobile.triporganizer.data.entities.LocationData;
+import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.login.LoginViewModel;
 
@@ -31,37 +34,58 @@ public class HomeFragment extends Fragment {
     public static final String TAG = "HomeFragment";
     private RecyclerView tripsRecyclerView;
     private NavController controller;
+    @Inject
+    ViewModelProviderFactory providerFactory;
+    private TripsViewModel tripsViewModel;
+
+    Trip data;
+    Note note;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initViews(view);
-        setDummyData();
         return view;
-    }
-
-    private void setDummyData() {
-        List<Trip> trips = new ArrayList<>();
-        for (int i =0; i <10; i++){
-            Trip trip = new Trip();
-            trip.setStatus("status"+i);
-            trip.setUserId("1234"+i);
-            trip.setDate(new Date());
-            trip.setId("11"+i);
-            trip.setType("mtip");
-            trips.add(trip);
-        }
-        TripsAdapter tripsAdapter = new TripsAdapter();
-        tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        tripsRecyclerView.setAdapter(tripsAdapter);
-        tripsAdapter.submitList(trips);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
+        tripsViewModel = new ViewModelProvider(this, providerFactory).get(TripsViewModel.class);
         controller = Navigation.findNavController(view);
+        TripsAdapter tripsAdapter = new TripsAdapter();
+        createDummyTrip();
+       // tripsViewModel.addTrip(data);
+        tripsViewModel.addNote(note,"");
+        tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tripsRecyclerView.setAdapter(tripsAdapter);
+        tripsViewModel.getTripsList("b3JWEfSAnRf3UjJRZvyb17frnE43").observe(getActivity(), tripAndLocationList -> {
+           // tripsAdapter.submitList(tripAndLocation);
+            Log.d("data", "we have trips .. ");
+        });
+
+
+    }
+
+    private void createDummyTrip() {
+        data = new Trip();
+        data.setTripName("Test Trip one");
+        data.setId(9);
+        data.setRound(false);
+        data.setUserId("b3JWEfSAnRf3UjJRZvyb17frnE43");
+        data.setStatus("Past");
+        LocationData locationData = new LocationData();
+        locationData.setId(8);
+        locationData.setTripId(9);
+        locationData.setStartDate(new Date());
+        locationData.setStartTripAddressName("Cairo");
+        locationData.setStartTripEndAddressName("Alexandria");
+        locationData.setStartTripStartPoint(151534);
+        locationData.setStartTripEndPoint(54545787);
+        data.setLocationData(locationData);
+        note = new Note("Note 1", 9, false);
     }
 
 

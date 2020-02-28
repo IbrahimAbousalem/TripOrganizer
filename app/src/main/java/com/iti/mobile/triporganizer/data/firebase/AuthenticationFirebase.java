@@ -20,6 +20,10 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.User;
+import com.iti.mobile.triporganizer.data.room.TripOrganizerDatabase;
+import com.iti.mobile.triporganizer.data.room.dao.UserDao;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,13 +35,15 @@ public class AuthenticationFirebase {
     private FirebaseUser firebaseUser;
     private static final String TAG = "AuthenticationFirebase";
     private FirebaseFirestore db;
+    private UserDao userDao;
 
 
 
     @Inject
-    public AuthenticationFirebase(FirebaseAuth auth, FirebaseFirestore db) {
+    public AuthenticationFirebase(UserDao userDao, FirebaseAuth auth, FirebaseFirestore db) {
         this.firebaseAuth = auth;
         this.db = db;
+        this.userDao = userDao;
     }
 
     //TODO: Return String to show the status
@@ -49,9 +55,7 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 //TODO: I removed User Photo
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
-                saveToDatabase(currentUser);
                 currentUserLiveData.postValue(currentUser);
-
             }else{
                 Log.i(TAG, "signInWithEmail:failure", task.getException());
                 currentUserLiveData.postValue(null);
@@ -70,9 +74,13 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=null;
                 for (UserInfo userInfo:user.getProviderData()){
-                   currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
                 saveToDatabase(currentUser);
+                User finalCurrentUser = currentUser;
+                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+                    userDao.insertUser(finalCurrentUser);
+                });
                 currentUserLiveData.postValue(currentUser);
 
             }else{
@@ -97,6 +105,10 @@ public class AuthenticationFirebase {
                             currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                         }
                         saveToDatabase(currentUser);
+                        User finalCurrentUser = currentUser;
+                        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+                            userDao.insertUser(finalCurrentUser);
+                        });
                         currentUserLiveData.postValue(currentUser);
                     } else {
                         // If sign in fails, display a message to the user.
@@ -111,18 +123,18 @@ public class AuthenticationFirebase {
         MutableLiveData<User> currentUser= new MutableLiveData<>();
         firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null){
-             String providerId=firebaseUser.getProviderId();
-             if(providerId.equals("facebook.com")||providerId.equals("google.com")){
-                 for(UserInfo userInfo:firebaseUser.getProviderData()){
-                     currentUser.postValue(new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId()));
-                 }
-             }else{
+            String providerId=firebaseUser.getProviderId();
+            if(providerId.equals("facebook.com")||providerId.equals("google.com")){
+                for(UserInfo userInfo:firebaseUser.getProviderData()){
+                    currentUser.postValue(new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId()));
+                }
+            }else{
 
-             }
-             //TODO : i Commented the user image.
+            }
+            //TODO : i Commented the user image.
             currentUser.postValue(new User(firebaseUser.getDisplayName(),"",firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
         }else{
-             currentUser.postValue(null);
+            currentUser.postValue(null);
         }
         return currentUser;
     }
@@ -145,6 +157,9 @@ public class AuthenticationFirebase {
                         user.setId(currentUser.getUid());
                         user.setProvider_id(currentUser.getProviderId());
                         saveToDatabase(user);
+                        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+                            userDao.insertUser(user);
+                        });
                         registerUser.postValue("Register Successfully");
                     }
                 }else{
@@ -169,10 +184,14 @@ public class AuthenticationFirebase {
                 for (UserInfo userInfo:user.getProviderData()){
                     currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
+                User finalCurrentUser = currentUser;
+                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+                    userDao.insertUser(finalCurrentUser);
+                });
                 saveToDatabase(currentUser);
                 authenticatedUserMutableLiveData.postValue(currentUser);
             } else {
-               Log.e("Error", authTask.getException().getMessage());
+                Log.e("Error", authTask.getException().getMessage());
             }
         });
         return authenticatedUserMutableLiveData;

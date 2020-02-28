@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 
-import java.util.List;
 import java.util.Objects;
 
 public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
@@ -37,7 +36,7 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
         public boolean areContentsTheSame(@NonNull Trip oldItem, @NonNull Trip newItem) {
             return oldItem.getStatus().equals(newItem.getStatus())&&
                     oldItem.getUserId().equals(newItem.getUserId())&&
-                    oldItem.getDate().getTime()==newItem.getDate().getTime();
+                    oldItem.getLocationData().getStartDate().getTime()==newItem.getLocationData().getStartDate().getTime();
         }
     };
 
@@ -63,21 +62,21 @@ public class TripsAdapter extends ListAdapter<Trip,  RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull  RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof  UpcomingTripViewHolder){
             Trip trip = getItem(position);
-                UpcomingTripViewHolder upcomingTripViewHolder = (UpcomingTripViewHolder) holder;
-                upcomingTripViewHolder.setTripNameTv(trip.getId());
-                upcomingTripViewHolder.setTripDateTv(trip.getDate().toString());
-            upcomingTripViewHolder.setTripTimeTv(String.valueOf(trip.getDate().getTime()));
+            UpcomingTripViewHolder upcomingTripViewHolder = (UpcomingTripViewHolder) holder;
+            upcomingTripViewHolder.setTripNameTv(trip.getTripName());
+            upcomingTripViewHolder.setTripDateTv(trip.getLocationData().getStartDate().toString());
+            upcomingTripViewHolder.setTripTimeTv(String.valueOf(trip.getLocationData().getStartDate().getTime()));
         }else if (holder instanceof  TripsViewHolder){
             Trip trip = getItem(position);
             TripsViewHolder tripsViewHolder = (TripsViewHolder) holder;
-            tripsViewHolder.setTripNameTv(trip.getId());
-            tripsViewHolder.setTripDateTv(trip.getDate().toString());
+            tripsViewHolder.setTripNameTv(trip.getTripName());
+            tripsViewHolder.setTripDateTv(trip.getLocationData().getStartDate().toString());
             tripsViewHolder.setTripStatusTv(trip.getStatus());
         }else {
             Trip trip = getItem(position);
             UpcomingTripsTextViewHolder upcomingTripsTextViewHolder = (UpcomingTripsTextViewHolder) holder;
-            upcomingTripsTextViewHolder.setTripNameTv(trip.getId());
-            upcomingTripsTextViewHolder.setTripDateTv(trip.getDate().toString());
+            upcomingTripsTextViewHolder.setTripNameTv(trip.getTripName());
+            upcomingTripsTextViewHolder.setTripDateTv(trip.getLocationData().getStartDate().toString());
             upcomingTripsTextViewHolder.setTripStatusTv(trip.getStatus());
         }
     }

@@ -1,24 +1,25 @@
 package com.iti.mobile.triporganizer.data.repository.trips;
 
 import androidx.lifecycle.LiveData;
+
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.data.firebase.TripsFirebase;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class TripRepositoryImp implements TripsRepository {
+public class TripRepositoryFirebaseImp implements TripsRepository {
     TripsFirebase tripsFirebase;
 
     @Inject
-    public TripRepositoryImp(TripsFirebase tripsFirebase){
+    public TripRepositoryFirebaseImp(TripsFirebase tripsFirebase){
         this.tripsFirebase = tripsFirebase;
     }
 
     @Override
     public boolean addTrip(Trip trip) {
       return tripsFirebase.addTrip(trip);
-
     }
 
     @Override
@@ -31,8 +32,15 @@ public class TripRepositoryImp implements TripsRepository {
        return tripsFirebase.updateTrip(trip);
     }
 
+    //think more about this..
     @Override
-    public LiveData<List<Trip>> getTripsForUser(String userId) {
-       return tripsFirebase.getTripsForUser(userId);
+    public LiveData<List<TripAndLocation>> getTripsFromRoom(String userId) {
+        return null;
     }
+
+    @Override
+    public LiveData<List<Trip>> getTripsFromFirebase(String userId) {
+        return tripsFirebase.getTripsForUser(userId);
+    }
+
 }

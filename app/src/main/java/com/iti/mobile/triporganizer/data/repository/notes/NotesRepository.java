@@ -1,12 +1,14 @@
 package com.iti.mobile.triporganizer.data.repository.notes;
 
-import androidx.lifecycle.LiveData;
 import com.iti.mobile.triporganizer.data.entities.Note;
+
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public interface NotesRepository {
-    boolean addNote(Note note);
-    boolean deleteNote(Note note);
-    boolean  updateNote(Note note);
-    LiveData<List<Note>> getNotesForTrip(String tripId);
+    void addNote(Note note, String userId);
+    void deleteNote(Note note, String userId);
+    void  updateNote(Note note, String userId);
+    LiveData<List<Note>> getNotesForTrip(int tripId, String userId);
 }

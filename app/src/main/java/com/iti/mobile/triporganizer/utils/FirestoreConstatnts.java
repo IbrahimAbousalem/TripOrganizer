@@ -7,19 +7,41 @@ public class FirestoreConstatnts {
     public static final String NOTES_COLLECTION = "Notes";
     public static final String USERS_COLLECTION = "Users";
 
+    //user
+    public static final String userName = "userName";
+    public static final String profilePicUrl = "profilePicUrl";
+    public static final String email = "email";
+
+    //trip
     public static final String id = "id";
+    public static final String fireTripId = "fireTripId";
     public static final String userId = "userId";
-    public static final String startPoint = "startPoint";
-    public static final String startAddressName = "startAddressName";
-    public static final String endAddressName = "endAddressName";
-    public static final String endPoint = "endPoint";
-    public static final String locationData = "locationData";
-    public static final String date = "date";
-    public static final String type = "type";
+    public static final String tripName = "tripName";
     public static final String status = "status";
+    public static final String startTrip = "startTrip";
     public static final String roundTrip = "roundTrip";
     public static final String isRound = "isRound";
-    public static final String message = "message";
-    public static final String tripId = "tripId";
 
+    //tripData
+    public static final String tripId = "tripId";
+    public static final String locationData = "locationData";
+    public static final String date = "date";
+
+    //locationData
+    public static final String startTripStartPoint = "startTripStartPoint";
+    public static final String startTripStartAddressName = "startTripStartAddressName";
+    public static final String startTripEndAddressName = "startTripEndAddressName";
+    public static final String startTripEndPoint = "startTripEndPoint";
+    public static final String roundTripStartPoint = "roundTripStartPoint";
+    public static final String roundTripStartAddressName = "roundTripStartAddressName";
+    public static final String roundTripEndAddressName = "roundTripEndAddressName";
+    public static final String roundTripEndPoint = "roundTripEndPoint";
+    public static final String tripDetailsId = "tripDetailsId";
+    public static final String startDate = "startDate";
+    public static final String roundDate = "roundDate";
+
+
+    //Note
+    public static final String message = "message";
+    public static final String fireNoteId = "fireNoteId";
 }

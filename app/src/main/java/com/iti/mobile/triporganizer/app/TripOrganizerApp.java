@@ -11,6 +11,7 @@ import com.iti.mobile.triporganizer.alarm.AlarmService;
 import com.iti.mobile.triporganizer.dagger.component.ApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.component.DaggerApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.module.application.ApplicationModule;
+import com.iti.mobile.triporganizer.dagger.module.application.RoomModule;
 
 public class TripOrganizerApp extends Application {
     private AlarmService alarmService;
@@ -20,6 +21,7 @@ public class TripOrganizerApp extends Application {
         super.onCreate();
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
+                .roomModule(new RoomModule(this))
                 .build();
         component.inject(this);
     }

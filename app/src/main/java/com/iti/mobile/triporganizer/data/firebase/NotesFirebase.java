@@ -28,19 +28,18 @@ public class NotesFirebase {
         this.db =db;
     }
 
-    public boolean addNote(Note note) {
-        DocumentReference reference = db.collection(NOTES_COLLECTION).document();
-        note.setId(reference.getId());
+    public boolean addNote(Note note, String userId) {
+        DocumentReference reference = db.collection(NOTES_COLLECTION).document(userId).collection(String.valueOf(note.getTripId())).document(String.valueOf(note.getId()));
         return reference.set(note).isSuccessful();
     }
 
-    public boolean deleteNote(Note note) {
-        DocumentReference reference = db.collection(NOTES_COLLECTION).document(note.getId());
+    public boolean deleteNote(Note note, String userId) {
+        DocumentReference reference = db.collection(NOTES_COLLECTION).document(userId).collection(String.valueOf(note.getTripId())).document(String.valueOf(note.getId()));
         return reference.delete().isSuccessful();
     }
 
-    public boolean updateNote(Note note) {
-        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(note.getId());
+    public boolean updateNote(Note note, String userId) {
+        DocumentReference reference = db.collection(NOTES_COLLECTION).document(userId).collection(String.valueOf(note.getTripId())).document(String.valueOf(note.getId()));
         Map<String, Object> mTrip = new HashMap<>();
         mTrip.put(FirestoreConstatnts.id, reference.getId());
         mTrip.put(FirestoreConstatnts.message, note.getMessage());
@@ -49,9 +48,10 @@ public class NotesFirebase {
         return reference.update(mTrip).isSuccessful();
     }
 
-    public LiveData<List<Note>> getNotesForTrip(String tripId) {
+    //Need to look for the id..
+    public LiveData<List<Note>> getNotesForTrip(int tripId, String userId) {
         MutableLiveData<List<Note>> listLiveData = new MutableLiveData<>();
-        db.collection(NOTES_COLLECTION).whereEqualTo(FirestoreConstatnts.tripId, tripId).get().addOnCompleteListener(task -> {
+        db.collection(NOTES_COLLECTION).document(userId).collection(String.valueOf(tripId)).get().addOnCompleteListener(task -> {
             List<Note> notes = task.getResult().toObjects(Note.class);
             listLiveData.postValue(notes);
         });
