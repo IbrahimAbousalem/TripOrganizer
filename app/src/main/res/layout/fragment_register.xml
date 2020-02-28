@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="74dp"
         android:layout_height="74dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         app:srcCompat="@drawable/ic_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -22,11 +28,10 @@
         style="@style/edittext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="24dp"
         android:hint="@string/user_name"
-        android:padding="@dimen/d_2"
         app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,9 +42,9 @@
             android:id="@+id/userNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/d_8"
             android:inputType="text"
-            android:paddingBottom="25dp" />
+            android:background="@android:color/transparent"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -48,10 +53,9 @@
         android:layout_height="wrap_content"
         style="@style/edittext"
         android:layout_marginStart="@dimen/d_32"
-        android:layout_marginTop="@dimen/d_16"
+        android:layout_marginTop="@dimen/d_10"
         android:layout_marginEnd="@dimen/d_32"
         android:hint="@string/email"
-        android:padding="@dimen/d_2"
         app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="@+id/userNameInputLayout"
         app:layout_constraintStart_toStartOf="@+id/userNameInputLayout"
@@ -62,8 +66,7 @@
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/d_8"
-            android:paddingBottom="25dp"
+            android:background="@android:color/transparent"
             android:inputType="textEmailAddress"
 
 />
@@ -74,7 +77,9 @@
         style="@style/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/d_10"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="@string/pass"
         app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="@+id/emailTextInputLayout"
@@ -87,8 +92,8 @@
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/d_8"
             android:inputType="numberPassword"
+            android:background="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +103,9 @@
         style="@style/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/d_10"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="@+id/passwordTextInputLayout"
         app:layout_constraintHorizontal_bias="1.0"
@@ -111,9 +118,9 @@
             android:id="@+id/confirmPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/d_8"
             android:hint="@string/confirm_password"
             android:inputType="numberPassword"
+            android:background="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,7 +129,7 @@
         style="@style/signinup_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="@dimen/d_24"
         android:layout_marginEnd="@dimen/d_24"
         android:text="@string/signup"
@@ -130,6 +137,16 @@
         app:layout_constraintEnd_toEndOf="@+id/confirmPasswordTextInputLayout"
         app:layout_constraintStart_toStartOf="@+id/confirmPasswordTextInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextInputLayout" />
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signupBtn"/>
 
     <TextView
         android:id="@+id/goToSignInTV"
@@ -142,6 +159,6 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signupBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
+</ScrollView>

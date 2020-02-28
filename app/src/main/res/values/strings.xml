@@ -11,8 +11,11 @@
     <string name="confirm_password">Enter Confirm Password</string>
     <string name="have_account">Already have an account?! <b><i><font color='#5A425C'>Sign In</font></i></b></string>
     <string name="valid_email">Enter valid Email</string>
+    <string name="valid_userName">Enter valid UserName</string>
     <string name="valid_confirm_password">Confirm Password is not equal Password</string>
     <string name="valid_password">Enter password Length equal 4</string>
+    <string name="empty_password">Enter password </string>
+    <string name="empty_confirm_password">Enter  confirm password </string>
 
     <string name="enteremail">You have to enter an email</string>
     <string name="enterpassword">You have to enter a password</string>
