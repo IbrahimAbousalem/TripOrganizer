@@ -59,5 +59,8 @@
 
     <string name="snooze">Snooze</string>
 
+    <string name="myTrips">My Trips</string>
+    <string name="history">History</string>
+
 
 </resources>
