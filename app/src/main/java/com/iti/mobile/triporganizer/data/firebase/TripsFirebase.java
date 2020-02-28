@@ -63,16 +63,20 @@ public class TripsFirebase {
         Map<String, Object> mLocationOne = new HashMap<>();
 
         mLocationOne.put(FirestoreConstatnts.tripId,trip.getLocationData().getTripId());
-        mLocationOne.put(FirestoreConstatnts.startTripEndPoint, trip.getLocationData().getStartTripEndPoint());
+        mLocationOne.put(FirestoreConstatnts.startTripEndPointLat, trip.getLocationData().getStartTripEndPointLat());
+        mLocationOne.put(FirestoreConstatnts.startTripEndPointLng, trip.getLocationData().getStartTripEndPointLng());
         mLocationOne.put(FirestoreConstatnts.startTripEndAddressName, trip.getLocationData().getStartTripEndAddressName());
-        mLocationOne.put(FirestoreConstatnts.startTripStartPoint, trip.getLocationData().getStartTripStartPoint());
+        mLocationOne.put(FirestoreConstatnts.startTripStartPointLat, trip.getLocationData().getStartTripStartPointLat());
+        mLocationOne.put(FirestoreConstatnts.startTripStartPointLng, trip.getLocationData().getStartTripStartPointLng());
         mLocationOne.put(FirestoreConstatnts.startTripStartAddressName, trip.getLocationData().getStartTripAddressName());
         mLocationOne.put(FirestoreConstatnts.startDate, trip.getLocationData().getStartDate());
         mLocationOne.put(FirestoreConstatnts.id, trip.getLocationData().getId());
 
-        mLocationOne.put(FirestoreConstatnts.roundTripEndPoint, trip.getLocationData().getRoundTripEndPoint());
+        mLocationOne.put(FirestoreConstatnts.roundTripEndPointLat, trip.getLocationData().getRoundTripEndPointLat());
+        mLocationOne.put(FirestoreConstatnts.roundTripEndPointLng, trip.getLocationData().getRoundTripEndPointLng());
         mLocationOne.put(FirestoreConstatnts.roundTripEndAddressName, trip.getLocationData().getRoundTripEndAddressName());
-        mLocationOne.put(FirestoreConstatnts.roundTripStartPoint, trip.getLocationData().getRoundTripStartPoint());
+        mLocationOne.put(FirestoreConstatnts.roundTripStartPointLat, trip.getLocationData().getRoundTripStartPointLat());
+        mLocationOne.put(FirestoreConstatnts.roundTripStartPointLng, trip.getLocationData().getRoundTripStartPointLng());
         mLocationOne.put(FirestoreConstatnts.roundTripStartAddressName, trip.getLocationData().getRoundTripStartAddressName());
         mLocationOne.put(FirestoreConstatnts.roundDate, trip.getLocationData().getRoundDate());
 

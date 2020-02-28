@@ -1,19 +1,21 @@
 package com.iti.mobile.triporganizer.details;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +26,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -35,11 +35,24 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
+import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+import com.iti.mobile.triporganizer.data.entities.LocationData;
+import com.iti.mobile.triporganizer.data.entities.Note;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import javax.inject.Inject;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.iti.mobile.triporganizer.utils.Flags.DATE1;
@@ -90,15 +103,33 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private Button roundBtn;
     private ImageView addNoteImageView;
     private RecyclerView notes_recyclerview;
-    private List<String> notesList;
+
+
+    @Inject
+    ViewModelProviderFactory providerFactory;
+    private DetailsViewModel detailsViewModel;
 
     NavController controller;
     NoteAdapter noteAdapter;
+    private List<Note> notesList;
     private int tripTypeChoice;
     private int tripActionChoice;
 
-    private int mYear, mMonth, mDay, mHour, mMinute;
 
+
+    private double startPonitLat;
+    private double startPonitLng;
+    private double endPonitLat;
+    private double endPonitLng;
+    private String startAddress;
+    private String endAddress;
+    private String name;
+
+    private int mYear, mMonth, mDay, mHour, mMinute;
+    private int hour1, minute1, hour2, minute2, year1, year2, month1, month2, day1, day2;
+
+    private Trip trip;
+    private LocationData locationData;
     private PlacesClient placesClient;
 
     public DetailsFragment() {
@@ -108,9 +139,14 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
+        detailsViewModel = new ViewModelProvider(this, providerFactory).get(DetailsViewModel.class);
         tripTypeChoice=TRIP_TYPE_SINGLE;
         tripActionChoice=VIEW_TRIP_FLAG;
+        notesList=new ArrayList<>();
         controller = Navigation.findNavController(view);
+        trip = new Trip();
+        locationData = new LocationData();
         switch (tripActionChoice) {
             case VIEW_TRIP_FLAG:
                 viewTrip(tripTypeChoice, tripActionChoice);
@@ -121,46 +157,18 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void showTripType(int tripType,int tripAction) {
-        tripActionChoice=tripAction;
-        switch (tripType) {
-            case TRIP_TYPE_SINGLE:
-                showSingleTrip();
-                break;
-            case TRIP_TYPE_ROUND:
-                showRoundTrip(tripActionChoice);
-                break;
-        }
-    }
-    private void showSingleTrip() {
-        focusSingleButton();
-        hideSecondDateTimeViews();
-    }
-
-    private void showRoundTrip(int tripActionChoice) {
-        focusRoundButton();
-        switch (tripActionChoice) {
-            case VIEW_TRIP_FLAG:
-                showSecondDateTimeTextView();
-                break;
-            case EDIT_TRIP_FLAG:
-                showSecondDateTimeEditText();
-                break;
-        }
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root=inflater.inflate(R.layout.fragment_details, container, false);
         setUpViews(root);
-        showNotesList(root);
+        //showNotesList(root);
         return root;
     }
 
+    // edit ->> 3nde trip bs m3ndesh notes or 3nde  bltaly lma ad8t ok y3ml save ll notes + update ll trips
+    // (Missing) new trip -> ana m3ndesh trip wla notes f deh momkn n3mlha function lw7dha mn sf7a lw7da 3lshan el save y3ml add l trip nad add l notes ... + el alamrm
     private void showNotesList(View root) {
-        notesList=new ArrayList<>();
-        notesList.add("one");
-        notesList.add("two");
         if (notesList.size() > 0) {
             notes_recyclerview = root.findViewById(R.id.notes_recyclerview);
             noteAdapter = new NoteAdapter(getContext(), notesList);
@@ -170,13 +178,14 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     public void setUpViews(View root) {
+        notes_recyclerview = root.findViewById(R.id.notes_recyclerview);
         bkImageView = root.findViewById(R.id.bkImageView);
         bkImageView.setOnClickListener(this);
         editBtn = root.findViewById(R.id.editBtn);
         editBtn.setOnClickListener(this);
         viewBtn = root.findViewById(R.id.viewBtn);
         viewBtn.setOnClickListener(this);
-        saveFabBtn = root.findViewById(R.id.saveFab);
+        saveFabBtn = root.findViewById(R.id.addTripFab);
         saveFabBtn.setOnClickListener(this);
 
         tripNameEt = root.findViewById(R.id.tripNameEt);
@@ -225,14 +234,20 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleStartPointPlacesSelected(AutocompleteSupportFragment startPointAutocompleteFragment) {
-        startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,
+               Place.Field.LAT_LNG,Place.Field.ADDRESS));
         startPointAutocompleteFragment.setHint(getString(R.string.estart_point));
         startPointAutocompleteFragment.setCountry("EG");
         startPointAutocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         startPointAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId()+", "+
+                place.getLatLng().latitude+", "+place.getLatLng().longitude);
+
+                startPonitLat=place.getLatLng().latitude;
+                startPonitLng=place.getLatLng().longitude;
+                startAddress=place.getName();
             }
 
             @Override
@@ -243,14 +258,20 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleEndPointPlacesSelected(AutocompleteSupportFragment endPointAutocompleteFragment) {
-        endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
         endPointAutocompleteFragment.setHint(getString(R.string.eend_point));
         endPointAutocompleteFragment.setCountry("EG");
         endPointAutocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         endPointAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId()+", "+
+                        place.getLatLng().latitude+", "+place.getLatLng().longitude);
+
+                endPonitLat=place.getLatLng().latitude;
+                endPonitLng=place.getLatLng().longitude;
+                endAddress=place.getName();
+
             }
 
             @Override
@@ -284,7 +305,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             case R.id.time2Tv:
                 showTime(TIME2);
                 break;
-            case R.id.saveFab:
+            case R.id.addTripFab:
                 saveTrip();
                 break;
             case R.id.singleBtn:
@@ -293,27 +314,75 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             case R.id.roundBtn:
                 showRoundTrip(tripActionChoice);
                 break;
+            case R.id.addNoteImageView:
+                addNote();
 
         }
     }
 
+    private void addNote() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        TextView titleTv = new TextView(getContext());
+        titleTv.setText(getResources().getString(R.string.enternote));
+        titleTv.setPadding(20, 30, 20, 30);
+        titleTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        builder.setCustomTitle(titleTv);
+        final EditText input = new EditText(getContext());
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Note note = new Note();
+                note.setMessage(input.getText().toString());
+                note.setStatus(false);
+                notesList.add(note);
+                if (notesList.size() > 0) {
+                    noteAdapter = new NoteAdapter(getContext(), notesList);
+                    noteAdapter.setOnRecyclerViewItemClickListener(new NoteAdapter.onRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClickListener(View v, int position) {
+                            deleteNote(position);
+                        }
+                    });
+                    notes_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+                    notes_recyclerview.setAdapter(noteAdapter);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void deleteNote(int position) {
+        notesList.remove(position);
+        noteAdapter.notifyItemRemoved(position);
+        noteAdapter.notifyItemRangeChanged(position,notesList.size());
+    }
+
     private void showTime(int time) {
-        // Get Current Time
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
-
         // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
-
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         switch(time){
                             case 3:
+                                hour1 = hourOfDay;
+                                minute1 = minute;
                                 time1TV.setText(hourOfDay + ":" + minute);
                                 break;
                             case 4:
+                                hour2=hourOfDay;
+                                minute2=minute;
                                 time2Tv.setText(hourOfDay + ":" + minute);
                                 break;
                         }
@@ -323,24 +392,31 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showDatePicker(int date) {
-        // Get Current Date
-        final Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+        c.getTimeInMillis();
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-              switch(date){
-                  case 1:
-                      date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                      break;
-                  case 2:
-                      date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                      break;
-              }
+                switch (date) {
+                    case 1:
+                        c.set(year, month, dayOfMonth);
+                        year1=year;
+                        month1=month+1;
+                        day1=dayOfMonth;
+                        date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        break;
+                    case 2:
+                        year2=year;
+                        month2=month+1;
+                        day2=dayOfMonth;
+                        date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        break;
+                }
             }
-        },mYear,mMonth,mDay);
+        }, mYear, mMonth, mDay);
 
         datePickerDialog.show();
     }
@@ -350,7 +426,33 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void saveTrip() {
-
+        String tripName=tripNameEt.getText().toString();
+        String date1=date1Tv.getText().toString();
+        String time1=time1TV.getText().toString();
+        String date2=date2Tv.getText().toString();
+        String time2=time2Tv.getText().toString();
+        try {
+            SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            date1 = date1 + " " + time1;
+            Date formatedDate=format.parse(date1);
+            Log.d(TAG, formatedDate.toString());
+            locationData.setStartDate(formatedDate);
+            Log.d(TAG,"saved formatted"+date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        locationData.setStartTripStartPointLat(startPonitLat);
+        locationData.setStartTripStartPointLng(startPonitLng);
+        locationData.setStartTripEndPointLat(endPonitLat);
+        locationData.setStartTripEndPointLng(endPonitLng);
+        locationData.setStartTripAddressName(startAddress);
+        locationData.setStartTripEndAddressName(endAddress);
+        trip.setTripName(tripName);
+        trip.setRound(false);
+        trip.setUserId("hZDY3CF3aWU5WjC6fNHmck2dBz02");
+        trip.setStatus("UpComing");
+        trip.setLocationData(locationData);
+        detailsViewModel.addTripAndNotes(trip, notesList);
     }
 
     private void viewTrip(int tripTypeChoice, int tripActionChoice) {
@@ -367,6 +469,34 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
        enableEditText();
        showTripType(tripTypeChoice,tripActionChoice);
 
+    }
+
+    private void showTripType(int tripType,int tripAction) {
+        tripActionChoice=tripAction;
+        switch (tripType) {
+            case TRIP_TYPE_SINGLE:
+                showSingleTrip();
+                break;
+            case TRIP_TYPE_ROUND:
+                showRoundTrip(tripActionChoice);
+                break;
+        }
+    }
+    private void showSingleTrip() {
+        focusSingleButton();
+        hideSecondDateTimeViews();
+    }
+
+    private void showRoundTrip(int tripActionChoice) {
+        focusRoundButton();
+        switch (tripActionChoice) {
+            case VIEW_TRIP_FLAG:
+                showSecondDateTimeTextView();
+                break;
+            case EDIT_TRIP_FLAG:
+                showSecondDateTimeEditText();
+                break;
+        }
     }
 
     private void disableEditText() {

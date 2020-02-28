@@ -2,6 +2,7 @@ package com.iti.mobile.triporganizer.data.repository.trips;
 
 import androidx.lifecycle.LiveData;
 
+import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.data.firebase.TripsFirebase;
@@ -41,6 +42,11 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
     @Override
     public LiveData<List<Trip>> getTripsFromFirebase(String userId) {
         return tripsFirebase.getTripsForUser(userId);
+    }
+
+    @Override
+    public void addTripAndNotes(Trip trip, List<Note> notes) {
+
     }
 
 }

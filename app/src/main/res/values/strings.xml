@@ -37,7 +37,7 @@
     <string name="eend_point">Enter End Point</string>
     <string name="edate">Pick Date</string>
     <string name="etime">Pick Time</string>
-
+    <string name="enternote">Add Note</string>
     <string name="facebook_app_id">497010691251023</string>
     <string name="fb_login_protocol_scheme">fb497010691251023</string>
 
@@ -55,6 +55,9 @@
     <string name="delete">Delete</string>
 
     <string name="snooze">Snooze</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

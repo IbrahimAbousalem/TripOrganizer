@@ -48,6 +48,9 @@
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addTripFragment2"
+            app:destination="@id/addTripFragment2" />
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
@@ -59,4 +62,9 @@
         android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
         android:label="activity_details"
         tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/addTripFragment2"
+        android:name="com.iti.mobile.triporganizer.add_trip.AddTripFragment"
+        android:label="fragment_add_trip"
+        tools:layout="@layout/fragment_add_trip" />
 </navigation>

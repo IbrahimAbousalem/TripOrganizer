@@ -7,29 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.data.entities.Note;
 
 import java.util.HashSet;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NotesHolder> {
-    private Context context;
-    private List<String> notesList;
-    private HashSet<String> selectedNotesList;
-    private static final String TAG = "NoteAdapter";
 
-    public NoteAdapter(Context context, List<String> notesList) {
-        this.context = context;
-        this.notesList = notesList;
-        selectedNotesList = new HashSet<>();
+    private onRecyclerViewItemClickListener onRecyclerViewItemClickListener;
+
+    public interface onRecyclerViewItemClickListener {
+        void onItemClickListener(View v,int position);
     }
 
-    public HashSet<String> getSelectedNotesList() {
-        return selectedNotesList;
+    private Context context;
+    private List<Note> notesList;
+
+    private static final String TAG = "NoteAdapter";
+
+    public NoteAdapter(Context context, List<Note> notesList) {
+        this.context = context;
+        this.notesList = notesList;
+    }
+
+    public void setOnRecyclerViewItemClickListener(onRecyclerViewItemClickListener onRecyclerViewItemClickListener){
+        this.onRecyclerViewItemClickListener=onRecyclerViewItemClickListener;
     }
 
     @NonNull
@@ -44,19 +53,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NotesHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NotesHolder holder, int position) {
-        holder.checkBox.setText(notesList.get(position));
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selectedNotesList.add(notesList.get(position));
-                } else {
-                    selectedNotesList.remove(notesList.get(position));
-                }
-                Log.i(TAG, "..............................SelectedNoteListSize....................... " + getSelectedNotesList().size());
-            }
-        });
-
+        holder.noteName.setText(notesList.get(position).getMessage());
     }
 
     @Override
@@ -64,12 +61,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NotesHolder> {
         return notesList.size();
     }
 
-    public class NotesHolder extends RecyclerView.ViewHolder {
-        CheckBox checkBox;
+    public class NotesHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        TextView noteName;
+        ImageView deleteNoteImageView;
 
         public NotesHolder(View itemView) {
             super(itemView);
-            this.checkBox = itemView.findViewById(R.id.checkBox_Notes);
+            noteName=itemView.findViewById(R.id.noteName);
+            deleteNoteImageView=itemView.findViewById(R.id.deleteNoteImgView);
+            deleteNoteImageView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(onRecyclerViewItemClickListener!=null){
+                onRecyclerViewItemClickListener.onItemClickListener(v,getAdapterPosition());
+            }
         }
     }
 }

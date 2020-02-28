@@ -56,9 +56,9 @@ public class HomeFragment extends Fragment {
         tripsViewModel = new ViewModelProvider(this, providerFactory).get(TripsViewModel.class);
         controller = Navigation.findNavController(view);
         TripsAdapter tripsAdapter = new TripsAdapter();
-        createDummyTrip();
+        //createDummyTrip();
        // tripsViewModel.addTrip(data);
-        tripsViewModel.addNote(note,"");
+      //  tripsViewModel.addNote(note,"");
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
         tripsViewModel.getTripsList("b3JWEfSAnRf3UjJRZvyb17frnE43").observe(getActivity(), tripAndLocationList -> {
@@ -69,24 +69,24 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void createDummyTrip() {
-        data = new Trip();
-        data.setTripName("Test Trip one");
-        data.setId(9);
-        data.setRound(false);
-        data.setUserId("b3JWEfSAnRf3UjJRZvyb17frnE43");
-        data.setStatus("Past");
-        LocationData locationData = new LocationData();
-        locationData.setId(8);
-        locationData.setTripId(9);
-        locationData.setStartDate(new Date());
-        locationData.setStartTripAddressName("Cairo");
-        locationData.setStartTripEndAddressName("Alexandria");
-        locationData.setStartTripStartPoint(151534);
-        locationData.setStartTripEndPoint(54545787);
-        data.setLocationData(locationData);
-        note = new Note("Note 1", 9, false);
-    }
+//    private void createDummyTrip() {
+//        data = new Trip();
+//        data.setTripName("Test Trip one");
+//        data.setId(9);
+//        data.setRound(false);
+//        data.setUserId("b3JWEfSAnRf3UjJRZvyb17frnE43");
+//        data.setStatus("Past");
+//        LocationData locationData = new LocationData();
+//        locationData.setId(8);
+//        locationData.setTripId(9);
+//        locationData.setStartDate(new Date());
+//        locationData.setStartTripAddressName("Cairo");
+//        locationData.setStartTripEndAddressName("Alexandria");
+//        locationData.setStartTripStartPoint(151534);
+//        locationData.setStartTripEndPoint(54545787);
+//        data.setLocationData(locationData);
+//        note = new Note("Note 1", 9, false);
+//    }
 
 
 
