@@ -119,10 +119,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showProgressBar(){
-        progressBar.setVisibility(VISIBLE);
+        binding.progressBar.setVisibility(VISIBLE);
     }
     private void hideProgressBar(){
-        progressBar.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.INVISIBLE);
     }
 //Google----------------------------------------------------------
 
@@ -189,7 +189,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void signInWithEmailAndPasswordView(String email, String password) {
         if(isValidData(email,password)){
             showProgressBar();
-            signInWithEmailAndPasswordViewModel(userEmailEt.getText().toString(),passwordEt.getText().toString());
+            signInWithEmailAndPasswordViewModel(binding.userEmailEt.getText().toString(),binding.passwordEt.getText().toString());
         }
     }
 
@@ -206,7 +206,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 //Forget Password ---------------------------------------------------------------
     private void forgetPassword() {
-        controller.navigate(R.id.action_loginFragment_to_homeFragment);
+        //controller.navigate(R.id.action_loginFragment_to_homeFragment);
     }
 //-----------------------------------------------------------------------------
 
@@ -232,8 +232,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void updateUi(User currentUser) {
         hideProgressBar();
         if (currentUser != null) {
-           // controller.navigate(R.id.action_loginFragment_to_homeFragment);
-            getActivity().startActivity(new Intent(getActivity(), TestHomeActivity.class) );
+            controller.navigate(R.id.action_loginFragment_to_mainFragment2);
+            //getActivity().startActivity(new Intent(getActivity(), TestHomeActivity.class) );
             //sendData?
             //gotoHomeActivity(currentUser);
         } else {
