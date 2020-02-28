@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/d_16"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/rounded_card_no_clr">
-
     <TextView
         android:id="@+id/textView3"
         style="@style/titles_details"
         android:layout_marginTop="32dp"
         android:text="@string/title"
-        app:layout_constraintBottom_toTopOf="@+id/tripNameEt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,56 +19,32 @@
     <EditText
         android:id="@+id/tripNameEt"
         style="@style/tripdetails_edittext"
-        android:padding="@dimen/d_15"
         android:ems="10"
         android:hint="@string/etitle"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        android:padding="@dimen/d_15"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
+    <TextView
+        android:id="@+id/tripNameTv"
+        style="@style/tripdetails_textview"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tripNameEt"
+        tools:text="TripName" />
 
     <TextView
         android:id="@+id/textView4"
         style="@style/titles_details"
         android:text="@string/start_point"
-        app:layout_constraintBottom_toTopOf="@+id/startPointConstraintlayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tripNameEt" />
-
-    <TextView
-        android:id="@+id/textView5"
-        style="@style/titles_details"
-        android:text="@string/end_point"
-        app:layout_constraintBottom_toTopOf="@+id/endPointConstraintlayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startPointConstraintlayout" />
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/endPointConstraintlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/tripdetails_edittext"
-        android:ems="10"
-        app:layout_constraintBottom_toTopOf="@+id/singleBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
-
-        <fragment android:id="@+id/endAutoCompleteFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tripNameTv" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/startPointConstraintlayout"
@@ -78,7 +52,6 @@
         android:layout_height="wrap_content"
         style="@style/tripdetails_edittext"
         android:ems="10"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
@@ -95,6 +68,54 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/startPointTv"
+        style="@style/tripdetails_textview"
+        tools:text="StartPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startPointConstraintlayout" />
+
+    <TextView
+        android:id="@+id/textView5"
+        style="@style/titles_details"
+        android:text="@string/end_point"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startPointTv" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/endPointConstraintlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/tripdetails_edittext"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+        <fragment android:id="@+id/endAutoCompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/endPointTv"
+        style="@style/tripdetails_textview"
+        tools:text="EndPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endPointConstraintlayout" />
+
     <Button
         android:id="@+id/singleBtn"
         style="@style/trip_type_btn"
@@ -103,7 +124,7 @@
         app:layout_constraintEnd_toStartOf="@+id/roundBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/endPointConstraintlayout" />
+        app:layout_constraintTop_toBottomOf="@+id/endPointTv" />
 
     <Button
         android:id="@+id/roundBtn"
@@ -113,8 +134,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/singleBtn"
-        app:layout_constraintTop_toBottomOf="@+id/endPointConstraintlayout" />
-
+        app:layout_constraintTop_toBottomOf="@+id/endPointTv"/>
     <TextView
         android:id="@+id/date1TitleTv"
         style="@style/titles_details"
@@ -135,14 +155,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date1TitleTv" />
-
+    <TextView
+        android:id="@+id/date1ViewTv"
+        style="@style/tripdetails_textview"
+        tools:text="Date1"
+        android:drawableLeft="@drawable/ic_date_gray_24dp"
+        android:drawablePadding="@dimen/d_5"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date1Tv" />
     <TextView
         android:id="@+id/time1TitleTv"
         style="@style/titles_details"
         android:text="@string/time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date1Tv" />
+        app:layout_constraintTop_toBottomOf="@+id/date1ViewTv" />
 
     <TextView
         android:id="@+id/time1Tv"
@@ -155,7 +184,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time1TitleTv" />
-
+    <TextView
+        android:id="@+id/time1ViewTv"
+        style="@style/tripdetails_textview"
+        tools:text="Time1"
+        android:drawableLeft="@drawable/ic_time_gray_24dp"
+        android:drawablePadding="@dimen/d_5"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time1Tv" />
     <TextView
         android:id="@+id/date2TitleTv"
         style="@style/titles_details"
@@ -163,7 +201,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time1Tv" />
+        app:layout_constraintTop_toBottomOf="@+id/time1ViewTv" />
 
     <TextView
         android:id="@+id/date2Tv"
@@ -179,25 +217,24 @@
         app:layout_constraintTop_toBottomOf="@+id/date2TitleTv" />
 
     <TextView
+        android:id="@+id/date2ViewTv"
+        style="@style/tripdetails_textview"
+        tools:text="Date2"
+        android:drawableLeft="@drawable/ic_date_gray_24dp"
+        android:drawablePadding="@dimen/d_5"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date2Tv" />
+
+    <TextView
         android:id="@+id/time2TitleTv"
         style="@style/titles_details"
         android:text="@string/time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date2Tv" />
-
-    <TextView
-        android:id="@+id/textView11"
-        style="@style/titles_details"
-        android:layout_width="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/notes"
-        app:layout_constraintEnd_toStartOf="@+id/addNoteImageView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time2Tv" />
+        app:layout_constraintTop_toBottomOf="@+id/date2ViewTv" />
 
     <TextView
         android:id="@+id/time2Tv"
@@ -212,6 +249,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time2TitleTv" />
 
+    <TextView
+        android:id="@+id/time2ViewTv"
+        style="@style/tripdetails_textview"
+        tools:text="Time2"
+        android:drawableLeft="@drawable/ic_time_gray_24dp"
+        android:drawablePadding="@dimen/d_5"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time2Tv" />
 
     <ImageView
         android:id="@+id/addNoteImageView"
@@ -220,7 +267,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time2Tv"
+        app:layout_constraintTop_toBottomOf="@+id/time2ViewTv"
         app:srcCompat="@drawable/ic_plus" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -228,10 +275,34 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/addNoteImageView" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notes_recyclerview"
+        app:srcCompat="@drawable/ic_done_white_24dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/title"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/notes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time2ViewTv" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

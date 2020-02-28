@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment {
     public static final String TAG = "HomeFragment";
     private RecyclerView tripsRecyclerView;
     private NavController controller;
-
     @Inject
     ViewModelProviderFactory providerFactory;
     TripsViewModel tripsViewModel;
@@ -88,6 +87,8 @@ public class HomeFragment extends Fragment {
         data.setLocationData(locationData);
         note = new Note("Note 1", 9, false);
     }
+
+
 
     private void initViews(View view) {
         tripsRecyclerView = view.findViewById(R.id.tripsRecyclerView);

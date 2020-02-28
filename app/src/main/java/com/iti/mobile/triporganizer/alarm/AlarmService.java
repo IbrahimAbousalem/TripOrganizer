@@ -8,11 +8,13 @@ import android.os.IBinder;
 import android.os.Vibrator;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
 
 public class AlarmService extends Service {
     MediaPlayer mp;
     Vibrator vibrator;
+    private static final int foregroundId = 1;
     public AlarmService() {
 
 
@@ -25,17 +27,16 @@ public class AlarmService extends Service {
 
     @Override
     public void onCreate() {
-        if (mp == null){
-            mp = new MediaPlayer();
-        }
+
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (!mp.isPlaying()) {
-            mp = MediaPlayer.create(getApplicationContext(), R.raw.belevier);
+          if (mp == null){
+        // mp = new MediaPlayer();
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.belevier);
         }
         mp.setVolume(100, 100);
         mp.start();
@@ -47,7 +48,8 @@ public class AlarmService extends Service {
         if (vibrator !=null){
             vibrator.vibrate(400);
         }
-        return START_STICKY;
+        startForeground(foregroundId, NotificationsUtils.makeStatusNotification("new trip",getApplicationContext()));
+        return START_NOT_STICKY;
     }
 
     public void stopRingTone(){
@@ -59,17 +61,26 @@ public class AlarmService extends Service {
             vibrator.cancel();
         }
     }
+    public void destroyService(){
+        onDestroy();
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mp.stop();
+        mp.reset();
+        mp.release();
+        mp = null;
+        stopForeground(true);
+
     }
 
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
     }
-    class  MyBinder extends Binder {
+    public class  MyBinder extends Binder {
         public AlarmService getService (){
             return AlarmService.this;
         }

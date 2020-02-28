@@ -26,11 +26,11 @@ public class LoginViewModel extends ViewModel {
         return authenticationRepositoryImp.signInWithFacebookFunc(accessToken);
     }
 
-    public LiveData<User> getCurrentUser(){
+    public LiveData<User> getCurrentUserVm(){
         return authenticationRepositoryImp.getCurrentUser();
     }
     public void signOutVM(){
-        authenticationRepositoryImp.signoutFunc();
+         authenticationRepositoryImp.signoutFunc();
     }
 
     public LiveData<User> signInWithGoogle(AuthCredential googleAuthCredential) {

@@ -7,4 +7,11 @@ public class Flags {
     public static final int TRIP_TYPE_ROUND=2;
     public static final int TRIP_TYPE_SINGLE=1;
 
+    public static final int DATE1=1;
+    public static final int TIME1=3;
+
+    public static final int DATE2=2;
+    public static final int TIME2=4;
+
+
 }

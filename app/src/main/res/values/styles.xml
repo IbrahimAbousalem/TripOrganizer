@@ -12,7 +12,6 @@
         <item name="android:textColor">@color/lighttxt</item>
         <item name="android:background">@drawable/rounded_et</item>
         <item name="android:layout_marginBottom">@dimen/d_20</item>
-        <item name="android:padding">@dimen/d_20</item>
         <item name="android:drawablePadding">@dimen/d_10</item>
     </style>
 
@@ -43,17 +42,6 @@
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="edittext_details">
-        <item name="android:layout_marginStart">@dimen/d_32</item>
-        <item name="android:layout_marginEnd">@dimen/d_32</item>
-        <item name="android:layout_marginTop">@dimen/d_5</item>
-        <item name="android:layout_marginBottom">@dimen/d_5</item>
-        <item name="android:padding">@dimen/d_10</item>
-        <item name="android:background">@drawable/rounded_card_no_clr</item>
-        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
@@ -89,5 +77,22 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:padding">@dimen/d_10</item>
+    </style>
+
+    <style name="tripdetails_textview">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/d_8</item>
+        <item name="android:layout_marginStart">@dimen/d_32</item>
+        <item name="android:layout_marginEnd">@dimen/d_32</item>
+    </style>
+    <style name="tripdetails_edittext">
+        <item name="android:layout_marginStart">@dimen/d_32</item>
+        <item name="android:layout_marginEnd">@dimen/d_32</item>
+        <item name="android:layout_marginTop">@dimen/d_5</item>
+        <item name="android:layout_marginBottom">@dimen/d_5</item>
+        <item name="android:background">@drawable/rounded_card_no_clr</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 </resources>
