@@ -3,23 +3,53 @@ package com.iti.mobile.triporganizer.main;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
-import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryImp;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.data.repository.notes.NoteRepositoryRoomImp;
+import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryFirebaseImp;
+import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryRoomImp;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class TripsViewModel extends ViewModel {
-    TripRepositoryImp tripRepositoryImp;
+    TripRepositoryFirebaseImp tripRepositoryFirebaseImp;
+    TripRepositoryRoomImp tripRepositoryRoomImp;
+    NoteRepositoryRoomImp noteRepositoryRoomImp;
 
     @Inject
-    public TripsViewModel(TripRepositoryImp tripRepositoryImp) {
-        this.tripRepositoryImp = tripRepositoryImp;
+    public TripsViewModel(TripRepositoryFirebaseImp tripRepositoryFirebaseImp, TripRepositoryRoomImp tripRepositoryRoomImp, NoteRepositoryRoomImp noteRepositoryRoomImp) {
+        this.tripRepositoryFirebaseImp = tripRepositoryFirebaseImp;
+        this.tripRepositoryRoomImp = tripRepositoryRoomImp;
+        this.noteRepositoryRoomImp = noteRepositoryRoomImp;
     }
 
-    public LiveData<List<Trip>> getTripsList(String uId){
-        return tripRepositoryImp.getTripsForUser(uId);
+    public LiveData<List<TripAndLocation>> getTripsList(String uId){
+        return tripRepositoryRoomImp.getTripsFromRoom(uId);
+    }
+
+    public void addTrip(Trip trip){
+        tripRepositoryRoomImp.addTrip(trip);
+    }
+
+    public void updateTrip(Trip trip){
+        tripRepositoryRoomImp.updateTrip(trip);
+    }
+    public void deleteTrip(Trip trip){
+        tripRepositoryRoomImp.deleteTrip(trip);
+    }
+
+    public void addNote(Note note){
+        noteRepositoryRoomImp.addNote(note);
+    }
+
+    public void updateNote(Note note){
+        noteRepositoryRoomImp.updateNote(note);
+    }
+    public void deleteNote(Note note){
+        noteRepositoryRoomImp.deleteNote(note);
     }
 
 }

@@ -1,41 +1,53 @@
 package com.iti.mobile.triporganizer.data.entities;
 
-import java.util.Date;
-
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import static androidx.room.ForeignKey.CASCADE;
 
-public class Trip {
-
-    private String id;
+@Entity(tableName = "trips",foreignKeys = @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "userId", onDelete = CASCADE))
+public class Trip{
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    @ColumnInfo(name = "userId", index = true)
     private String userId;
+    @Ignore
+    private String fireTripId;
     private String tripName;
-    private LocationData locationData;
-    private Date date;
-    private String type;
     private String status;
-    private Trip roundTrip;
+    @Ignore
+    private LocationData locationData;
+
     private boolean isRound;
 
     public Trip() {
     }
 
-    public Trip(String id, String userId, String tripName, LocationData locationData, Date date, String type, String status, Trip roundTrip, boolean isRound) {
+    public Trip(long id, String userId, String tripName, String status, LocationData locationData, boolean isRound) {
         this.id = id;
         this.userId = userId;
         this.tripName = tripName;
-        this.locationData = locationData;
-        this.date = date;
-        this.type = type;
         this.status = status;
-        this.roundTrip = roundTrip;
+        this.locationData = locationData;
         this.isRound = isRound;
     }
 
-    public String getId() {
+    public String getFireTripId() {
+        return fireTripId;
+    }
+
+    public void setFireTripId(String fireTripId) {
+        this.fireTripId = fireTripId;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -55,30 +67,6 @@ public class Trip {
         this.tripName = tripName;
     }
 
-    public LocationData getLocationData() {
-        return locationData;
-    }
-
-    public void setLocationData(LocationData locationData) {
-        this.locationData = locationData;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -87,12 +75,12 @@ public class Trip {
         this.status = status;
     }
 
-    public Trip getRoundTrip() {
-        return roundTrip;
+    public LocationData getLocationData() {
+        return locationData;
     }
 
-    public void setRoundTrip(Trip roundTrip) {
-        this.roundTrip = roundTrip;
+    public void setLocationData(LocationData locationData) {
+        this.locationData = locationData;
     }
 
     public boolean isRound() {
@@ -106,10 +94,10 @@ public class Trip {
     @Override
     public boolean equals(@Nullable Object obj) {
         Trip data = (Trip) obj;
-        if(!tripName.equals(data.getTripName()) || roundTrip != data.getRoundTrip()
-            || !locationData.equals(data.locationData) || !date.equals(data.getDate())
-            || !type.equals(data.getType()) || !status.equals(data.getStatus())){
-            return  false;
+        if (data != null && (!tripName.equals(data.getTripName()) ||  locationData != data.getLocationData()
+                || isRound != data.isRound()
+                || !status.equals(data.getStatus()))) {
+            return false;
         }
         return true;
     }

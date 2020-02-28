@@ -15,10 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -28,27 +24,21 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
-import com.iti.mobile.triporganizer.base.MainActivity;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
+import com.iti.mobile.triporganizer.databinding.FragmentLoginBinding;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
 
 import java.util.Arrays;
 
 import javax.inject.Inject;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "LoginFragment";
@@ -59,15 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Inject
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
-
-    private EditText userEmailEt;
-    private EditText passwordEt;
-    private TextView forgetPasswordTv;
-    private Button signInBtn;
-    private ImageView facebookImageView;
-    private SignInButton googleImgView;
-    private TextView signUpTv;
-
+    private FragmentLoginBinding binding;
     private GoogleConfiguration googleConfiguration;
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
@@ -78,7 +60,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
@@ -92,8 +76,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        String email = userEmailEt.getText().toString();
-        String password = passwordEt.getText().toString();
+        String email = binding.userEmailEt.getText().toString();
+        String password = binding.passwordEt.getText().toString();
         switch (v.getId()) {
             case R.id.forgetPasswordTv:
                 forgetPassword();
@@ -145,28 +129,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-//    @Override
-//    public void startActivityForResult(Intent intent, int requestCode) {
-//        super.startActivityForResult(intent, requestCode);
-//        if (requestCode == RC_SIGN_IN) {
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
-//            try {
-//                // Google Sign In was successful, authenticate with Firebase
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                AuthCredential credential = googleConfiguration.getGoogleAuthCredential(account);
-//                loginViewModel.signInWithGoogle(credential).observe(this,user -> {
-//                    if (user != null) {
-//                        updateUi(user);
-//                    } else {
-//                        updateUi(null);
-//                    }
-//                });
-//            } catch (ApiException e) {
-//                Log.w(TAG, "Google sign in failed", e);
-//            }
-//        }
-//    }
-
 //----------------------------------------------------------------------------------------
 
 //Facebook------------------------------------------------------------------------
@@ -198,7 +160,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //Normal SignIn ------------------------------------------------------------------------------------------
     private void signInWithEmailAndPasswordView(String email, String password) {
         if(isValidData(email,password)){
-            signInWithEmailAndPasswordViewModel(userEmailEt.getText().toString(),passwordEt.getText().toString());
+            signInWithEmailAndPasswordViewModel(binding.userEmailEt.getText().toString(),binding.passwordEt.getText().toString());
         }
     }
 
@@ -228,11 +190,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //Utils-----------------------------------------------------------------
     private boolean isValidData(String email, String password) {
         if(email.isEmpty()){
-            userEmailEt.setError(getString(R.string.enteremail));
+            binding.userEmailEt.setError(getString(R.string.enteremail));
             return false;
         }
         if(password.isEmpty()){
-            passwordEt.setError(getString(R.string.enterpassword));
+            binding.passwordEt.setError(getString(R.string.enterpassword));
             return false;
         }
         return true;
@@ -254,19 +216,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setUpViews(View view) {
-        userEmailEt = view.findViewById(R.id.userEmailEt);
-        passwordEt = view.findViewById(R.id.passwordEt);
-        forgetPasswordTv = view.findViewById(R.id.forgetPasswordTv);
-        forgetPasswordTv.setOnClickListener(this);
-        signInBtn = view.findViewById(R.id.signInBtn);
-        signInBtn.setOnClickListener(this);
-        facebookImageView = view.findViewById(R.id.facebookImageView);
-        facebookImageView.setOnClickListener(this);
-        googleImgView = view.findViewById(R.id.googleImageView);
-        googleImgView.setOnClickListener(this);
-        signUpTv = view.findViewById(R.id.signUpTv);
-        signUpTv.setOnClickListener(this);
+        binding.forgetPasswordTv.setOnClickListener(this);
+        binding.signInBtn.setOnClickListener(this);
+        binding.facebookImageView.setOnClickListener(this);
+        binding.googleImageView.setOnClickListener(this);
+        binding.signUpTv.setOnClickListener(this);
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

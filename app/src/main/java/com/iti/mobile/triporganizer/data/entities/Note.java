@@ -1,19 +1,42 @@
 package com.iti.mobile.triporganizer.data.entities;
 
+import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "notes", foreignKeys = @ForeignKey(entity = Trip.class,  parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
 public class Note {
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    @Ignore
+    private String fireNoteId;
     private String message;
-    private String tripId;
+    @ColumnInfo(name = "tripId", index = true)
+    private long tripId;
     private boolean status;
-    private String id;
 
     public Note() {
     }
 
-    public Note(String message, String tripId, boolean status, String id) {
+    @Ignore
+    public Note(String message, long tripId, boolean status) {
         this.message = message;
         this.tripId = tripId;
         this.status = status;
-        this.id = id;
+    }
+
+    public String getFireNoteId() {
+        return fireNoteId;
+    }
+
+    public void setFireNoteId(String fireNoteId) {
+        this.fireNoteId = fireNoteId;
     }
 
     public String getMessage() {
@@ -24,11 +47,11 @@ public class Note {
         this.message = message;
     }
 
-    public String getTripId() {
+    public long getTripId() {
         return tripId;
     }
 
-    public void setTripId(String tripId) {
+    public void setTripId(long tripId) {
         this.tripId = tripId;
     }
 
@@ -40,11 +63,21 @@ public class Note {
         this.status = status;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Note note = (Note) obj;
+        if (note != null && (tripId != note.getTripId() || !message.equals(note.getMessage())
+                || status != note.getStatus())) {
+            return false;
+        }
+        return true;
     }
 }

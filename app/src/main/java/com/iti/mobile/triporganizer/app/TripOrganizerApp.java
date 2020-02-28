@@ -5,6 +5,7 @@ import android.app.Application;
 import com.iti.mobile.triporganizer.dagger.component.ApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.component.DaggerApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.module.application.ApplicationModule;
+import com.iti.mobile.triporganizer.dagger.module.application.RoomModule;
 
 public class TripOrganizerApp extends Application {
     ApplicationComponent component;
@@ -13,6 +14,7 @@ public class TripOrganizerApp extends Application {
         super.onCreate();
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
+                .roomModule(new RoomModule(this))
                 .build();
         component.inject(this);
     }

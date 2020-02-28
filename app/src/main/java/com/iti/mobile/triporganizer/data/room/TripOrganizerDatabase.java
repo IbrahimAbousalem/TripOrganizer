@@ -1,47 +1,31 @@
 package com.iti.mobile.triporganizer.data.room;
 
-import android.content.Context;
-
 import com.iti.mobile.triporganizer.data.room.dao.LocationDataDao;
 import com.iti.mobile.triporganizer.data.room.dao.NoteDao;
 import com.iti.mobile.triporganizer.data.room.dao.TripDao;
-import com.iti.mobile.triporganizer.data.room.dao.TripDataDao;
 import com.iti.mobile.triporganizer.data.room.dao.UserDao;
-import com.iti.mobile.triporganizer.data.room_entity.LocationData;
-import com.iti.mobile.triporganizer.data.room_entity.Note;
-import com.iti.mobile.triporganizer.data.room_entity.Trip;
-import com.iti.mobile.triporganizer.data.room_entity.TripData;
-import com.iti.mobile.triporganizer.data.room_entity.User;
+import com.iti.mobile.triporganizer.data.entities.LocationData;
+import com.iti.mobile.triporganizer.data.entities.Note;
+import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.utils.DateConverter;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import androidx.room.Database;
-import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 
-@Database(entities = {User.class, Trip.class, TripData.class, LocationData.class, Note.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Trip.class, LocationData.class, Note.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)
 abstract public class TripOrganizerDatabase extends RoomDatabase {
-    private static TripOrganizerDatabase mInstance;
-    abstract UserDao userDao();
-    abstract TripDao tripDao();
-    abstract TripDataDao tripDataDao();
-    abstract LocationDataDao locationDataDao();
-    abstract NoteDao noteDao();
-
-    public static TripOrganizerDatabase getInstance(Context context) {
-        if (mInstance == null) {
-            synchronized (TripOrganizerDatabase.class) {
-                if(mInstance!=null){
-                    mInstance = Room.databaseBuilder(context.getApplicationContext(),
-                            TripOrganizerDatabase.class,
-                            "TripOrganizerDB")
-                            .fallbackToDestructiveMigration()
-                            .build();
-                }
-            }
-        }
-        return mInstance;
-    }
+    private static final int NUMBER_OF_THREADS = 4;
+    public abstract UserDao getUserDao();
+    public abstract TripDao getTripDao();
+    public abstract LocationDataDao getLocationDataDao();
+    public abstract NoteDao getNoteDao();
+    public static final ExecutorService databaseWriteExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 }

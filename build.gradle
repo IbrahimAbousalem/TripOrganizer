@@ -5,7 +5,7 @@ buildscript {
         room_version = "2.2.3"
         lifecycle_version = "2.2.0"
         dagger_version = "2.23.1"
-        nav_version = "2.3.0-alpha01"
+        nav_version = "2.3.0-alpha02"
         firestore_version = "21.4.0"
         room_version = "2.2.4"
     }
@@ -14,8 +14,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.0'
         classpath 'com.google.gms:google-services:4.3.3'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

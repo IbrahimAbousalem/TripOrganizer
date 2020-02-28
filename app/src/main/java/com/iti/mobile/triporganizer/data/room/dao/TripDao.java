@@ -1,6 +1,7 @@
 package com.iti.mobile.triporganizer.data.room.dao;
 
-import com.iti.mobile.triporganizer.data.room_entity.Trip;
+import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 
 import java.util.List;
 
@@ -8,21 +9,24 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 @Dao
 public interface TripDao {
 
-    @Insert
-    void addTrip(Trip trip);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long addTrip(Trip trip);
 
     @Update
-    void updateTrip(Trip trip);
+    int updateTrip(Trip trip);
 
     @Delete
-    void deleteTrip(Trip trip);
+    int deleteTrip(Trip trip);
 
-    @Query("SELECT * FROM trips WHERE userId =:userId")
-    LiveData<List<Trip>> getAllTrips(String userId);
+    @Transaction
+    @Query("SELECT trips.*, locationData.* FROM trips, locationData WHERE trips.userId =:userId AND locationData.tripId = trips.id")
+    LiveData<List<TripAndLocation>> getAllTrips(String userId);
 }

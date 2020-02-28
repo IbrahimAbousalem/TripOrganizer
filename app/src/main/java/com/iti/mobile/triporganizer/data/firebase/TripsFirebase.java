@@ -8,6 +8,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.data.room.TripOrganizerDatabase;
+import com.iti.mobile.triporganizer.data.room.dao.LocationDataDao;
+import com.iti.mobile.triporganizer.data.room.dao.TripDao;
 import com.iti.mobile.triporganizer.utils.FirestoreConstatnts;
 
 import java.util.HashMap;
@@ -33,49 +37,65 @@ public class TripsFirebase {
     }
 
     public boolean addTrip(Trip trip) {
-        DocumentReference reference = db.collection(TRIPS_COLLECTION).document();
-        trip.setId(reference.getId());
+        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getUserId()).collection("UserTrips").document(String.valueOf(trip.getId()));
         return reference.set(trip).isSuccessful();
     }
 
     public boolean deleteTrip(Trip trip) {
-        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getId());
+        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getUserId()).collection("UserTrips").document(String.valueOf(trip.getId()));
+
         //delete related notes
-        db.collection(NOTES_COLLECTION).whereEqualTo(FirestoreConstatnts.tripId, trip.getId()).get().addOnCompleteListener(task -> {
+        db.collection(NOTES_COLLECTION).document(String.valueOf(trip.getId())).collection(String.valueOf(trip.getId())).get().addOnCompleteListener(task -> {
             List<Note> notes = task.getResult().toObjects(Note.class);
             for (Note note : notes){
-                notesFirebase.deleteNote(note);
+                notesFirebase.deleteNote(note, trip.getUserId());
             }
         });
         return reference.delete().isSuccessful();
     }
 
     public boolean updateTrip(Trip trip) {
-        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getId());
-        Map<String, Object> mTrip = new HashMap<>();
-        Map<String, Object> mLocation = new HashMap<>();
-        mLocation.put(FirestoreConstatnts.endPoint, trip.getLocationData().getEndPoint());
-        mLocation.put(FirestoreConstatnts.endAddressName, trip.getLocationData().getEndAddressName());
-        mLocation.put(FirestoreConstatnts.startPoint, trip.getLocationData().getStartPoint());
-        mLocation.put(FirestoreConstatnts.startAddressName, trip.getLocationData().getStartAddressName());
 
-        mTrip.put(FirestoreConstatnts.id, reference.getId());
-        mTrip.put(FirestoreConstatnts.type, trip.getType());
-        mTrip.put(FirestoreConstatnts.locationData, mLocation);
-        mTrip.put(FirestoreConstatnts.date, trip.getDate());
-        mTrip.put(FirestoreConstatnts.isRound, trip.isRound());
+    //    DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getFireTripId());
+        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getUserId()).collection("UserTrips").document(String.valueOf(trip.getId()));
+
+        Map<String, Object> mTrip = new HashMap<>();
+        Map<String, Object> mLocationOne = new HashMap<>();
+
+        mLocationOne.put(FirestoreConstatnts.tripId,trip.getLocationData().getTripId());
+        mLocationOne.put(FirestoreConstatnts.startTripEndPoint, trip.getLocationData().getStartTripEndPoint());
+        mLocationOne.put(FirestoreConstatnts.startTripEndAddressName, trip.getLocationData().getStartTripEndAddressName());
+        mLocationOne.put(FirestoreConstatnts.startTripStartPoint, trip.getLocationData().getStartTripStartPoint());
+        mLocationOne.put(FirestoreConstatnts.startTripStartAddressName, trip.getLocationData().getStartTripAddressName());
+        mLocationOne.put(FirestoreConstatnts.startDate, trip.getLocationData().getStartDate());
+        mLocationOne.put(FirestoreConstatnts.id, trip.getLocationData().getId());
+
+        mLocationOne.put(FirestoreConstatnts.roundTripEndPoint, trip.getLocationData().getRoundTripEndPoint());
+        mLocationOne.put(FirestoreConstatnts.roundTripEndAddressName, trip.getLocationData().getRoundTripEndAddressName());
+        mLocationOne.put(FirestoreConstatnts.roundTripStartPoint, trip.getLocationData().getRoundTripStartPoint());
+        mLocationOne.put(FirestoreConstatnts.roundTripStartAddressName, trip.getLocationData().getRoundTripStartAddressName());
+        mLocationOne.put(FirestoreConstatnts.roundDate, trip.getLocationData().getRoundDate());
+
+        mTrip.put(FirestoreConstatnts.fireTripId, trip.getFireTripId());
+        mTrip.put(FirestoreConstatnts.id, trip.getId());
         mTrip.put(FirestoreConstatnts.userId, trip.getUserId());
-        mTrip.put(FirestoreConstatnts.roundTrip, trip.getRoundTrip());
+        mTrip.put(FirestoreConstatnts.locationData, mLocationOne);
+        mTrip.put(FirestoreConstatnts.tripName, trip.getTripName());
+        mTrip.put(FirestoreConstatnts.isRound, trip.isRound());
         mTrip.put(FirestoreConstatnts.status, trip.getStatus());
+
         return reference.update(mTrip).isSuccessful();
     }
 
     public LiveData<List<Trip>> getTripsForUser(String userId) {
+//        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(trip.getUserId()).collection("UserTrips").document(String.valueOf(trip.getId()));
+
         MutableLiveData<List<Trip>> listLiveData = new MutableLiveData<>();
-        db.collection(TRIPS_COLLECTION).whereEqualTo(FirestoreConstatnts.userId,userId).get().addOnCompleteListener(task -> {
+        db.collection(TRIPS_COLLECTION).document(userId).collection("UserTrips").get().addOnCompleteListener(task -> {
             List<Trip> trips = task.getResult().toObjects(Trip.class);
             listLiveData.postValue(trips);
         });
         return listLiveData;
     }
+
 }

@@ -23,7 +23,7 @@ public class HistoryAdapter extends ListAdapter<Trip, HistoryAdapter.HistoryView
     private static final DiffUtil.ItemCallback<Trip> DIFF_CALLBACK = new DiffUtil.ItemCallback<Trip>() {
         @Override
         public boolean areItemsTheSame(@NonNull Trip oldItem, @NonNull Trip newItem) {
-            return oldItem.getId().equals(newItem.getId());
+            return oldItem.getId()!= newItem.getId();
         }
 
         @Override
@@ -42,8 +42,8 @@ public class HistoryAdapter extends ListAdapter<Trip, HistoryAdapter.HistoryView
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         holder.setTripNameTV(getItem(position).getTripName());
-        holder.setTripDateTV(getItem(position).getDate().toString());
-        holder.setTripLocationTV(getItem(position).getLocationData().getStartAddressName());
+        holder.setTripDateTV(getItem(position).getLocationData().getStartDate().toString());
+        holder.setTripLocationTV(getItem(position).getLocationData().getStartTripAddressName());
         holder.setTripStatusTV(getItem(position).getStatus());
     }
 
