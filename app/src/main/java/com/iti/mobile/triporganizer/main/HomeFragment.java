@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
     private NavController controller;
     @Inject
     ViewModelProviderFactory providerFactory;
-    TripsViewModel tripsViewModel;
+    private TripsViewModel tripsViewModel;
 
     Trip data;
     Note note;
@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
         TripsAdapter tripsAdapter = new TripsAdapter();
         createDummyTrip();
        // tripsViewModel.addTrip(data);
-        tripsViewModel.addNote(note);
+        tripsViewModel.addNote(note,"");
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
         tripsViewModel.getTripsList("b3JWEfSAnRf3UjJRZvyb17frnE43").observe(getActivity(), tripAndLocationList -> {

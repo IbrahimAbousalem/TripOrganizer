@@ -15,9 +15,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class TripsViewModel extends ViewModel {
-    TripRepositoryFirebaseImp tripRepositoryFirebaseImp;
-    TripRepositoryRoomImp tripRepositoryRoomImp;
-    NoteRepositoryRoomImp noteRepositoryRoomImp;
+    private TripRepositoryFirebaseImp tripRepositoryFirebaseImp;
+    private TripRepositoryRoomImp tripRepositoryRoomImp;
+    private NoteRepositoryRoomImp noteRepositoryRoomImp;
 
     @Inject
     public TripsViewModel(TripRepositoryFirebaseImp tripRepositoryFirebaseImp, TripRepositoryRoomImp tripRepositoryRoomImp, NoteRepositoryRoomImp noteRepositoryRoomImp) {
@@ -41,15 +41,15 @@ public class TripsViewModel extends ViewModel {
         tripRepositoryRoomImp.deleteTrip(trip);
     }
 
-    public void addNote(Note note){
-        noteRepositoryRoomImp.addNote(note);
+    public void addNote(Note note, String userId){
+        noteRepositoryRoomImp.addNote(note,userId);
     }
 
-    public void updateNote(Note note){
-        noteRepositoryRoomImp.updateNote(note);
+    public void updateNote(Note note, String userId){
+        noteRepositoryRoomImp.updateNote(note,userId);
     }
-    public void deleteNote(Note note){
-        noteRepositoryRoomImp.deleteNote(note);
+    public void deleteNote(Note note, String userId){
+        noteRepositoryRoomImp.deleteNote(note, userId);
     }
 
 }

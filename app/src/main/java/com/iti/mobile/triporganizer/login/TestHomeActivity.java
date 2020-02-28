@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
+import com.iti.mobile.triporganizer.base.MainActivity;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
