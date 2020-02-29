@@ -64,41 +64,41 @@ public class RegisterFragment extends Fragment {
             String userName = userNameEditText.getText().toString();
 
             if (userName.isEmpty() || userName.length()< 3) {
-                userNameInputLayout.setError(getString(R.string.valid_userName));
+                userNameEditText.setError(getString(R.string.valid_userName));
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             if (!isValidEmail(email)) {
-                userNameInputLayout.setError(null);
-                emailTextInputLayout.setError(getString(R.string.valid_email));
+                userNameEditText.setError(null);
+                emailEditText.setError(getString(R.string.valid_email));
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             String password = passwordEditText.getText().toString();
             if(password.isEmpty()){
-                emailTextInputLayout.setError(null);
-                passwordTextInputLayout.setError(getString(R.string.empty_password));
+                emailEditText.setError(null);
+                passwordEditText.setError(getString(R.string.empty_password));
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             if (password.length() <= 3) {
-                passwordTextInputLayout.setError(getString(R.string.valid_password));
+                passwordEditText.setError(getString(R.string.valid_password));
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             String confirmPassword = confirmPasswordEditText.getText().toString();
             if(confirmPassword.isEmpty()){
-                confirmPasswordTextInputLayout.setError(getString(R.string.empty_confirm_password));
+                confirmPasswordEditText.setError(getString(R.string.empty_confirm_password));
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             if (!password.equals(confirmPassword)) {
-                confirmPasswordTextInputLayout.setError(getString(R.string.valid_confirm_password));
+                confirmPasswordEditText.setError(getString(R.string.valid_confirm_password));
                 progressBar.setVisibility(View.GONE);
                 return;
             }
-            passwordTextInputLayout.setError(null);
-            confirmPasswordTextInputLayout.setError(null);
+            passwordEditText.setError(null);
+            confirmPasswordEditText.setError(null);
             User user = new User(userName, "", email, "", "");
             registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
                 progressBar.setVisibility(View.GONE);

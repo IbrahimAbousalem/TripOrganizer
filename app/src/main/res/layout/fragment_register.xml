@@ -23,51 +23,60 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userNameInputLayout"
         style="@style/edittext"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="30dp"
+
+        android:layout_marginStart="@dimen/d_32"
+        android:layout_marginEnd="@dimen/d_32"
+        android:layout_marginTop="@dimen/d_10"
         android:hint="@string/user_name"
         app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:startIconDrawable="@drawable/ic_user_24px">
+        app:startIconDrawable="@drawable/ic_user_24px"
+        >
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/userNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:background="@android:color/transparent"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailTextInputLayout"
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/userNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:inputType="text"
+
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailTextInputLayout"
         style="@style/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
         android:layout_marginStart="@dimen/d_32"
-        android:layout_marginTop="@dimen/d_10"
         android:layout_marginEnd="@dimen/d_32"
+        android:layout_marginTop="@dimen/d_10"
         android:hint="@string/email"
         app:hintTextAppearance="@style/HintText"
-        app:layout_constraintEnd_toEndOf="@+id/userNameInputLayout"
-        app:layout_constraintStart_toStartOf="@+id/userNameInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameInputLayout"
-        app:startIconDrawable="@drawable/ic_user_24px">
+        app:startIconDrawable="@drawable/ic_user_24px"
+        android:importantForAutofill="no"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:inputType="textEmailAddress"
+            android:inputType="textEmailAddress|textFilter"
+
+
 
 />
     </com.google.android.material.textfield.TextInputLayout>
@@ -78,8 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/d_10"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="@dimen/d_32"
+        android:layout_marginEnd="@dimen/d_32"
         android:hint="@string/pass"
         app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="@+id/emailTextInputLayout"
@@ -129,7 +138,7 @@
         style="@style/signinup_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
         android:layout_marginStart="@dimen/d_24"
         android:layout_marginEnd="@dimen/d_24"
         android:text="@string/signup"
