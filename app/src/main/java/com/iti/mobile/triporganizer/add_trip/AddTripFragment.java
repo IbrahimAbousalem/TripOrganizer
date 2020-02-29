@@ -73,6 +73,9 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     AddTripViewModel addTripViewModel;
     private FragmentAddTripBinding binding;
 
+    @Inject
+    FirebaseAuth firebaseAuth;
+
     private double startPonitLat;
     private double startPonitLng;
     private double endPonitLat;
@@ -335,7 +338,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         }
         trip.setTripName(tripName);
         trip.setRound(isRound);
-        trip.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        trip.setUserId(firebaseAuth.getCurrentUser().getUid());
         trip.setStatus("UpComing");
         trip.setLocationData(locationData);
         addTripViewModel.addTripAndNotes(trip, notesList);

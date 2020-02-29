@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,9 +27,12 @@ import com.iti.mobile.triporganizer.utils.FragmentUtils;
 public class MainFragment extends Fragment {
     private FragmentMainBinding binding;
     private NavController navController;
-    private HistoryFragment historyFragment;
-    private HomeFragment homeFragment;
+
     private FloatingActionButton add_button;
+    BottomNavigationView bottomNavigation;
+    private final HomeFragment homeFragment = new HomeFragment();
+    private final HistoryFragment historyFragment = new HistoryFragment();
+    Fragment activeFragment= homeFragment;
     public MainFragment() {
 
     }
@@ -38,9 +43,9 @@ public class MainFragment extends Fragment {
         binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         add_button = binding.addButton;
-        BottomNavigationView bottomNavigation = binding.bottomNavigation;
-        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        bottomNavigation.setSelectedItemId(R.id.botton_navigation_my_trips);
+        bottomNavigation = binding.bottomNavigation;
+      //  bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+       // bottomNavigation.setOnNavigationItemReselectedListener(onNavigationItemReselectedListener);
         handleActions();
         return  view;
     }
@@ -49,6 +54,16 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        NavigationUI.setupWithNavController(bottomNavigation, navController);
+
+       // bottomNavigation.setSelectedItemId(R.id.botton_navigation_my_trips);
+    }
+
+    @Override
+    public void onResume() {
+
+       // bottomNavigation.setSelectedItemId(R.id.botton_navigation_my_trips);
+        super.onResume();
     }
 
     private void handleActions() {
@@ -56,16 +71,35 @@ public class MainFragment extends Fragment {
             navController.navigate(R.id.action_mainFragment2_to_addTripFragment);
         });
     }
+    private BottomNavigationView.OnNavigationItemReselectedListener onNavigationItemReselectedListener = new BottomNavigationView.OnNavigationItemReselectedListener() {
+        @Override
+        public void onNavigationItemReselected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.homeFragment:
+                    FragmentUtils.hideFragment((AppCompatActivity) getContext(),activeFragment);
+                    showHomeFragment();
+                    activeFragment = homeFragment;
+                    break;
 
+                case R.id.historyFragment:
+                    FragmentUtils.hideFragment((AppCompatActivity) getContext(),activeFragment);
+                    showHistoryFragment();
+                    activeFragment = historyFragment;
+                    break;
+
+            }
+
+        }
+    };
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()){
-                case R.id.botton_navigation_my_trips:
+                case R.id.homeFragment:
                     showHomeFragment();
                     return  true;
 
-                case R.id.botton_navigation_history:
+                case R.id.historyFragment:
                     showHistoryFragment();
                     return true;
 
@@ -76,16 +110,12 @@ public class MainFragment extends Fragment {
     };
 
     private void showHistoryFragment() {
-        if (historyFragment == null){
-            historyFragment = new HistoryFragment();
-        }
-        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, historyFragment, HistoryFragment.TAG, true);
+
+        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, historyFragment, HistoryFragment.TAG, false);
     }
 
     private void showHomeFragment() {
-        if (homeFragment == null){
-            homeFragment = new HomeFragment();
-        }
-        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, homeFragment, HomeFragment.TAG, true);
+
+        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, homeFragment, HomeFragment.TAG, false);
     }
 }
