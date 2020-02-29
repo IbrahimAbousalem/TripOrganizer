@@ -1,5 +1,8 @@
 package com.iti.mobile.triporganizer.data.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,7 +13,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "notes", foreignKeys = @ForeignKey(entity = Trip.class,  parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
-public class Note {
+public class Note implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -30,6 +33,26 @@ public class Note {
         this.tripId = tripId;
         this.status = status;
     }
+
+    protected Note(Parcel in) {
+        id = in.readLong();
+        fireNoteId = in.readString();
+        message = in.readString();
+        tripId = in.readLong();
+        status = in.readByte() != 0;
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
 
     public String getFireNoteId() {
         return fireNoteId;
@@ -79,5 +102,19 @@ public class Note {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(fireNoteId);
+        dest.writeString(message);
+        dest.writeLong(tripId);
+        dest.writeByte((byte) (status ? 1 : 0));
     }
 }

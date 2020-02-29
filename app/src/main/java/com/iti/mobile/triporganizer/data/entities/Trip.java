@@ -1,5 +1,8 @@
 package com.iti.mobile.triporganizer.data.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,7 +12,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "trips",foreignKeys = @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "userId", onDelete = CASCADE))
-public class Trip{
+public class Trip implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = "userId", index = true)
@@ -34,6 +37,28 @@ public class Trip{
         this.locationData = locationData;
         this.isRound = isRound;
     }
+
+    protected Trip(Parcel in) {
+        id = in.readLong();
+        userId = in.readString();
+        fireTripId = in.readString();
+        tripName = in.readString();
+        status = in.readString();
+        locationData = in.readParcelable(LocationData.class.getClassLoader());
+        isRound = in.readByte() != 0;
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 
     public String getFireTripId() {
         return fireTripId;
@@ -100,5 +125,21 @@ public class Trip{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(userId);
+        dest.writeString(fireTripId);
+        dest.writeString(tripName);
+        dest.writeString(status);
+        dest.writeParcelable(locationData, flags);
+        dest.writeByte((byte) (isRound ? 1 : 0));
     }
 }

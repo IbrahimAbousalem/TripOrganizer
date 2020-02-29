@@ -1,5 +1,8 @@
 package com.iti.mobile.triporganizer.data.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 import androidx.annotation.Nullable;
@@ -12,7 +15,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "locationData", foreignKeys = @ForeignKey(entity = Trip.class, parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
-public class LocationData {
+public class LocationData implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "locationId")
@@ -58,6 +61,35 @@ public class LocationData {
         this.startDate = startDate;
         this.roundDate = roundDate;
     }
+
+    protected LocationData(Parcel in) {
+        id = in.readLong();
+        tripId = in.readLong();
+        startTripAddressName = in.readString();
+        startTripStartPointLat = in.readDouble();
+        startTripStartPointLng = in.readDouble();
+        startTripEndAddressName = in.readString();
+        startTripEndPointLat = in.readDouble();
+        startTripEndPointLng = in.readDouble();
+        roundTripStartAddressName = in.readString();
+        roundTripStartPointLat = in.readDouble();
+        roundTripStartPointLng = in.readDouble();
+        roundTripEndAddressName = in.readString();
+        roundTripEndPointLat = in.readDouble();
+        roundTripEndPointLng = in.readDouble();
+    }
+
+    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
+        @Override
+        public LocationData createFromParcel(Parcel in) {
+            return new LocationData(in);
+        }
+
+        @Override
+        public LocationData[] newArray(int size) {
+            return new LocationData[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -195,5 +227,28 @@ public class LocationData {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(tripId);
+        dest.writeString(startTripAddressName);
+        dest.writeDouble(startTripStartPointLat);
+        dest.writeDouble(startTripStartPointLng);
+        dest.writeString(startTripEndAddressName);
+        dest.writeDouble(startTripEndPointLat);
+        dest.writeDouble(startTripEndPointLng);
+        dest.writeString(roundTripStartAddressName);
+        dest.writeDouble(roundTripStartPointLat);
+        dest.writeDouble(roundTripStartPointLng);
+        dest.writeString(roundTripEndAddressName);
+        dest.writeDouble(roundTripEndPointLat);
+        dest.writeDouble(roundTripEndPointLng);
     }
 }
