@@ -49,4 +49,9 @@ public class TripRepositoryRoomImp implements TripsRepository {
         return null;
     }
 
+    @Override
+    public void addTripAndNotes(Trip trip, List<Note> notes) {
+        tripsRoom.addTripAndNotes(trip, notes);
+    }
+
 }

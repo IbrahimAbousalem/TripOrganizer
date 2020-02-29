@@ -77,8 +77,8 @@ public class ChatHeadActivity extends AppCompatActivity {
                     strings.add("saturday");
                     strings.add("saturday");
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                    NoteAdapter noteAdapter = new NoteAdapter(this,strings);
-                    recyclerView.setAdapter(noteAdapter);
+                   // NoteAdapter noteAdapter = new NoteAdapter(this,strings);
+                   // recyclerView.setAdapter(noteAdapter);
                     return Unit.INSTANCE;
                 })
                 .setupImage(imageView -> {

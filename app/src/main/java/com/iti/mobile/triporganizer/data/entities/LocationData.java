@@ -20,14 +20,18 @@ public class LocationData {
     @ColumnInfo(name = "tripId", index = true)
     private long tripId;
     private String startTripAddressName;
-    private long startTripStartPoint;
+    private double startTripStartPointLat;
+    private double startTripStartPointLng;
     private String startTripEndAddressName;
-    private long startTripEndPoint;
+    private double startTripEndPointLat;
+    private double startTripEndPointLng;
 
     private String roundTripStartAddressName;
-    private long roundTripStartPoint;
+    private double roundTripStartPointLat;
+    private double roundTripStartPointLng;
     private String roundTripEndAddressName;
-    private long roundTripEndPoint;
+    private double roundTripEndPointLat;
+    private double roundTripEndPointLng;
 
     private Date startDate;
     private Date roundDate;
@@ -36,16 +40,21 @@ public class LocationData {
     }
 
     @Ignore
-    public LocationData(long tripId, String startTripAddressName, long startTripStartPoint, String startTripEndAddressName, long startTripEndPoint, String roundTripStartAddressName, long roundTripStartPoint, String roundTripEndAddressName, long roundTripEndPoint, Date startDate, Date roundDate) {
+    public LocationData(long id, long tripId, String startTripAddressName, double startTripStartPointLat, double startTripStartPointLng, String startTripEndAddressName, double startTripEndPointLat, double startTripEndPointLng, String roundTripStartAddressName, double roundTripStartPointLat, double roundTripStartPointLng, String roundTripEndAddressName, double roundTripEndPointLat, double roundTripEndPointLng, Date startDate, Date roundDate) {
+        this.id = id;
         this.tripId = tripId;
         this.startTripAddressName = startTripAddressName;
-        this.startTripStartPoint = startTripStartPoint;
+        this.startTripStartPointLat = startTripStartPointLat;
+        this.startTripStartPointLng = startTripStartPointLng;
         this.startTripEndAddressName = startTripEndAddressName;
-        this.startTripEndPoint = startTripEndPoint;
+        this.startTripEndPointLat = startTripEndPointLat;
+        this.startTripEndPointLng = startTripEndPointLng;
         this.roundTripStartAddressName = roundTripStartAddressName;
-        this.roundTripStartPoint = roundTripStartPoint;
+        this.roundTripStartPointLat = roundTripStartPointLat;
+        this.roundTripStartPointLng = roundTripStartPointLng;
         this.roundTripEndAddressName = roundTripEndAddressName;
-        this.roundTripEndPoint = roundTripEndPoint;
+        this.roundTripEndPointLat = roundTripEndPointLat;
+        this.roundTripEndPointLng = roundTripEndPointLng;
         this.startDate = startDate;
         this.roundDate = roundDate;
     }
@@ -53,6 +62,7 @@ public class LocationData {
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -73,12 +83,20 @@ public class LocationData {
         this.startTripAddressName = startTripAddressName;
     }
 
-    public long getStartTripStartPoint() {
-        return startTripStartPoint;
+    public double getStartTripStartPointLat() {
+        return startTripStartPointLat;
     }
 
-    public void setStartTripStartPoint(long startTripStartPoint) {
-        this.startTripStartPoint = startTripStartPoint;
+    public void setStartTripStartPointLat(double startTripStartPointLat) {
+        this.startTripStartPointLat = startTripStartPointLat;
+    }
+
+    public double getStartTripStartPointLng() {
+        return startTripStartPointLng;
+    }
+
+    public void setStartTripStartPointLng(double startTripStartPointLng) {
+        this.startTripStartPointLng = startTripStartPointLng;
     }
 
     public String getStartTripEndAddressName() {
@@ -89,12 +107,20 @@ public class LocationData {
         this.startTripEndAddressName = startTripEndAddressName;
     }
 
-    public long getStartTripEndPoint() {
-        return startTripEndPoint;
+    public double getStartTripEndPointLat() {
+        return startTripEndPointLat;
     }
 
-    public void setStartTripEndPoint(long startTripEndPoint) {
-        this.startTripEndPoint = startTripEndPoint;
+    public void setStartTripEndPointLat(double startTripEndPointLat) {
+        this.startTripEndPointLat = startTripEndPointLat;
+    }
+
+    public double getStartTripEndPointLng() {
+        return startTripEndPointLng;
+    }
+
+    public void setStartTripEndPointLng(double startTripEndPointLng) {
+        this.startTripEndPointLng = startTripEndPointLng;
     }
 
     public String getRoundTripStartAddressName() {
@@ -105,12 +131,20 @@ public class LocationData {
         this.roundTripStartAddressName = roundTripStartAddressName;
     }
 
-    public long getRoundTripStartPoint() {
-        return roundTripStartPoint;
+    public double getRoundTripStartPointLat() {
+        return roundTripStartPointLat;
     }
 
-    public void setRoundTripStartPoint(long roundTripStartPoint) {
-        this.roundTripStartPoint = roundTripStartPoint;
+    public void setRoundTripStartPointLat(double roundTripStartPointLat) {
+        this.roundTripStartPointLat = roundTripStartPointLat;
+    }
+
+    public double getRoundTripStartPointLng() {
+        return roundTripStartPointLng;
+    }
+
+    public void setRoundTripStartPointLng(double roundTripStartPointLng) {
+        this.roundTripStartPointLng = roundTripStartPointLng;
     }
 
     public String getRoundTripEndAddressName() {
@@ -121,12 +155,20 @@ public class LocationData {
         this.roundTripEndAddressName = roundTripEndAddressName;
     }
 
-    public long getRoundTripEndPoint() {
-        return roundTripEndPoint;
+    public double getRoundTripEndPointLat() {
+        return roundTripEndPointLat;
     }
 
-    public void setRoundTripEndPoint(long roundTripEndPoint) {
-        this.roundTripEndPoint = roundTripEndPoint;
+    public void setRoundTripEndPointLat(double roundTripEndPointLat) {
+        this.roundTripEndPointLat = roundTripEndPointLat;
+    }
+
+    public double getRoundTripEndPointLng() {
+        return roundTripEndPointLng;
+    }
+
+    public void setRoundTripEndPointLng(double roundTripEndPointLng) {
+        this.roundTripEndPointLng = roundTripEndPointLng;
     }
 
     public Date getStartDate() {
@@ -149,7 +191,7 @@ public class LocationData {
     public boolean equals(@Nullable Object obj) {
         LocationData location = (LocationData) obj;
         if (location != null && (tripId != location.getTripId() || !startTripAddressName.equals(location.getStartTripAddressName()) || !startTripEndAddressName.equals(location.getStartTripEndAddressName())
-                || startTripStartPoint != location.getStartTripStartPoint() || startTripEndPoint != location.getStartTripEndPoint() || startDate !=location.getStartDate())) {
+                || startTripStartPointLat != location.getStartTripStartPointLat() || startTripStartPointLng != location.getStartTripStartPointLng() ||startTripEndPointLat != location.getStartTripEndPointLat() || startTripEndPointLng != location.getStartTripEndPointLng() ||startDate !=location.getStartDate())) {
             return false;
         }
         return true;

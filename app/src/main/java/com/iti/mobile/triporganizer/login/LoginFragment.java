@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -61,15 +62,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
-
-    private TextInputEditText userEmailEt;
-    private TextInputEditText passwordEt;
-    private TextView forgetPasswordTv;
-    private Button signInBtn;
-    private ProgressBar progressBar;
-    private ImageView facebookImageView;
-    private ImageView googleImgView;
-    private TextView signUpTv;
 
     private GoogleConfiguration googleConfiguration;
     private GoogleSignInClient mGoogleSignInClient;
@@ -145,11 +137,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 AuthCredential credential = googleConfiguration.getGoogleAuthCredential(account);
                 showProgressBar();
                 loginViewModel.signInWithGoogle(credential).observe(this, user -> {
-                    if (user != null) {
-                        updateUi(user);
-                    } else {
-                        updateUi(null);
-                    }
+                   updateUi(user);
                 });
             } catch (ApiException e) {
                 Log.w(TAG, "Google sign in failed", e);
@@ -195,11 +183,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void signInWithEmailAndPasswordViewModel(String email,String password){
         loginViewModel.signInWithEmailAndPasswordVM(email,password).observe(this, currentUser->{
-            if(currentUser!=null){
-                updateUi(currentUser);
-            }else{
-                updateUi(null);
-            }
+            updateUi(currentUser);
         });
     }
 //-----------------------------------------------------------------------------------------------------
@@ -229,42 +213,32 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
-    private void updateUi(User currentUser) {
+    private void updateUi(String message) {
         hideProgressBar();
-        if (currentUser != null) {
+        if (message != null&&!message.isEmpty()&&!message.contains("Error")) {
             controller.navigate(R.id.action_loginFragment_to_mainFragment2);
-            //getActivity().startActivity(new Intent(getActivity(), TestHomeActivity.class) );
-            //sendData?
-            //gotoHomeActivity(currentUser);
         } else {
-            displayError();
+            displayError(message);
         }
     }
 
-    private void displayError() {
-        Log.i(TAG, "Login Failed !");
-        //TODO:RESPOND TO DIFFERENT EXCEPTION
+    private void displayError(String message) {
+        if(message.contains("email")||message.contains("Email")){
+            binding.userEmailEt.setError(message);
+        }else if(message.contains("password")||message.contains("Password")){
+            binding.passwordEt.setError(message);
+        }else {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setUpViews(View view) {
         binding.forgetPasswordTv.setOnClickListener(this);
         binding.signInBtn.setOnClickListener(this);
+
         binding.facebookImageView.setOnClickListener(this);
         binding.googleImageView.setOnClickListener(this);
         binding.signUpTv.setOnClickListener(this);
-//        userEmailEt = view.findViewById(R.id.userEmailEt);
-//        passwordEt = view.findViewById(R.id.passwordEt);
-//        forgetPasswordTv = view.findViewById(R.id.forgetPasswordTv);
-//        forgetPasswordTv.setOnClickListener(this);
-//        signInBtn = view.findViewById(R.id.signInBtn);
-//        signInBtn.setOnClickListener(this);
-//        progressBar=view.findViewById(R.id.progressBar);
-//        facebookImageView = view.findViewById(R.id.facebookImageView);
-//        facebookImageView.setOnClickListener(this);
-//        googleImgView = view.findViewById(R.id.googleImageView);
-//        googleImgView.setOnClickListener(this);
-//        signUpTv = view.findViewById(R.id.signUpTv);
-//        signUpTv.setOnClickListener(this);
     }
 
     @Override

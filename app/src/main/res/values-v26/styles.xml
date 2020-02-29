@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="edittext">
+        <item name="android:textColor">@color/lighttxt</item>
+        <item name="android:background">@drawable/rounded_et</item>
+        <item name="android:layout_marginBottom">@dimen/d_20</item>
+        <item name="android:drawablePadding">@dimen/d_10</item>
+        <item name="android:autofilledHighlight">@android:color/transparent</item>
+    </style>
+</resources>

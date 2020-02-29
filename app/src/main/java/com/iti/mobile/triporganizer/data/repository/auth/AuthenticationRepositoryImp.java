@@ -18,12 +18,12 @@ public class AuthenticationRepositoryImp implements AuthenticationRepository{
     }
 
     @Override
-    public LiveData<User> signInWithEmailAndPasswordFunc(String email, String password) {
+    public LiveData<String> signInWithEmailAndPasswordFunc(String email, String password) {
         return authenticationFirebase.signInWithEmailAndPasswordFunc(email,password);
     }
 
     @Override
-    public LiveData<User> signInWithFacebookFunc(AccessToken accessToken) {
+    public LiveData<String> signInWithFacebookFunc(AccessToken accessToken) {
         return authenticationFirebase.signInWithFacebookFunc(accessToken);
     }
 
@@ -43,7 +43,7 @@ public class AuthenticationRepositoryImp implements AuthenticationRepository{
     }
 
     @Override
-    public LiveData<User> firebaseSignInWithGoogle(AuthCredential googleAuthCredential) {
+    public LiveData<String> firebaseSignInWithGoogle(AuthCredential googleAuthCredential) {
         return authenticationFirebase.signInWithGoogle(googleAuthCredential);
     }
 }

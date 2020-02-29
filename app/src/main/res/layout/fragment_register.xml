@@ -20,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userNameInputLayout"
         style="@style/edittext"
@@ -37,7 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:startIconDrawable="@drawable/ic_user_24px">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userNameEditText"
             android:layout_width="match_parent"
@@ -59,7 +57,8 @@
         app:layout_constraintEnd_toEndOf="@+id/userNameInputLayout"
         app:layout_constraintStart_toStartOf="@+id/userNameInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/userNameInputLayout"
-        app:startIconDrawable="@drawable/ic_user_24px">
+        app:startIconDrawable="@drawable/ic_user_24px"
+        android:importantForAutofill="no">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
@@ -67,8 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@android:color/transparent"
-            android:inputType="textEmailAddress"
-            />
+            android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -92,7 +90,6 @@
             android:background="@android:color/transparent"
             android:inputType="numberPassword" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/confirmPasswordTextInputLayout"

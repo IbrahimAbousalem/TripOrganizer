@@ -40,13 +40,13 @@
     <string name="eend_point">Enter End Point</string>
     <string name="edate">Pick Date</string>
     <string name="etime">Pick Time</string>
-
+    <string name="enternote">Add Note</string>
     <string name="facebook_app_id">497010691251023</string>
     <string name="fb_login_protocol_scheme">fb497010691251023</string>
 
     <string name="google_places_api_key">AIzaSyDrhEBrA9oj5N0zD7VAwk0EHv0exMbc0Cc</string>
 
-    <string name="user_name">Enter User Name</string>
+    <string name="user_name">User Name</string>
 
     <string name="next_trip">Next Trip</string>
     <string name="upcoming_trips">Upcoming Trips</string>
@@ -58,7 +58,6 @@
     <string name="delete">Delete</string>
 
     <string name="snooze">Snooze</string>
-
     <string name="myTrips">My Trips</string>
     <string name="history">History</string>
 

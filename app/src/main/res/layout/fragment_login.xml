@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
+<ScrollView
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -66,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
-            android:inputType="textPassword"
+            android:inputType="numberPassword"
             android:textColor="#090909"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>

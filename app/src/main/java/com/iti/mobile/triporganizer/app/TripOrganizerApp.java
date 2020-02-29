@@ -9,6 +9,7 @@ import android.os.IBinder;
 
 import com.iti.mobile.triporganizer.alarm.AlarmService;
 import com.iti.mobile.triporganizer.dagger.component.ApplicationComponent;
+//import com.iti.mobile.triporganizer.dagger.component.DaggerApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.component.DaggerApplicationComponent;
 import com.iti.mobile.triporganizer.dagger.module.application.ApplicationModule;
 import com.iti.mobile.triporganizer.dagger.module.application.RoomModule;

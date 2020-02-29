@@ -42,5 +42,25 @@
         <action
             android:id="@+id/action_mainFragment2_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_addTripFragment"
+            app:destination="@id/addTripFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addTripFragment"
+        android:name="com.iti.mobile.triporganizer.add_trip.AddTripFragment"
+        android:label="fragment_add_trip"
+        tools:layout="@layout/fragment_add_trip" >
+        <action
+            android:id="@+id/action_addTripFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.iti.mobile.triporganizer.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>

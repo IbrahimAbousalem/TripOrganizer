@@ -44,27 +44,26 @@ public class AuthenticationFirebase {
         this.userDao = userDao;
     }
 
-    //TODO: Return String to show the status
-    public LiveData<User> signInWithEmailAndPasswordFunc(String email, String password) {
-        MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
+    public LiveData<String> signInWithEmailAndPasswordFunc(String email, String password) {
+        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 Log.i(TAG, "signInWithEmail:success");
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 //TODO: I removed User Photo
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
-                currentUserLiveData.postValue(currentUser);
+                currentUserLiveData.postValue(currentUser.getId());
             }else{
-                Log.i(TAG, "signInWithEmail:failure", task.getException());
-                currentUserLiveData.postValue(null);
+                Log.i(TAG, "signInWithEmail:failure"+task.getException().getMessage());
+                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
             }
         });
         return currentUserLiveData;
     }
 
-    public LiveData<User> signInWithGoogleFunc(GoogleSignInAccount account){
+    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-        MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
+        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
         AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
         firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
@@ -79,18 +78,18 @@ public class AuthenticationFirebase {
                 TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                     userDao.insertUser(finalCurrentUser);
                 });
-                currentUserLiveData.postValue(currentUser);
+                currentUserLiveData.postValue(currentUser.getId());
 
             }else{
                 Log.i(TAG, "signInWithGoogle:failure", task.getException());
-                currentUserLiveData.postValue(null);
+                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
             }
         });
         return currentUserLiveData;
     }
 
-    public LiveData<User> signInWithFacebookFunc(AccessToken accessToken){
-        MutableLiveData<User> currentUserLiveData=new MutableLiveData<>();
+    public LiveData<String> signInWithFacebookFunc(AccessToken accessToken){
+        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
         Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         firebaseAuth.signInWithCredential(credential)
@@ -107,11 +106,11 @@ public class AuthenticationFirebase {
                         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                             userDao.insertUser(finalCurrentUser);
                         });
-                        currentUserLiveData.postValue(currentUser);
+                        currentUserLiveData.postValue(currentUser.getId());
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        currentUserLiveData.postValue(null);
+                        currentUserLiveData.postValue("Error:" +task.getException().getMessage());
                     }
                 });
         return currentUserLiveData;
@@ -158,10 +157,10 @@ public class AuthenticationFirebase {
                         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                             userDao.insertUser(user);
                         });
-                        registerUser.postValue("Register Successfully");
+                        registerUser.postValue(user.getId());
                     }
                 }else{
-                    registerUser.postValue(task.getException().getMessage());
+                    registerUser.postValue("Error:" +task.getException().getMessage());
                 }
             }
         });
@@ -173,8 +172,8 @@ public class AuthenticationFirebase {
         //TODO: add onSuccess and on Failure
     }
 
-    public MutableLiveData<User> signInWithGoogle(AuthCredential googleAuthCredential) {
-        MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> signInWithGoogle(AuthCredential googleAuthCredential) {
+        MutableLiveData<String> authenticatedUserMutableLiveData = new MutableLiveData<>();
         firebaseAuth.signInWithCredential(googleAuthCredential).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -187,9 +186,10 @@ public class AuthenticationFirebase {
                     userDao.insertUser(finalCurrentUser);
                 });
                 saveToDatabase(currentUser);
-                authenticatedUserMutableLiveData.postValue(currentUser);
+                authenticatedUserMutableLiveData.postValue(currentUser.getId());
             } else {
-                Log.e("Error", authTask.getException().getMessage());
+                Log.e(TAG,"Error:" +authTask.getException().getMessage());
+                authenticatedUserMutableLiveData.postValue(authTask.getException().getMessage());
             }
         });
         return authenticatedUserMutableLiveData;

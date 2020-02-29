@@ -53,7 +53,7 @@ public class MainFragment extends Fragment {
 
     private void handleActions() {
         add_button.setOnClickListener((view)->{
-            navController.navigate(R.id.action_mainFragment2_to_detailsFragment);
+            navController.navigate(R.id.action_mainFragment2_to_addTripFragment);
         });
     }
 
