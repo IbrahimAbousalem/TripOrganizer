@@ -7,12 +7,9 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -39,21 +36,13 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
         trip.setId(1234);
 
 
-
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent alarmIntent = new Intent(this, AlarmBroadCastReceiver.class);
-        alarmIntent.setData(Uri.parse("custom://" + trip.getId()));
-        alarmIntent.setAction(String.valueOf(trip.getId()));
-
-        //request code for pending intent must be unique on application level
-        pendingIntent = PendingIntent.getBroadcast(this, 101, alarmIntent, 0);
+        createPendingIntent(String.valueOf(trip.getId()));
 
         setAlarm.setOnClickListener((view)->{
-            startAlarm();
+            startAlarm(String.valueOf(trip.getId()));
         });
         cancelAlarm.setOnClickListener((view)->{
-            cancelAlarm();
+            cancelAlarm(String.valueOf(trip.getId()));
         });
         stopSound.setOnClickListener((view)->{
             /*
@@ -65,6 +54,16 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
 
     }
 
+    private PendingIntent createPendingIntent(String tripId) {
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent alarmIntent = new Intent(this, AlarmBroadCastReceiver.class);
+        alarmIntent.setData(Uri.parse("custom://" + tripId));
+        alarmIntent.setAction(tripId);
+
+        //request code for pending intent must be unique on application level
+        return PendingIntent.getBroadcast(this, 101, alarmIntent, 0);
+    }
 
 
     private void enableReceiver() {
@@ -85,12 +84,12 @@ public class SetAlarmDummyActivity extends AppCompatActivity {
     }
 
 
-    private void startAlarm() {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, 5*1000, pendingIntent);
+    private void startAlarm(String tripId) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, 5*1000, createPendingIntent(tripId));
     }
 
-    private void cancelAlarm() {
-        alarmManager.cancel(pendingIntent);
-        Toast.makeText(getApplicationContext(), "Alarm Cancelled", Toast.LENGTH_LONG).show();
+    private void cancelAlarm(String tripId) {
+        alarmManager.cancel(createPendingIntent(tripId));
+
     }
 }

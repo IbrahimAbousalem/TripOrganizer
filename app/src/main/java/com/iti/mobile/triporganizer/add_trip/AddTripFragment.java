@@ -60,7 +60,7 @@ import static com.iti.mobile.triporganizer.utils.Flags.TIME1;
 import static com.iti.mobile.triporganizer.utils.Flags.TIME2;
 import static com.iti.mobile.triporganizer.utils.Flags.VIEW_TRIP_FLAG;
 
-public class AddTripFragment extends Fragment implements View.OnClickListener{
+public class AddTripFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "AddTripFragment";
     private AutocompleteSupportFragment startPointAutocompleteFragment;
@@ -73,13 +73,16 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
     AddTripViewModel addTripViewModel;
     private FragmentAddTripBinding binding;
 
+    @Inject
+    FirebaseAuth firebaseAuth;
+
     private double startPonitLat;
     private double startPonitLng;
     private double endPonitLat;
     private double endPonitLng;
     private String startAddress;
     private String endAddress;
-    private boolean isRound=false;
+    private boolean isRound = false;
     private Trip trip;
     private LocationData locationData;
 
@@ -104,7 +107,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         controller = Navigation.findNavController(view);
         trip = new Trip();
         locationData = new LocationData();
-        notesList=new ArrayList<>();
+        notesList = new ArrayList<>();
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         addTripViewModel = new ViewModelProvider(this, providerFactory).get(AddTripViewModel.class);
         initView(view);
@@ -133,19 +136,19 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
 
     private void handleStartPointPlacesSelected(AutocompleteSupportFragment startPointAutocompleteFragment) {
         startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,
-                Place.Field.LAT_LNG,Place.Field.ADDRESS));
+                Place.Field.LAT_LNG, Place.Field.ADDRESS));
         startPointAutocompleteFragment.setHint(getString(R.string.estart_point));
         startPointAutocompleteFragment.setCountry("EG");
         startPointAutocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         startPointAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId()+", "+
-                        place.getLatLng().latitude+", "+place.getLatLng().longitude);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " +
+                        place.getLatLng().latitude + ", " + place.getLatLng().longitude);
 
-                startPonitLat=place.getLatLng().latitude;
-                startPonitLng=place.getLatLng().longitude;
-                startAddress=place.getName();
+                startPonitLat = place.getLatLng().latitude;
+                startPonitLng = place.getLatLng().longitude;
+                startAddress = place.getName();
             }
 
             @Override
@@ -156,19 +159,19 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleEndPointPlacesSelected(AutocompleteSupportFragment endPointAutocompleteFragment) {
-        endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
+        endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
         endPointAutocompleteFragment.setHint(getString(R.string.eend_point));
         endPointAutocompleteFragment.setCountry("EG");
         endPointAutocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         endPointAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId()+", "+
-                        place.getLatLng().latitude+", "+place.getLatLng().longitude);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " +
+                        place.getLatLng().latitude + ", " + place.getLatLng().longitude);
 
-                endPonitLat=place.getLatLng().latitude;
-                endPonitLng=place.getLatLng().longitude;
-                endAddress=place.getName();
+                endPonitLat = place.getLatLng().latitude;
+                endPonitLng = place.getLatLng().longitude;
+                endAddress = place.getName();
 
             }
 
@@ -208,6 +211,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
 
         }
     }
+
     private void addNote() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         TextView titleTv = new TextView(getContext());
@@ -220,8 +224,8 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String inputText=input.getText().toString();
-                if(inputText.isEmpty()) return;
+                String inputText = input.getText().toString();
+                if (inputText.isEmpty()) return;
                 Note note = new Note();
                 note.setMessage(inputText);
                 note.setStatus(false);
@@ -252,35 +256,33 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
     private void deleteNote(int position) {
         notesList.remove(position);
         noteAdapter.notifyItemRemoved(position);
-        noteAdapter.notifyItemRangeChanged(position,notesList.size());
+        noteAdapter.notifyItemRangeChanged(position, notesList.size());
     }
 
     private void showSingleTrip() {
-        isRound=false;
+        isRound = false;
         focusSingleButton();
         hideSecondDateTimeViews();
     }
 
     private void showRoundTrip() {
-        isRound=true;
+        isRound = true;
         focusRoundButton();
         showSecondDateTimeEditText();
 
     }
+
     private void showSecondDateTimeEditText() {
-        binding.date2TitleTv.setVisibility(VISIBLE);
         binding.date2Tv.setVisibility(VISIBLE);
-        binding.time2TitleTv.setVisibility(VISIBLE);
         binding.time2Tv.setVisibility(VISIBLE);
     }
 
 
     private void hideSecondDateTimeViews() {
-        binding.date2TitleTv.setVisibility(GONE);
         binding.date2Tv.setVisibility(GONE);
-        binding.time2TitleTv.setVisibility(GONE);
         binding.time2Tv.setVisibility(GONE);
     }
+
     private void focusSingleButton() {
         binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.whiteclr));
@@ -296,18 +298,18 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
     }
 
     private void addTrip() {
-        String tripName=binding.tripNameEt.getText().toString();
-        String date1=binding.date1Tv.getText().toString();
-        String time1=binding.time1Tv.getText().toString();
-        String date2=binding.date2Tv.getText().toString();
-        String time2=binding.time2Tv.getText().toString();
+        String tripName = binding.tripNameEt.getText().toString();
+        String date1 = binding.date1Tv.getText().toString();
+        String time1 = binding.time1Tv.getText().toString();
+        String date2 = binding.date2Tv.getText().toString();
+        String time2 = binding.time2Tv.getText().toString();
         try {
-            SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             date1 = date1 + " " + time1;
-            Date formatedDate=format.parse(date1);
+            Date formatedDate = format.parse(date1);
             Log.d(TAG, formatedDate.toString());
             locationData.setStartDate(formatedDate);
-            Log.d(TAG,"saved formatted"+date1);
+            Log.d(TAG, "saved formatted" + date1);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -317,11 +319,11 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         locationData.setStartTripEndPointLng(endPonitLng);
         locationData.setStartTripAddressName(startAddress);
         locationData.setStartTripEndAddressName(endAddress);
-        if(isRound){
+        if (isRound) {
             try {
-                SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 date2 = date2 + " " + time2;
-                Date formatedDate=format.parse(date2);
+                Date formatedDate = format.parse(date2);
                 Log.d(TAG, formatedDate.toString());
                 locationData.setRoundDate(formatedDate);
             } catch (ParseException e) {
@@ -336,7 +338,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         }
         trip.setTripName(tripName);
         trip.setRound(isRound);
-        trip.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        trip.setUserId(firebaseAuth.getCurrentUser().getUid());
         trip.setStatus("UpComing");
         trip.setLocationData(locationData);
         addTripViewModel.addTripAndNotes(trip, notesList);
@@ -353,15 +355,15 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        switch(time){
+                        switch (time) {
                             case 3:
                                 hour1 = hourOfDay;
                                 minute1 = minute;
                                 binding.time1Tv.setText(hourOfDay + ":" + minute);
                                 break;
                             case 4:
-                                hour2=hourOfDay;
-                                minute2=minute;
+                                hour2 = hourOfDay;
+                                minute2 = minute;
                                 binding.time2Tv.setText(hourOfDay + ":" + minute);
                                 break;
                         }
@@ -382,15 +384,15 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
                 switch (date) {
                     case 1:
                         c.set(year, month, dayOfMonth);
-                        year1=year;
-                        month1=month+1;
-                        day1=dayOfMonth;
+                        year1 = year;
+                        month1 = month + 1;
+                        day1 = dayOfMonth;
                         binding.date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         break;
                     case 2:
-                        year2=year;
-                        month2=month+1;
-                        day2=dayOfMonth;
+                        year2 = year;
+                        month2 = month + 1;
+                        day2 = dayOfMonth;
                         binding.date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         break;
                 }

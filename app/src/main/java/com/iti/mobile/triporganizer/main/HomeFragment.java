@@ -23,6 +23,7 @@ import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.login.LoginViewModel;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class HomeFragment extends Fragment {
     @Inject
     ViewModelProviderFactory providerFactory;
     private TripsViewModel tripsViewModel;
+    @Inject
+    FirebaseAuth firebaseAuth;
 
     Trip data;
     Note note;
@@ -47,6 +50,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initViews(view);
+        setRetainInstance(true);
         return view;
     }
 
@@ -61,8 +65,10 @@ public class HomeFragment extends Fragment {
        // tripsViewModel.addTrip(data);
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
-        tripsViewModel.getTripsList(FirebaseAuth.getInstance().getCurrentUser().getUid()).observe(getActivity(), tripAndLocationList -> {
-           // tripsAdapter.submitList(tripAndLocation);
+
+        tripsViewModel.getTripsList(firebaseAuth.getCurrentUser().getUid()).observe(requireActivity(), tripAndLocationList -> {
+            List<TripAndLocation> tripAndLocations = tripAndLocationList;
+            tripsAdapter.submitList(tripAndLocationList);
             Log.d("data", "we have trips .. ");
         });
 

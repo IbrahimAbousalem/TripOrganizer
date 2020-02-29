@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/botton_navigation_my_trips"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_user_24dp"
+        android:orderInCategory="1"
+        app:showAsAction="always"
         android:title="@string/myTrips" />
     <item
-        android:id="@+id/botton_navigation_history"
+        android:id="@+id/historyFragment"
+        android:orderInCategory="2"
+        app:showAsAction="always"
         android:icon="@drawable/ic_start_gray_24dp"
         android:title="@string/history" />
 </menu>
