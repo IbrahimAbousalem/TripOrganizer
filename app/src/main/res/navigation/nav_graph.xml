@@ -40,14 +40,11 @@
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_mainFragment2_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
-        <action
             android:id="@+id/action_mainFragment2_to_addTripFragment"
             app:destination="@id/addTripFragment" />
         <action
-            android:id="@+id/action_mainFragment2_to_historyFragment"
-            app:destination="@id/historyFragment" />
+            android:id="@+id/action_mainFragment2_to_homeFragment2"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTripFragment"
@@ -62,5 +59,20 @@
         android:id="@+id/historyFragment"
         android:name="com.iti.mobile.triporganizer.history.HistoryFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.iti.mobile.triporganizer.main.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

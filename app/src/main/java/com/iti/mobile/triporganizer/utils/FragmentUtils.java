@@ -16,4 +16,10 @@ public class FragmentUtils {
         }
         transaction.commit();
     }
+    public static void hideFragment(AppCompatActivity context, Fragment fragment){
+        FragmentManager fragmentManager = context.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.hide(fragment);
+        transaction.commit();
+    }
 }
