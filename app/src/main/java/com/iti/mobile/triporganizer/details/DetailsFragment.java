@@ -332,6 +332,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String inputText = input.getText().toString();
+                if(inputText.isEmpty())return;
                 Note note = new Note();
                 note.setMessage(input.getText().toString());
                 note.setStatus(false);
@@ -426,6 +428,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void saveTrip() {
+        //TODO : check the roundTrip after the startTrip
         String tripName=tripNameEt.getText().toString();
         String date1=date1Tv.getText().toString();
         String time1=time1TV.getText().toString();

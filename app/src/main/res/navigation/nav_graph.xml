@@ -17,12 +17,8 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            android:id="@+id/action_loginFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -30,41 +26,41 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_registerFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
     </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.iti.mobile.triporganizer.main.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_historyFragment"
-            app:destination="@id/historyFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
-        <action
-            android:id="@+id/action_homeFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_addTripFragment2"
-            app:destination="@id/addTripFragment2" />
-    </fragment>
-    <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.iti.mobile.triporganizer.history.HistoryFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
         android:label="activity_details"
         tools:layout="@layout/fragment_details" />
     <fragment
-        android:id="@+id/addTripFragment2"
+        android:id="@+id/mainFragment2"
+        android:name="com.iti.mobile.triporganizer.main.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment2_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_addTripFragment"
+            app:destination="@id/addTripFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTripFragment"
         android:name="com.iti.mobile.triporganizer.add_trip.AddTripFragment"
         android:label="fragment_add_trip"
-        tools:layout="@layout/fragment_add_trip" />
+        tools:layout="@layout/fragment_add_trip" >
+        <action
+            android:id="@+id/action_addTripFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.iti.mobile.triporganizer.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>

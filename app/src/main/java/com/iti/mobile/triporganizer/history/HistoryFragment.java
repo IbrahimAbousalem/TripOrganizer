@@ -24,7 +24,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HistoryFragment extends Fragment {
-
+    public static final String TAG = "HistoryFragment";
     private RecyclerView historyRecycleView;
     private HistoryAdapter adapter;
     private NavController controller;

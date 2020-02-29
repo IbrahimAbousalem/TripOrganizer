@@ -93,6 +93,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         binding = FragmentAddTripBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        showSingleTrip();
         return view;
     }
 
@@ -100,6 +101,8 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
+        trip = new Trip();
+        locationData = new LocationData();
         notesList=new ArrayList<>();
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         addTripViewModel = new ViewModelProvider(this, providerFactory).get(AddTripViewModel.class);
@@ -323,12 +326,12 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            locationData.setStartTripStartPointLat(endPonitLat);
-            locationData.setStartTripStartPointLng(endPonitLng);
-            locationData.setStartTripEndPointLat(startPonitLat);
-            locationData.setStartTripEndPointLng(startPonitLng);
-            locationData.setStartTripAddressName(endAddress);
-            locationData.setStartTripEndAddressName(startAddress);
+            locationData.setRoundTripStartPointLat(endPonitLat);
+            locationData.setRoundTripStartPointLng(endPonitLng);
+            locationData.setRoundTripEndPointLat(startPonitLat);
+            locationData.setRoundTripEndPointLng(startPonitLng);
+            locationData.setRoundTripStartAddressName(endAddress);
+            locationData.setRoundTripEndAddressName(startAddress);
         }
         trip.setTripName(tripName);
         trip.setRound(isRound);
@@ -336,6 +339,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         trip.setStatus("UpComing");
         trip.setLocationData(locationData);
         addTripViewModel.addTripAndNotes(trip, notesList);
+        //TODO: Go back after adding a trip.
     }
 
     private void showTime(int time) {

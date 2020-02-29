@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
+
 
 import javax.inject.Inject;
 
@@ -39,6 +41,7 @@ public class RegisterFragment extends Fragment {
     private TextInputEditText confirmPasswordEditText;
     private Button signUpButton;
     private TextView goToSignInTV;
+    private ProgressBar progressBar ;
     private boolean userIsExist = false;
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -50,31 +53,55 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         setUpViews(view);
 
         signUpButton.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
             String email = emailEditText.getText().toString();
             String userName = userNameEditText.getText().toString();
 
+            if (userName.isEmpty() || userName.length()< 3) {
+                userNameInputLayout.setError(getString(R.string.valid_userName));
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
             if (!isValidEmail(email)) {
+                userNameInputLayout.setError(null);
                 emailTextInputLayout.setError(getString(R.string.valid_email));
+                progressBar.setVisibility(View.GONE);
                 return;
             }
             String password = passwordEditText.getText().toString();
+            if(password.isEmpty()){
+                emailTextInputLayout.setError(null);
+                passwordTextInputLayout.setError(getString(R.string.empty_password));
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
             if (password.length() <= 3) {
                 passwordTextInputLayout.setError(getString(R.string.valid_password));
+                progressBar.setVisibility(View.GONE);
                 return;
             }
             String confirmPassword = confirmPasswordEditText.getText().toString();
-
-            if (!password.equals(confirmPassword)) {
-                confirmPasswordTextInputLayout.setError(getString(R.string.valid_confirm_password));
+            if(confirmPassword.isEmpty()){
+                confirmPasswordTextInputLayout.setError(getString(R.string.empty_confirm_password));
+                progressBar.setVisibility(View.GONE);
                 return;
             }
+            if (!password.equals(confirmPassword)) {
+                confirmPasswordTextInputLayout.setError(getString(R.string.valid_confirm_password));
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+            passwordTextInputLayout.setError(null);
+            confirmPasswordTextInputLayout.setError(null);
             User user = new User(userName, "", email, "", "");
             registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
+                progressBar.setVisibility(View.GONE);
                 if(s.equals("Register Successfully")){
                     Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
                 }else{
@@ -104,6 +131,7 @@ public class RegisterFragment extends Fragment {
         confirmPasswordEditText = view.findViewById(R.id.confirmPasswordEditText);
         signUpButton = view.findViewById(R.id.signupBtn);
         goToSignInTV = view.findViewById(R.id.goToSignInTV);
+        progressBar = view.findViewById(R.id.progressBar);
         registerViewModel = new ViewModelProvider(this, providerFactory).get(RegisterViewModel.class);
     }
 

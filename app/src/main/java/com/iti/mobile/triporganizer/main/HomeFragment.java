@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment {
         TripsAdapter tripsAdapter = new TripsAdapter();
         //createDummyTrip();
        // tripsViewModel.addTrip(data);
-      //  tripsViewModel.addNote(note,"");
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
         tripsViewModel.getTripsList("b3JWEfSAnRf3UjJRZvyb17frnE43").observe(getActivity(), tripAndLocationList -> {

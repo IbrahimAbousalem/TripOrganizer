@@ -18,11 +18,11 @@ public class LoginViewModel extends ViewModel {
         this.authenticationRepositoryImp = repo;
     }
 
-    public LiveData<User> signInWithEmailAndPasswordVM(String email, String password){
+    public LiveData<String> signInWithEmailAndPasswordVM(String email, String password){
         return authenticationRepositoryImp.signInWithEmailAndPasswordFunc(email,password);
     }
 
-    public LiveData<User> signInWithEFacebookVM(AccessToken accessToken){
+    public LiveData<String> signInWithEFacebookVM(AccessToken accessToken){
         return authenticationRepositoryImp.signInWithFacebookFunc(accessToken);
     }
 
@@ -33,7 +33,7 @@ public class LoginViewModel extends ViewModel {
          authenticationRepositoryImp.signoutFunc();
     }
 
-    public LiveData<User> signInWithGoogle(AuthCredential googleAuthCredential) {
+    public LiveData<String> signInWithGoogle(AuthCredential googleAuthCredential) {
         return authenticationRepositoryImp.firebaseSignInWithGoogle(googleAuthCredential);
     }
 
