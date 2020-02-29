@@ -37,7 +37,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
         public boolean areContentsTheSame(@NonNull TripAndLocation oldItem, @NonNull TripAndLocation newItem) {
             return oldItem.getTrip().getStatus().equals(newItem.getTrip().getStatus())&&
                     oldItem.getTrip().getUserId().equals(newItem.getTrip().getUserId())&&
-                    oldItem.getTrip().getLocationData().getStartDate().getTime()==newItem.getTrip().getLocationData().getStartDate().getTime();
+                    oldItem.getLocationDataList().getStartDate().getTime()==newItem.getLocationDataList().getStartDate().getTime();
         }
     };
 

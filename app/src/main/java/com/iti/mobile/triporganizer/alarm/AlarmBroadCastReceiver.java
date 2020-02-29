@@ -8,10 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
 import android.widget.Toast;
 
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
+import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.utils.AlarmUtils;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_Cancel;
@@ -22,11 +26,12 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
     private  AlarmManager alarmManager;
     private  PendingIntent pendingIntent;
-    TripOrganizerApp tripOrganizerApp;
+    private TripOrganizerApp tripOrganizerApp;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         tripOrganizerApp = (TripOrganizerApp) context.getApplicationContext();
+
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 
            // add all the alarms after rebooting so that the alarms survives the reboot process
@@ -35,17 +40,48 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             //stop service
 
             tripOrganizerApp.stopAlarmService();
+            String tripId, tripName, desLat,destLon;
+            tripId = intent.getStringExtra("tripId");
+            tripName = intent.getStringExtra("tripName");
+            desLat = intent.getStringExtra("destnationLatitude");
+            destLon = intent.getStringExtra("destinatinLongtiude");
+            Intent serviceIntent = new Intent(context, AlarmService.class);
+            serviceIntent.putExtra("tripName", tripName);
+            serviceIntent.putExtra("tripId", tripId);
+            serviceIntent.putExtra("destnationLatitude", desLat);
+            serviceIntent.putExtra("destinatinLongtiude", destLon);
+            AlarmUtils.startAlarm(context,1*60*1000, tripName, tripId, desLat, destLon);
 
-            startAlarm(context,"1234");
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
+           // context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            String tripId, desLat, destLon;
+            tripId = intent.getStringExtra("tripId");
+            desLat = intent.getStringExtra("destnationLatitude");
+            destLon = intent.getStringExtra("destinatinLongtiude");
+            Uri gmmIntentUri = Uri.parse("google.navigation:q="+desLat+","+destLon);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri).setFlags(FLAG_ACTIVITY_NEW_TASK);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            context.startActivity(mapIntent);
+            tripOrganizerApp.stopSound();
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Cancel)){
             tripOrganizerApp.stopAlarmService();
+
         }
         else {
             //bind service
+            String tripId, tripName, desLat, destLon;
+            tripId = intent.getStringExtra("tripId");
+            tripName = intent.getStringExtra("tripName");
+            desLat = intent.getStringExtra("destnationLatitude");
+            destLon = intent.getStringExtra("destinatinLongtiude");
+            Intent serviceIntent = new Intent(context, AlarmService.class);
+            serviceIntent.putExtra("tripName", tripName);
+            serviceIntent.putExtra("tripId", tripId);
+            serviceIntent.putExtra("destnationLatitude", desLat);
+            serviceIntent.putExtra("destinatinLongtiude", destLon);
             tripOrganizerApp.bindAlarmService();
-            context.startService(new Intent(context,AlarmService.class));
+            context.startService(serviceIntent);
             //context.startActivity(new Intent(context, SetAlarmDummyActivity.class).setFlags(FLAG_ACTIVITY_NEW_TASK));
         }
 
@@ -62,7 +98,11 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         //request code for pending intent must be unique on application level
         pendingIntent = PendingIntent.getBroadcast(context, 101, alarmIntent, 0);
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, 7*1000, pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 7*1000, pendingIntent);
+        }else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, 7*1000, pendingIntent);
+        }
     }
 
     private void cancelAlarm(Context context, String tripId) {

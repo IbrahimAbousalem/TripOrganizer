@@ -1,5 +1,6 @@
 package com.iti.mobile.triporganizer.add_trip;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.iti.mobile.triporganizer.data.entities.Note;
@@ -29,8 +30,8 @@ public class AddTripViewModel extends ViewModel {
         repo.deleteTrip(trip);
     }
 
-    public void addTripAndNotes(Trip trip, List<Note> notes){
-        repo.addTripAndNotes(trip, notes);
+    public LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes){
+        return repo.addTripAndNotes(trip, notes);
     }
 
 }

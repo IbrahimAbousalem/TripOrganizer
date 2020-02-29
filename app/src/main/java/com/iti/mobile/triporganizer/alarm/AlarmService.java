@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
 
@@ -33,6 +34,11 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String tripId=null,tripName=null,desLat=null,destLon=null;
+        tripId = intent.getStringExtra("tripId");
+        tripName = intent.getStringExtra("tripName");
+        desLat = intent.getStringExtra("destnationLatitude");
+        destLon = intent.getStringExtra("destinatinLongtiude");
 
           if (mp == null){
         // mp = new MediaPlayer();
@@ -48,7 +54,7 @@ public class AlarmService extends Service {
         if (vibrator !=null){
             vibrator.vibrate(400);
         }
-        startForeground(foregroundId, NotificationsUtils.makeStatusNotification("new trip",getApplicationContext()));
+        startForeground(foregroundId, NotificationsUtils.makeStatusNotification(tripName, getApplicationContext(),tripName, tripId, desLat, destLon));
         return START_NOT_STICKY;
     }
 
@@ -68,10 +74,12 @@ public class AlarmService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mp.stop();
-        mp.reset();
-        mp.release();
-        mp = null;
+        if (mp !=null){
+            mp.stop();
+            mp.reset();
+            mp.release();
+            mp = null;
+        }
         stopForeground(true);
 
     }

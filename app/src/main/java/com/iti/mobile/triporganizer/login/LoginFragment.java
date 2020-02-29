@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public static final String CURRENT_USER = "currentUser";
     private static final int RC_SIGN_IN = 9001;
 
-    NavController controller;
+    private NavController controller;
     @Inject
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
@@ -66,7 +66,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -80,7 +80,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
         loginViewModel.getCurrentUserId().observe(getViewLifecycleOwner(), userId -> {
             if(!userId.equals(Constants.NO_DATA)){
-                controller.navigate(R.id.action_loginFragment_to_mainFragment2);
+                controller.navigate(R.id.action_loginFragment_to_main2Activity);
             }
         });
         setUpViews(view);
@@ -215,7 +215,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void updateUi(String message) {
         hideProgressBar();
         if (message != null&&!message.isEmpty()&&!message.contains("Error")) {
-            controller.navigate(R.id.action_loginFragment_to_mainFragment2);
+            controller.navigate(R.id.action_loginFragment_to_main2Activity);
         } else {
             displayError(message);
         }

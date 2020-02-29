@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment"
+    android:id="@+id/navigation_for_bottom_nav"
+    >
+
+
+        <fragment
+            android:id="@+id/historyFragment"
+            android:name="com.iti.mobile.triporganizer.history.HistoryFragment"
+            android:label="fragment_history"
+            tools:layout="@layout/fragment_history"
+            >
+            <action
+                android:id="@+id/action_historyFragment_to_addTripFragment3"
+                app:destination="@id/addTripFragment3" />
+        </fragment>
+        <fragment
+            android:id="@+id/homeFragment"
+            android:name="com.iti.mobile.triporganizer.main.HomeFragment"
+            android:label="HomeFragment"
+            >
+            <action
+                android:id="@+id/action_homeFragment_to_historyFragment"
+                app:destination="@id/historyFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_homeFragment_to_detailsFragment3"
+                app:destination="@id/detailsFragment3" />
+            <action
+                android:id="@+id/action_homeFragment_to_addTripFragment3"
+                app:destination="@id/addTripFragment3" />
+        </fragment>
+    <fragment
+        android:id="@+id/addTripFragment3"
+        android:name="com.iti.mobile.triporganizer.add_trip.AddTripFragment"
+        android:label="fragment_add_trip"
+        tools:layout="@layout/fragment_add_trip" />
+    <fragment
+        android:id="@+id/detailsFragment3"
+        android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
+
+
+</navigation>

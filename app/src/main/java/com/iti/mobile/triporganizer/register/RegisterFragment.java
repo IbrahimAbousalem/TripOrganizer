@@ -44,7 +44,7 @@ public class RegisterFragment extends Fragment {
     private NavController controller;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -53,7 +53,7 @@ public class RegisterFragment extends Fragment {
     private void updateUi(String message) {
         hideProgressBar();
         if (message != null&&!message.isEmpty()&&!message.contains("Error")) {
-            controller.navigate(R.id.action_registerFragment_to_mainFragment2);
+            controller.navigate(R.id.action_registerFragment_to_main2Activity);
         } else {
             displayError(message);
         }

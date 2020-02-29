@@ -16,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 @ApplicationScope
 public class TripsRoom {
@@ -51,7 +52,8 @@ public class TripsRoom {
             tripsFirebase.addTrip(trip);
         });
     }
-    public void addTripAndNotes(Trip trip, List<Note> notes){
+    public LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes){
+        MutableLiveData<Trip>  tripMutableLiveData = new MutableLiveData<>();
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
             long tripId = tripDao.addTrip(trip);
             LocationData locationData = trip.getLocationData();
@@ -60,6 +62,7 @@ public class TripsRoom {
             trip.setId(tripId);
             locationData.setId(locationId);
             trip.setLocationData(locationData);
+            tripMutableLiveData.postValue(trip);
             tripsFirebase.addTrip(trip);
             if(notes!=null || !notes.isEmpty()){
                 for(Note note : notes) {
@@ -70,6 +73,7 @@ public class TripsRoom {
                 }
             }
         });
+        return  tripMutableLiveData;
     }
     //send feedback to the user.
     public void updateTrip(Trip trip){

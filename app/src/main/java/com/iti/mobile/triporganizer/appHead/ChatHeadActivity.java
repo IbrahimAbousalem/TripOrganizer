@@ -8,10 +8,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+import com.iti.mobile.triporganizer.data.entities.Note;
+import com.iti.mobile.triporganizer.data.room.dao.NoteDao;
 import com.iti.mobile.triporganizer.details.NoteAdapter;
 import com.sha.apphead.AppHead;
 import com.sha.apphead.BadgeView;
@@ -23,30 +28,28 @@ import com.sha.apphead.HeadView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import kotlin.Unit;
 
 public class ChatHeadActivity extends AppCompatActivity {
-
-    ImageView it ;
+  ImageView it ;
   Button   btnShowReadHead;
   Button btnUpdateBadge ;
   RecyclerView recyclerView;
+  @Inject
+  NoteDao noteDao;
+  String tripId;
+  Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_head);
-        Button btnShowHead = findViewById(R.id.btnShowHead);
+        ((TripOrganizerApp) getApplication()).getComponent().newControllerComponent(new ControllerModule(this)).inject(this);
         it = findViewById(R.id.headImageView);
-        btnShowReadHead = findViewById(R.id.btnShowReadHead);
-        btnUpdateBadge= findViewById(R.id.btnUpdateBadge);
-        btnShowHead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDefault();
-            }
-        });
-
-
+        intent = getIntent();
+        tripId = intent.getStringExtra("tripId");
+        showDefault();
 
 
     }
@@ -69,16 +72,13 @@ public class ChatHeadActivity extends AppCompatActivity {
                 .onFinishInflate(headView -> {
                     // your logic
                     recyclerView     = headView.findViewById(R.id.RV);
-                    List<String> strings = new ArrayList<>();
-                    strings.add("saturday");
-                    strings.add("saturday");
-                    strings.add("saturday");
-                    strings.add("saturday");
-                    strings.add("saturday");
-                    strings.add("saturday");
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                   // NoteAdapter noteAdapter = new NoteAdapter(this,strings);
-                   // recyclerView.setAdapter(noteAdapter);
+                    noteDao.getAllNote(Integer.parseInt(tripId)).observe(this, notes -> {
+
+                         NoteAdapter noteAdapter = new NoteAdapter(ChatHeadActivity.this,notes);
+                         recyclerView.setAdapter(noteAdapter);
+                    });
+
                     return Unit.INSTANCE;
                 })
                 .setupImage(imageView -> {

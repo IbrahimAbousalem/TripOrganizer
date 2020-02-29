@@ -9,10 +9,13 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
+
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "trips",foreignKeys = @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "userId", onDelete = CASCADE))
-public class Trip implements Parcelable {
+public class Trip implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = "userId", index = true)
@@ -48,17 +51,17 @@ public class Trip implements Parcelable {
         isRound = in.readByte() != 0;
     }
 
-    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
-        @Override
-        public Trip createFromParcel(Parcel in) {
-            return new Trip(in);
-        }
-
-        @Override
-        public Trip[] newArray(int size) {
-            return new Trip[size];
-        }
-    };
+//    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+//        @Override
+//        public Trip createFromParcel(Parcel in) {
+//            return new Trip(in);
+//        }
+//
+//        @Override
+//        public Trip[] newArray(int size) {
+//            return new Trip[size];
+//        }
+//    };
 
     public String getFireTripId() {
         return fireTripId;
@@ -119,27 +122,24 @@ public class Trip implements Parcelable {
     @Override
     public boolean equals(@Nullable Object obj) {
         Trip data = (Trip) obj;
-        if (data != null && (!tripName.equals(data.getTripName()) ||  locationData != data.getLocationData()
-                || isRound != data.isRound()
-                || !status.equals(data.getStatus()))) {
-            return false;
-        }
-        return true;
+        return data == null || (tripName.equals(data.getTripName()) && locationData == data.getLocationData()
+                && isRound == data.isRound()
+                && status.equals(data.getStatus()));
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(userId);
-        dest.writeString(fireTripId);
-        dest.writeString(tripName);
-        dest.writeString(status);
-        dest.writeParcelable(locationData, flags);
-        dest.writeByte((byte) (isRound ? 1 : 0));
-    }
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeLong(id);
+//        dest.writeString(userId);
+//        dest.writeString(fireTripId);
+//        dest.writeString(tripName);
+//        dest.writeString(status);
+//        dest.writeParcelable(locationData, flags);
+//        dest.writeByte((byte) (isRound ? 1 : 0));
+//    }
 }
