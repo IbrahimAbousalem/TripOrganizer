@@ -29,6 +29,7 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
@@ -335,7 +336,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         }
         trip.setTripName(tripName);
         trip.setRound(isRound);
-        trip.setUserId("hZDY3CF3aWU5WjC6fNHmck2dBz02");
+        trip.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         trip.setStatus("UpComing");
         trip.setLocationData(locationData);
         addTripViewModel.addTripAndNotes(trip, notesList);

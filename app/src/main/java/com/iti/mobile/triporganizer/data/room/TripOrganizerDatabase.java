@@ -18,7 +18,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 
-@Database(entities = {User.class, Trip.class, LocationData.class, Note.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class, Trip.class, LocationData.class, Note.class}, version = 3, exportSchema = false)
 @TypeConverters(DateConverter.class)
 abstract public class TripOrganizerDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;

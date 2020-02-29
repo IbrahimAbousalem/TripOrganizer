@@ -34,6 +34,8 @@ import com.iti.mobile.triporganizer.databinding.FragmentRegisterBinding;
 
 import javax.inject.Inject;
 
+import static android.view.View.VISIBLE;
+
 public class RegisterFragment extends Fragment {
 
     private static final String TAG = "RegisterFragment";
@@ -48,6 +50,8 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         binding.signupBtn.setOnClickListener(v -> {
             binding.progressBar.setVisibility(View.VISIBLE);
             String email = binding.emailEditText.getText().toString();
@@ -91,11 +95,7 @@ public class RegisterFragment extends Fragment {
             User user = new User(userName, "", email, "", "");
             registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
                 binding.progressBar.setVisibility(View.GONE);
-                if(s.equals("Register Successfully")){
-                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-                }
+                updateUi(s);
             });
         });
                 binding.goToSignInTV.setOnClickListener(new View.OnClickListener() {
@@ -104,11 +104,28 @@ public class RegisterFragment extends Fragment {
                         getActivity().finish();
                     }
                 });
-        binding = FragmentRegisterBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
         return view;
     }
 
+    private void updateUi(String message) {
+        hideProgressBar();
+        if (message != null&&!message.isEmpty()&&!message.contains("Error")) {
+            controller.navigate(R.id.action_registerFragment_to_mainFragment2);
+        } else {
+            displayError(message);
+        }
+    }
+
+    private void displayError(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(){
+        binding.progressBar.setVisibility(VISIBLE);
+    }
+    private void hideProgressBar(){
+        binding.progressBar.setVisibility(View.INVISIBLE);
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
