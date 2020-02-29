@@ -37,8 +37,6 @@ public class AuthenticationFirebase {
     private FirebaseFirestore db;
     private UserDao userDao;
 
-
-
     @Inject
     public AuthenticationFirebase(UserDao userDao, FirebaseAuth auth, FirebaseFirestore db) {
         this.firebaseAuth = auth;

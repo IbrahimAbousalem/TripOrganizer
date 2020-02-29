@@ -217,7 +217,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void displayError(String message) {
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        if(message.contains("email")||message.contains("Email")){
+            binding.userEmailEt.setError(message);
+        }else if(message.contains("password")||message.contains("Password")){
+            binding.passwordEt.setError(message);
+        }else {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setUpViews(View view) {

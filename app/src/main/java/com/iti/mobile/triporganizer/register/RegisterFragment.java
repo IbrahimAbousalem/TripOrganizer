@@ -52,7 +52,6 @@ public class RegisterFragment extends Fragment {
             binding.progressBar.setVisibility(View.VISIBLE);
             String email = binding.emailEditText.getText().toString();
             String userName = binding.userNameEditText.getText().toString();
-
             if (userName.isEmpty() || userName.length()< 3) {
                 binding.userNameEditText.setError(getString(R.string.valid_userName));
                 binding.progressBar.setVisibility(View.GONE);
@@ -105,8 +104,6 @@ public class RegisterFragment extends Fragment {
                         getActivity().finish();
                     }
                 });
-
-
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         return view;
