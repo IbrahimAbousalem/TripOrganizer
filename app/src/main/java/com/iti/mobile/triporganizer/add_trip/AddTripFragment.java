@@ -340,6 +340,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener{
         trip.setStatus("UpComing");
         trip.setLocationData(locationData);
         addTripViewModel.addTripAndNotes(trip, notesList);
+        getActivity().onBackPressed();
         //TODO: Go back after adding a trip.
     }
 

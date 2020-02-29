@@ -16,21 +16,17 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.User;
-import com.iti.mobile.triporganizer.databinding.FragmentLoginBinding;
 import com.iti.mobile.triporganizer.databinding.FragmentRegisterBinding;
 
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -39,72 +35,19 @@ import static android.view.View.VISIBLE;
 public class RegisterFragment extends Fragment {
 
     private static final String TAG = "RegisterFragment";
-    private boolean userIsExist = false;
+
     @Inject
     ViewModelProviderFactory providerFactory;
     private RegisterViewModel registerViewModel ;
     private FragmentRegisterBinding binding;
 
-    NavController controller;
+    private NavController controller;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        binding.signupBtn.setOnClickListener(v -> {
-            binding.progressBar.setVisibility(View.VISIBLE);
-            String email = binding.emailEditText.getText().toString();
-            String userName = binding.userNameEditText.getText().toString();
-            if (userName.isEmpty() || userName.length()< 3) {
-                binding.userNameEditText.setError(getString(R.string.valid_userName));
-                binding.progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (!isValidEmail(email)) {
-                binding.userNameEditText.setError(null);
-                binding.emailEditText.setError(getString(R.string.valid_email));
-                binding.progressBar.setVisibility(View.GONE);
-                return;
-            }
-            String password = binding.passwordEditText.getText().toString();
-            if(password.isEmpty()){
-                binding.emailEditText.setError(null);
-                binding.passwordEditText.setError(getString(R.string.empty_password));
-                binding.progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (password.length() <= 3) {
-                binding.passwordEditText.setError(getString(R.string.valid_password));
-                binding.progressBar.setVisibility(View.GONE);
-                return;
-            }
-            String confirmPassword = binding.confirmPasswordEditText.getText().toString();
-            if(confirmPassword.isEmpty()){
-                binding.confirmPasswordEditText.setError(getString(R.string.empty_confirm_password));
-                binding.progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (!password.equals(confirmPassword)) {
-                binding.confirmPasswordEditText.setError(getString(R.string.valid_confirm_password));
-                binding.progressBar.setVisibility(View.GONE);
-                return;
-            }
-            binding.passwordEditText.setError(null);
-            binding.confirmPasswordEditText.setError(null);
-            User user = new User(userName, "", email, "", "");
-            registerViewModel.registerUser(user, password).observe(getActivity(), s -> {
-                binding.progressBar.setVisibility(View.GONE);
-                updateUi(s);
-            });
-        });
-                binding.goToSignInTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getActivity().finish();
-                    }
-                });
-        return view;
+        return binding.getRoot();
     }
 
     private void updateUi(String message) {
@@ -130,9 +73,63 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
-        ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
+        ((TripOrganizerApp) Objects.requireNonNull(getActivity()).getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         registerViewModel = new ViewModelProvider(this, providerFactory).get(RegisterViewModel.class);
+
+        binding.signupBtn.setOnClickListener(v -> registerUser());
+        binding.goToSignInTV.setOnClickListener(v -> getActivity().onBackPressed());
     }
+
+    private void registerUser() {
+        showProgressBar();
+        String email = Objects.requireNonNull(binding.emailEditText.getText()).toString();
+        String userName = Objects.requireNonNull(binding.userNameEditText.getText()).toString();
+        String password = Objects.requireNonNull(binding.passwordEditText.getText()).toString();
+        String confirmPassword = Objects.requireNonNull(binding.confirmPasswordEditText.getText()).toString();
+        if(!validateData(email, userName, password, confirmPassword)) return;
+        User user = new User(userName, "", email, "", "");
+        registerViewModel.registerUser(user, password).observe(getViewLifecycleOwner(), s -> {
+            binding.progressBar.setVisibility(View.GONE);
+            updateUi(s);
+        });
+    }
+
+    private boolean validateData(String email, String userName, String password, String confirmPassword) {
+        if (userName.isEmpty() || userName.length()< 3) {
+            binding.userNameEditText.setError(getString(R.string.valid_userName));
+            binding.progressBar.setVisibility(View.GONE);
+            return false;
+        }
+        if (!isValidEmail(email)) {
+            binding.userNameEditText.setError(null);
+            binding.emailEditText.setError(getString(R.string.valid_email));
+            binding.progressBar.setVisibility(View.GONE);
+            return false;
+        }
+        if(password.isEmpty()){
+            binding.emailEditText.setError(null);
+            binding.passwordEditText.setError(getString(R.string.empty_password));
+            binding.progressBar.setVisibility(View.GONE);
+            return false;
+        }else if (password.length() <= 3) {
+            binding.passwordEditText.setError(getString(R.string.valid_password));
+            binding.progressBar.setVisibility(View.GONE);
+            return false;
+        }
+        if(confirmPassword.isEmpty()){
+            binding.confirmPasswordEditText.setError(getString(R.string.empty_confirm_password));
+            binding.progressBar.setVisibility(View.GONE);
+            return false;
+        }else if (!password.equals(confirmPassword)) {
+            binding.confirmPasswordEditText.setError(getString(R.string.valid_confirm_password));
+            binding.progressBar.setVisibility(View.GONE);
+            return false;
+        }
+        binding.passwordEditText.setError(null);
+        binding.confirmPasswordEditText.setError(null);
+        return true;
+    }
+
     private boolean isValidEmail(String email) {
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }

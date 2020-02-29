@@ -31,7 +31,6 @@
         android:hint="@string/user_name"
         android:inputType="textPersonName"
         android:padding="@dimen/d_5"
-        app:hintTextAppearance="@style/HintText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -42,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@android:color/transparent"
-            android:inputType="text" />
+            android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

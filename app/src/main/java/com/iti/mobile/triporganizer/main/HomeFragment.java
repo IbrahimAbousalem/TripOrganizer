@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
@@ -60,11 +61,10 @@ public class HomeFragment extends Fragment {
        // tripsViewModel.addTrip(data);
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
-        tripsViewModel.getTripsList("b3JWEfSAnRf3UjJRZvyb17frnE43").observe(getActivity(), tripAndLocationList -> {
+        tripsViewModel.getTripsList(FirebaseAuth.getInstance().getCurrentUser().getUid()).observe(getActivity(), tripAndLocationList -> {
            // tripsAdapter.submitList(tripAndLocation);
             Log.d("data", "we have trips .. ");
         });
-
 
     }
 
