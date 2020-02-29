@@ -62,5 +62,12 @@
     <string name="myTrips">My Trips</string>
     <string name="history">History</string>
 
+    <string name="plzEnterTripName">You have to enter trip name</string>
+    <string name="plzEnterStartPoint">You have to enter start point</string>
+    <string name="plzEnterEndPoint">You have to enter end point</string>
+    <string name="plzPickDate">You have to pick a date</string>
+    <string name="plzPickValidStartDate">Start Date has to occurs before End Date</string>
+    <string name="plzPickTime">You have to pick a time</string>
+    <string name="plzPickValidStartTime">Start Time has to occurs before End Time</string>
 
 </resources>
