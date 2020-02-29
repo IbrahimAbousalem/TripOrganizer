@@ -9,21 +9,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import com.google.android.gms.common.api.Status;
@@ -33,7 +30,6 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
@@ -41,6 +37,7 @@ import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,52 +67,21 @@ import static com.iti.mobile.triporganizer.utils.Flags.VIEW_TRIP_FLAG;
 public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "DetailsFragment";
-    private Button editBtn;
-    private Button viewBtn;
-    private ImageView bkImageView;
-    private FloatingActionButton saveFabBtn;
 
     private AutocompleteSupportFragment startPointAutocompleteFragment;
     private AutocompleteSupportFragment endPointAutocompleteFragment;
-    private ConstraintLayout startPointConstraintlayout;
-    private ConstraintLayout endPointConstraintlayout;
-
-    private TextView tripNameTv;
-    private TextView startPointTv;
-    private TextView endPointTv;
-    private TextView date1ViewTv;
-    private TextView time1ViewTv;
-    private TextView date2ViewTv;
-    private TextView time2ViewTv;
-
-    private EditText tripNameEt;
-    private TextView date1Tv;
-    private TextView time1TV;
-    private TextView date2Tv;
-    private TextView time2Tv;
-
-    private TextView date1TitleTv;
-    private TextView time1TitleTv;
-    private TextView date2TitleTv;
-    private TextView time2TitleTv;
-
-    private Button singleBtn;
-    private Button roundBtn;
-    private ImageView addNoteImageView;
-    private RecyclerView notes_recyclerview;
-
 
     @Inject
     ViewModelProviderFactory providerFactory;
     private DetailsViewModel detailsViewModel;
+    private FragmentDetailsBinding binding;
+
 
     NavController controller;
     NoteAdapter noteAdapter;
     private List<Note> notesList;
     private int tripTypeChoice;
     private int tripActionChoice;
-
-
 
     private double startPonitLat;
     private double startPonitLng;
@@ -160,66 +126,33 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root=inflater.inflate(R.layout.fragment_details, container, false);
-        setUpViews(root);
-        //showNotesList(root);
-        return root;
+        binding = FragmentDetailsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     // edit ->> 3nde trip bs m3ndesh notes or 3nde  bltaly lma ad8t ok y3ml save ll notes + update ll trips
     // (Missing) new trip -> ana m3ndesh trip wla notes f deh momkn n3mlha function lw7dha mn sf7a lw7da 3lshan el save y3ml add l trip nad add l notes ... + el alamrm
     private void showNotesList(View root) {
         if (notesList.size() > 0) {
-            notes_recyclerview = root.findViewById(R.id.notes_recyclerview);
             noteAdapter = new NoteAdapter(getContext(), notesList);
-            notes_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-            notes_recyclerview.setAdapter(noteAdapter);
+            binding.notesRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.notesRecyclerview.setAdapter(noteAdapter);
         }
     }
 
     public void setUpViews(View root) {
-        notes_recyclerview = root.findViewById(R.id.notes_recyclerview);
-        bkImageView = root.findViewById(R.id.bkImageView);
-        bkImageView.setOnClickListener(this);
-        editBtn = root.findViewById(R.id.editBtn);
-        editBtn.setOnClickListener(this);
-        viewBtn = root.findViewById(R.id.viewBtn);
-        viewBtn.setOnClickListener(this);
-        saveFabBtn = root.findViewById(R.id.addTripFab);
-        saveFabBtn.setOnClickListener(this);
-
-        tripNameEt = root.findViewById(R.id.tripNameEt);
-        startPointConstraintlayout=root.findViewById(R.id.startPointConstraintlayout);
-        endPointConstraintlayout=root.findViewById(R.id.endPointConstraintlayout);
-        date1Tv = root.findViewById(R.id.date1Tv);
-        date1Tv.setOnClickListener(this);
-        date2Tv = root.findViewById(R.id.date2Tv);
-        date2Tv.setOnClickListener(this);
-        time1TV = root.findViewById(R.id.time1Tv);
-        time1TV.setOnClickListener(this);
-        time2Tv = root.findViewById(R.id.time2Tv);
-        time2Tv.setOnClickListener(this);
-
-        tripNameTv=root.findViewById(R.id.tripNameTv);
-        startPointTv=root.findViewById(R.id.startPointTv);
-        endPointTv=root.findViewById(R.id.endPointTv);
-        date1ViewTv=root.findViewById(R.id.date1ViewTv);
-        time1ViewTv=root.findViewById(R.id.time1ViewTv);
-        date2ViewTv=root.findViewById(R.id.date2ViewTv);
-        time2ViewTv=root.findViewById(R.id.time2ViewTv);
-
-        date1TitleTv = root.findViewById(R.id.date1TitleTv);
-        time1TitleTv = root.findViewById(R.id.time1TitleTv);
-        date2TitleTv = root.findViewById(R.id.date2TitleTv);
-        time2TitleTv = root.findViewById(R.id.time2TitleTv);
-
-
-        singleBtn = root.findViewById(R.id.singleBtn);
-        singleBtn.setOnClickListener(this);
-        roundBtn = root.findViewById(R.id.roundBtn);
-        roundBtn.setOnClickListener(this);
-        addNoteImageView = root.findViewById(R.id.addNoteImageView);
-        addNoteImageView.setOnClickListener(this);
+        binding.bkImageView.setOnClickListener(this);
+        binding.editBtn.setOnClickListener(this);
+        binding.viewBtn.setOnClickListener(this);
+        binding.saveTripFab.setOnClickListener(this);
+        binding.date1Tv.setOnClickListener(this);
+        binding.date2Tv.setOnClickListener(this);
+        binding.time1Tv.setOnClickListener(this);
+        binding.time2Tv.setOnClickListener(this);
+        binding.singleBtn.setOnClickListener(this);
+        binding.roundBtn.setOnClickListener(this);
+        binding.addNoteImageView.setOnClickListener(this);
 
         if (!Places.isInitialized()) {
             Places.initialize(getContext(), getString(R.string.google_places_api_key));
@@ -346,8 +279,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                             deleteNote(position);
                         }
                     });
-                    notes_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-                    notes_recyclerview.setAdapter(noteAdapter);
+                    binding.notesRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+                    binding.notesRecyclerview.setAdapter(noteAdapter);
                 }
             }
         });
@@ -380,12 +313,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                             case 3:
                                 hour1 = hourOfDay;
                                 minute1 = minute;
-                                time1TV.setText(hourOfDay + ":" + minute);
+                                binding.time1Tv.setText(hourOfDay + ":" + minute);
                                 break;
                             case 4:
                                 hour2=hourOfDay;
                                 minute2=minute;
-                                time2Tv.setText(hourOfDay + ":" + minute);
+                                binding.time2Tv.setText(hourOfDay + ":" + minute);
                                 break;
                         }
                     }
@@ -408,13 +341,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                         year1=year;
                         month1=month+1;
                         day1=dayOfMonth;
-                        date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        binding.date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         break;
                     case 2:
                         year2=year;
                         month2=month+1;
                         day2=dayOfMonth;
-                        date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        binding.date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         break;
                 }
             }
@@ -429,11 +362,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private void saveTrip() {
         //TODO : check the roundTrip after the startTrip
-        String tripName=tripNameEt.getText().toString();
-        String date1=date1Tv.getText().toString();
-        String time1=time1TV.getText().toString();
-        String date2=date2Tv.getText().toString();
-        String time2=time2Tv.getText().toString();
+        String tripName=binding.tripNameEt.getText().toString();
+        String date1=binding.date1Tv.getText().toString();
+        String time1=binding.time1Tv.getText().toString();
+        String date2=binding.date2Tv.getText().toString();
+        String time2=binding.time2Tv.getText().toString();
         try {
             SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
             date1 = date1 + " " + time1;
@@ -503,92 +436,92 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void disableEditText() {
-        addNoteImageView.setVisibility(GONE);
-        tripNameEt.setVisibility(GONE);
-        tripNameTv.setVisibility(VISIBLE);
-        startPointConstraintlayout.setVisibility(GONE);
-        startPointTv.setVisibility(VISIBLE);
-        endPointConstraintlayout.setVisibility(GONE);
-        endPointTv.setVisibility(VISIBLE);
-        date1Tv.setVisibility(GONE);
-        date1ViewTv.setVisibility(VISIBLE);
-        time1TV.setVisibility(GONE);
-        time1ViewTv.setVisibility(VISIBLE);
-        saveFabBtn.setVisibility(GONE);
+        binding.addNoteImageView.setVisibility(GONE);
+        binding.tripNameEt.setVisibility(GONE);
+        binding.tripNameTv.setVisibility(VISIBLE);
+        binding.startPointConstraintlayout.setVisibility(GONE);
+        binding.startPointTv.setVisibility(VISIBLE);
+        binding.endPointConstraintlayout.setVisibility(GONE);
+        binding.endPointTv.setVisibility(VISIBLE);
+        binding.date1Tv.setVisibility(GONE);
+        binding.date1ViewTv.setVisibility(VISIBLE);
+        binding.time1Tv.setVisibility(GONE);
+        binding.time1ViewTv.setVisibility(VISIBLE);
+        binding.saveTripFab.setVisibility(GONE);
     }
 
     private void enableEditText() {
-        addNoteImageView.setVisibility(VISIBLE);
-        tripNameEt.setVisibility(VISIBLE);
-        tripNameTv.setVisibility(GONE);
-        startPointConstraintlayout.setVisibility(VISIBLE);
-        startPointTv.setVisibility(GONE);
-        endPointConstraintlayout.setVisibility(VISIBLE);
-        endPointTv.setVisibility(GONE);
-        date1Tv.setVisibility(VISIBLE);
-        date1ViewTv.setVisibility(GONE);
-        time1TV.setVisibility(VISIBLE);
-        time1ViewTv.setVisibility(GONE);
-        saveFabBtn.setVisibility(VISIBLE);
+        binding.addNoteImageView.setVisibility(VISIBLE);
+        binding.tripNameEt.setVisibility(VISIBLE);
+        binding.tripNameTv.setVisibility(GONE);
+        binding.startPointConstraintlayout.setVisibility(VISIBLE);
+        binding.startPointTv.setVisibility(GONE);
+        binding.endPointConstraintlayout.setVisibility(VISIBLE);
+        binding.endPointTv.setVisibility(GONE);
+        binding.date1Tv.setVisibility(VISIBLE);
+        binding.date1ViewTv.setVisibility(GONE);
+        binding.time1Tv.setVisibility(VISIBLE);
+        binding.time1ViewTv.setVisibility(GONE);
+        binding.saveTripFab.setVisibility(VISIBLE);
     }
 
     private void showSecondDateTimeTextView() {
-        date2TitleTv.setVisibility(VISIBLE);
-        date2Tv.setVisibility(GONE);
-        date2ViewTv.setVisibility(VISIBLE);
-        time2TitleTv.setVisibility(VISIBLE);
-        time2Tv.setVisibility(GONE);
-        time2ViewTv.setVisibility(VISIBLE);
+        binding.date2TitleTv.setVisibility(VISIBLE);
+        binding.date2Tv.setVisibility(GONE);
+        binding.date2ViewTv.setVisibility(VISIBLE);
+        binding.time2TitleTv.setVisibility(VISIBLE);
+        binding.time2Tv.setVisibility(GONE);
+        binding.time2ViewTv.setVisibility(VISIBLE);
     }
 
     private void showSecondDateTimeEditText() {
-        date2TitleTv.setVisibility(VISIBLE);
-        date2Tv.setVisibility(VISIBLE);
-        date2ViewTv.setVisibility(GONE);
-        time2TitleTv.setVisibility(VISIBLE);
-        time2Tv.setVisibility(VISIBLE);
-        time2ViewTv.setVisibility(GONE);
+        binding.date2TitleTv.setVisibility(VISIBLE);
+        binding.date2Tv.setVisibility(VISIBLE);
+        binding.date2ViewTv.setVisibility(GONE);
+        binding.time2TitleTv.setVisibility(VISIBLE);
+        binding.time2Tv.setVisibility(VISIBLE);
+        binding.time2ViewTv.setVisibility(GONE);
     }
 
 
     private void hideSecondDateTimeViews() {
-        date2TitleTv.setVisibility(GONE);
-        date2Tv.setVisibility(GONE);
-        date2ViewTv.setVisibility(GONE);
-        time2TitleTv.setVisibility(GONE);
-        time2Tv.setVisibility(GONE);
-        time2ViewTv.setVisibility(GONE);
+        binding.date2TitleTv.setVisibility(GONE);
+        binding.date2Tv.setVisibility(GONE);
+        binding.date2ViewTv.setVisibility(GONE);
+        binding.time2TitleTv.setVisibility(GONE);
+        binding.time2Tv.setVisibility(GONE);
+        binding.time2ViewTv.setVisibility(GONE);
     }
     private void focusSingleButton() {
-        singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
-        singleBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
-        roundBtn.setTextColor(getResources().getColor(R.color.darktxt));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.singleBtn.setTextColor(getResources().getColor(R.color.whiteclr));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.roundBtn.setTextColor(getResources().getColor(R.color.darktxt));
     }
 
     private void focusRoundButton() {
-        roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
-        roundBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
-        singleBtn.setTextColor(getResources().getColor(R.color.darktxt));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.roundBtn.setTextColor(getResources().getColor(R.color.whiteclr));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.singleBtn.setTextColor(getResources().getColor(R.color.darktxt));
     }
     private void focusEditButton() {
-        editBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
-        editBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        editBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_white_24dp, 0, 0, 0);
-        viewBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
-        viewBtn.setTextColor(getResources().getColor(R.color.darktxt));
-        viewBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_gray_24dp, 0, 0, 0);
+        binding.editBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.editBtn.setTextColor(getResources().getColor(R.color.whiteclr));
+        binding.editBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_white_24dp, 0, 0, 0);
+        binding.viewBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.viewBtn.setTextColor(getResources().getColor(R.color.darktxt));
+        binding.viewBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_gray_24dp, 0, 0, 0);
 
     }
 
     private void focusViewButton() {
-        viewBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
-        viewBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        viewBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_white_24dp, 0, 0, 0);
-        editBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
-        editBtn.setTextColor(getResources().getColor(R.color.darktxt));
-        editBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_gray_24dp, 0, 0, 0);
+        binding.viewBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.viewBtn.setTextColor(getResources().getColor(R.color.whiteclr));
+        binding.viewBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_white_24dp, 0, 0, 0);
+        binding.editBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.editBtn.setTextColor(getResources().getColor(R.color.darktxt));
+        binding.editBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_gray_24dp, 0, 0, 0);
     }
 
 

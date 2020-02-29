@@ -15,10 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -32,13 +28,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
-import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.databinding.FragmentLoginBinding;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
 
@@ -62,15 +56,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
-
-    private TextInputEditText userEmailEt;
-    private TextInputEditText passwordEt;
-    private TextView forgetPasswordTv;
-    private Button signInBtn;
-    private ProgressBar progressBar;
-    private ImageView facebookImageView;
-    private ImageView googleImgView;
-    private TextView signUpTv;
 
     private GoogleConfiguration googleConfiguration;
     private GoogleSignInClient mGoogleSignInClient;
@@ -238,7 +223,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void setUpViews(View view) {
         binding.forgetPasswordTv.setOnClickListener(this);
         binding.signInBtn.setOnClickListener(this);
-
         binding.facebookImageView.setOnClickListener(this);
         binding.googleImageView.setOnClickListener(this);
         binding.signUpTv.setOnClickListener(this);
