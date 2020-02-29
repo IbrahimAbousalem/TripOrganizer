@@ -26,11 +26,8 @@ public class SharedPreferenceUtility {
         editor.apply();
     }
 
-    public LiveData<String> getUserId(){
-        MutableLiveData<String> returnedUserId = new MutableLiveData<>();
-        String userId = sharedPref.getString(Constants.USER_ID,Constants.NO_DATA);
-        returnedUserId.postValue(userId);
-        return returnedUserId;
+    public String getUserId(){
+        return sharedPref.getString(Constants.USER_ID,Constants.NO_DATA);
     }
 
     public void clearPref(){

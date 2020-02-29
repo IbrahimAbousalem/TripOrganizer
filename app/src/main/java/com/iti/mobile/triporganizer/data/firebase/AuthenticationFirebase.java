@@ -123,7 +123,7 @@ public class AuthenticationFirebase {
         return currentUserLiveData;
     }
 
-    public LiveData<String> getCurrentUserId(){
+    public String getCurrentUserId(){
         return sharedPref.getUserId();
     }
 

@@ -43,7 +43,7 @@ public class AuthenticationRepositoryImp implements AuthenticationRepository{
     }
 
     @Override
-    public LiveData<String> getCurrentUserId(){
+    public String getCurrentUserId(){
         return authenticationFirebase.getCurrentUserId();
     }
 

@@ -37,7 +37,7 @@ public class LoginViewModel extends ViewModel {
         return authenticationRepositoryImp.firebaseSignInWithGoogle(googleAuthCredential);
     }
 
-    public LiveData<String> getCurrentUserId(){
+    public String getCurrentUserId(){
         return authenticationRepositoryImp.getCurrentUserId();
     }
 

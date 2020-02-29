@@ -78,11 +78,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         controller = Navigation.findNavController(view);
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
-        loginViewModel.getCurrentUserId().observe(getViewLifecycleOwner(), userId -> {
-            if(!userId.equals(Constants.NO_DATA)){
-                controller.navigate(R.id.action_loginFragment_to_mainFragment2);
-            }
-        });
+        String userId = loginViewModel.getCurrentUserId();
+        if(!userId.equals(Constants.NO_DATA)){
+            controller.navigate(R.id.action_loginFragment_to_mainFragment2);
+        }
         setUpViews(view);
     }
 
