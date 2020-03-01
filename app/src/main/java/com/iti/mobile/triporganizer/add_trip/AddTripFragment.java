@@ -298,10 +298,10 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         String time1 = binding.time1Tv.getText().toString();
         String date2 = binding.date2Tv.getText().toString();
         String time2 = binding.time2Tv.getText().toString();
-        Date formatedDate1=null;
-        Date formatedDate2=null;
+        Date formatedDate1 = null;
+        Date formatedDate2 = null;
         try {
-            if(!date1.isEmpty()){
+            if (!date1.isEmpty()) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 date1 = date1 + " " + time1;
                 formatedDate1 = format.parse(date1);
@@ -323,92 +323,97 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
-            isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2);
-            if(isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2)){
-                locationData.setStartDate(formatedDate1);
+        isValidData(tripName, startAddress, endAddress, date1, formatedDate1, time1, date2, formatedDate2, time2,isRound);
+        if (isValidData(tripName, startAddress, endAddress, date1, formatedDate1, time1, date2, formatedDate2, time2,isRound)) {
+            locationData.setStartDate(formatedDate1);
+            locationData.setStartTripStartPointLat(startPonitLat);
+            locationData.setStartTripStartPointLng(startPonitLng);
+            locationData.setStartTripEndPointLat(endPonitLat);
+            locationData.setStartTripEndPointLng(endPonitLng);
+            locationData.setStartTripAddressName(startAddress);
+            locationData.setStartTripEndAddressName(endAddress);
+            if(isRound){
                 locationData.setRoundDate(formatedDate2);
-                locationData.setStartTripStartPointLat(startPonitLat);
-                locationData.setStartTripStartPointLng(startPonitLng);
-                locationData.setStartTripEndPointLat(endPonitLat);
-                locationData.setStartTripEndPointLng(endPonitLng);
-                locationData.setStartTripAddressName(startAddress);
-                locationData.setStartTripEndAddressName(endAddress);
                 locationData.setRoundTripStartPointLat(endPonitLat);
                 locationData.setRoundTripStartPointLng(endPonitLng);
                 locationData.setRoundTripEndPointLat(startPonitLat);
                 locationData.setRoundTripEndPointLng(startPonitLng);
                 locationData.setRoundTripStartAddressName(endAddress);
                 locationData.setRoundTripEndAddressName(startAddress);
-                trip.setTripName(tripName);
-                trip.setRound(isRound);
-                trip.setUserId(firebaseAuth.getCurrentUser().getUid());
-                trip.setStatus("UpComing");
-                trip.setLocationData(locationData);
-                addTripViewModel.addTripAndNotes(trip, notesList);
             }
+            trip.setTripName(tripName);
+            trip.setRound(isRound);
+            trip.setUserId(firebaseAuth.getCurrentUser().getUid());
+            trip.setStatus("UpComing");
+            trip.setLocationData(locationData);
+            addTripViewModel.addTripAndNotes(trip, notesList);
         }
-        //TODO: Go back after adding a trip.
+        //getActivity().onBackPressed();
+    }
 
-
-    private boolean isValidData(String tripName, String startAddress, String endAddress, String date1,Date formatedDate1, String time1, String date2,Date formatedDate2, String time2) {
-        if(tripName.isEmpty()){
+    private boolean isValidData(String tripName, String startAddress, String endAddress, String date1, Date formatedDate1, String time1, String date2, Date formatedDate2, String time2,boolean isRound) {
+        if (tripName.isEmpty()) {
             binding.tripNameEt.setError(getResources().getString(R.string.plzEnterTripName));
             return false;
-        }else{
+        } else {
             binding.tripNameEt.setError(null);
         }
-        if(startAddress==null){
-            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+        if (startAddress == null) {
+            ((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
                     .setError(getResources().getString(R.string.plzEnterStartPoint));
             return false;
-        }else{
-            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+        } else {
+            ((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
                     .setError(null);
         }
-        if(endAddress==null){
-            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+        if (endAddress == null) {
+            ((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
                     .setError(getResources().getString(R.string.plzEnterEndPoint));
             return false;
-        }else{
-            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+        } else {
+            ((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
                     .setError(null);
         }
-        if(date1.isEmpty()){
+        if (date1.isEmpty()) {
             binding.date1Tv.setError(getResources().getString(R.string.plzPickDate));
             return false;
-        }else{
+        } else {
             binding.date1Tv.setError(null);
         }
-        if(date2.isEmpty()){
-            binding.date2Tv.setError(getResources().getString(R.string.plzPickDate));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
-        if(time1.isEmpty()){
+        if (time1.isEmpty()) {
             binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
             return false;
-        }else{
+        } else {
             binding.time1Tv.setError(null);
         }
-        if(time2.isEmpty()){
-            binding.time2Tv.setError(getResources().getString(R.string.plzPickTime));
-            return false;
-        }else{
-            binding.time2Tv.setError(null);
+
+        if(isRound){
+            if (date2.isEmpty()) {
+                binding.date2Tv.setError(getResources().getString(R.string.plzPickDate));
+                return false;
+            } else {
+                binding.date1Tv.setError(null);
+            }
+            if (time2.isEmpty()) {
+                binding.time2Tv.setError(getResources().getString(R.string.plzPickTime));
+                return false;
+            } else {
+                binding.time2Tv.setError(null);
+            }
+            if (formatedDate1.compareTo(formatedDate2) > 0) {
+                binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
+                return false;
+            } else {
+                binding.date1Tv.setError(null);
+            }
+            if (formatedDate1.getTime() > formatedDate2.getTime()) {
+                binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime));
+                return false;
+            } else {
+                binding.date1Tv.setError(null);
+            }
         }
-        if(formatedDate1.compareTo(formatedDate2)> 0){
-            binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
-        if(formatedDate1.getTime()>formatedDate2.getTime()){
-            binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
+
         return true;
     }
 

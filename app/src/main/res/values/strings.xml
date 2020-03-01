@@ -70,4 +70,9 @@
     <string name="plzPickTime">You have to pick a time</string>
     <string name="plzPickValidStartTime">Start Time has to occurs before End Time</string>
 
+    <string name="logout">Log Out</string>
+    <string name="save">Save</string>
+
+
+
 </resources>

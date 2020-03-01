@@ -1,5 +1,6 @@
 package com.iti.mobile.triporganizer.data.firebase;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.User;
 import com.iti.mobile.triporganizer.data.room.TripOrganizerDatabase;
 import com.iti.mobile.triporganizer.data.room.dao.UserDao;
+import com.iti.mobile.triporganizer.data.shared_prefs.SharedPreferenceUtility;
 
 import java.util.List;
 
@@ -36,12 +38,14 @@ public class AuthenticationFirebase {
     private static final String TAG = "AuthenticationFirebase";
     private FirebaseFirestore db;
     private UserDao userDao;
+    private SharedPreferenceUtility sharedPref;
 
     @Inject
-    public AuthenticationFirebase(UserDao userDao, FirebaseAuth auth, FirebaseFirestore db) {
+    public AuthenticationFirebase(UserDao userDao, FirebaseAuth auth, FirebaseFirestore db, SharedPreferenceUtility sharedPref) {
         this.firebaseAuth = auth;
         this.db = db;
         this.userDao = userDao;
+        this.sharedPref = sharedPref;
     }
 
     public LiveData<String> signInWithEmailAndPasswordFunc(String email, String password) {
@@ -52,6 +56,7 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 //TODO: I removed User Photo
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
+                sharedPref.saveUserId(currentUser.getId());
                 currentUserLiveData.postValue(currentUser.getId());
             }else{
                 Log.i(TAG, "signInWithEmail:failure"+task.getException().getMessage());
@@ -75,6 +80,7 @@ public class AuthenticationFirebase {
                 }
                 saveToDatabase(currentUser);
                 User finalCurrentUser = currentUser;
+                sharedPref.saveUserId(currentUser.getId());
                 TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                     userDao.insertUser(finalCurrentUser);
                 });
@@ -102,6 +108,7 @@ public class AuthenticationFirebase {
                             currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                         }
                         saveToDatabase(currentUser);
+                        sharedPref.saveUserId(currentUser.getId());
                         User finalCurrentUser = currentUser;
                         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                             userDao.insertUser(finalCurrentUser);
@@ -114,6 +121,10 @@ public class AuthenticationFirebase {
                     }
                 });
         return currentUserLiveData;
+    }
+
+    public String getCurrentUserId(){
+        return sharedPref.getUserId();
     }
 
     public LiveData<User> getCurrentUser(){
@@ -141,6 +152,7 @@ public class AuthenticationFirebase {
         if(firebaseUser!=null){
             firebaseAuth.signOut();
         }
+        sharedPref.clearPref();
     }
 
     public MutableLiveData<String> register(User user, String password) {
@@ -154,6 +166,7 @@ public class AuthenticationFirebase {
                         user.setId(currentUser.getUid());
                         user.setProvider_id(currentUser.getProviderId());
                         saveToDatabase(user);
+                        sharedPref.saveUserId(user.getId());
                         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                             userDao.insertUser(user);
                         });
@@ -185,6 +198,7 @@ public class AuthenticationFirebase {
                 TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                     userDao.insertUser(finalCurrentUser);
                 });
+                sharedPref.saveUserId(currentUser.getId());
                 saveToDatabase(currentUser);
                 authenticatedUserMutableLiveData.postValue(currentUser.getId());
             } else {
@@ -194,5 +208,6 @@ public class AuthenticationFirebase {
         });
         return authenticatedUserMutableLiveData;
     }
+
 
 }

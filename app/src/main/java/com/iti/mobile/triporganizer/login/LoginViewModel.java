@@ -37,4 +37,8 @@ public class LoginViewModel extends ViewModel {
         return authenticationRepositoryImp.firebaseSignInWithGoogle(googleAuthCredential);
     }
 
+    public String getCurrentUserId(){
+        return authenticationRepositoryImp.getCurrentUserId();
+    }
+
 }

@@ -24,10 +24,6 @@ import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
-import com.iti.mobile.triporganizer.login.LoginViewModel;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -65,13 +61,12 @@ public class HomeFragment extends Fragment {
        // tripsViewModel.addTrip(data);
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
+
         tripsViewModel.getTripsList(firebaseAuth.getCurrentUser().getUid()).observe(requireActivity(), tripAndLocationList -> {
             List<TripAndLocation> tripAndLocations = tripAndLocationList;
-
             tripsAdapter.submitList(tripAndLocationList);
             Log.d("data", "we have trips .. ");
         });
-
 
     }
 

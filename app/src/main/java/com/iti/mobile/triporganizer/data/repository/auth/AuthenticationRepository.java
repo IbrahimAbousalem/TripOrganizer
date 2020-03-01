@@ -14,4 +14,5 @@ public interface AuthenticationRepository {
     LiveData<String> registerUser(User user, String password);
     void signoutFunc();
     LiveData<String> firebaseSignInWithGoogle(AuthCredential googleAuthCredential);
+    String getCurrentUserId();
 }

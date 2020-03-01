@@ -43,6 +43,11 @@ public class AuthenticationRepositoryImp implements AuthenticationRepository{
     }
 
     @Override
+    public String getCurrentUserId(){
+        return authenticationFirebase.getCurrentUserId();
+    }
+
+    @Override
     public LiveData<String> firebaseSignInWithGoogle(AuthCredential googleAuthCredential) {
         return authenticationFirebase.signInWithGoogle(googleAuthCredential);
     }

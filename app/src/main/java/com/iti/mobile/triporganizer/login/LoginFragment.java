@@ -34,6 +34,7 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.databinding.FragmentLoginBinding;
+import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
 
 import java.util.Arrays;
@@ -68,17 +69,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUpViews(view);
         controller = Navigation.findNavController(view);
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         loginViewModel = new ViewModelProvider(this, providerFactory).get(LoginViewModel.class);
+        String userId = loginViewModel.getCurrentUserId();
+        if(!userId.equals(Constants.NO_DATA)){
+            controller.navigate(R.id.action_loginFragment_to_mainFragment2);
+        }
+        setUpViews(view);
     }
 
     @Override
