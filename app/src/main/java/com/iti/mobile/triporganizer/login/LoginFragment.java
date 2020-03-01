@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         String userId = loginViewModel.getCurrentUserId();
         if(!userId.equals(Constants.NO_DATA)){
-            controller.navigate(R.id.action_loginFragment_to_main2Activity);
+            controller.navigate(R.id.action_loginFragment_to_homeFragment);
         }
 
         setUpViews(view);
@@ -223,7 +223,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void updateUi(String message) {
         hideProgressBar();
         if (message != null&&!message.isEmpty()&&!message.contains("Error")) {
-            controller.navigate(R.id.action_loginFragment_to_main2Activity);
+            controller.navigate(R.id.action_loginFragment_to_homeFragment);
         } else {
             displayError(message);
         }
