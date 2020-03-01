@@ -59,8 +59,10 @@ public class AlarmService extends Service {
     }
 
     public void stopRingTone(){
-        if (mp != null){
+        if (mp != null && mp.isPlaying()){
             mp.stop();
+            mp.reset();
+            mp.release();
 
         }
         if (vibrator != null) {

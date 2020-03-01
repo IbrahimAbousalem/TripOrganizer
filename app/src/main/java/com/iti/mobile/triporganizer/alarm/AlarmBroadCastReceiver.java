@@ -54,7 +54,10 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
-           // context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            if (tripOrganizerApp.getAlarmService()!=null){
+                tripOrganizerApp.stopAlarmService();
+            }
+            context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
             String tripId, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             desLat = intent.getStringExtra("destnationLatitude");
