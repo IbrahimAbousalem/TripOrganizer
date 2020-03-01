@@ -41,6 +41,7 @@ import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.databinding.FragmentAddTripBinding;
 import com.iti.mobile.triporganizer.details.NoteAdapter;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
+import com.iti.mobile.triporganizer.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -334,6 +335,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             locationData.setStartTripEndPointLng(endPonitLng);
             locationData.setStartTripAddressName(startAddress);
             locationData.setStartTripEndAddressName(endAddress);
+            locationData.setRound(isRound);
             if(isRound){
                 locationData.setRoundDate(formatedDate2);
                 locationData.setRoundTripStartPointLat(endPonitLat);
@@ -344,16 +346,12 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 locationData.setRoundTripEndAddressName(startAddress);
             }
             trip.setTripName(tripName);
-            trip.setRound(isRound);
-            trip.setUserId(firebaseAuth.getCurrentUser().getUid());
-            trip.setStatus("UpComing");
             trip.setLocationData(locationData);
-            addTripViewModel.addTripAndNotes(trip, notesList).observe(requireActivity(), new Observer<Trip>() {
-                @Override
-                public void onChanged(Trip trip) {
-                    AlarmUtils.startAlarm(getContext(), trip.getLocationData().getStartDate().getTime(),trip.getTripName(), String.valueOf(trip.getId()), String.valueOf(trip.getLocationData().getStartTripEndPointLat()), String.valueOf(trip.getLocationData().getStartTripEndPointLng()));
-                    getActivity().onBackPressed();
-                }
+            trip.setUserId(firebaseAuth.getCurrentUser().getUid());
+            trip.setStatus(Constants.UPCOMING);
+            addTripViewModel.addTripAndNotes(trip, notesList).observe(requireActivity(), trip -> {
+                AlarmUtils.startAlarm(getContext(), trip.getLocationData().getStartDate().getTime(),trip.getTripName(), String.valueOf(trip.getId()), String.valueOf(trip.getLocationData().getStartTripEndPointLat()), String.valueOf(trip.getLocationData().getStartTripEndPointLng()));
+                getActivity().onBackPressed();
             });
         }
     }

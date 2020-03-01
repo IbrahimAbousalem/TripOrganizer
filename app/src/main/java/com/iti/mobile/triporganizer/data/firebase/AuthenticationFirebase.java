@@ -57,6 +57,7 @@ public class AuthenticationFirebase {
                 //TODO: I removed User Photo
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
                 sharedPref.saveUserId(currentUser.getId());
+                userDao.insertUser(currentUser);
                 currentUserLiveData.postValue(currentUser.getId());
             }else{
                 Log.i(TAG, "signInWithEmail:failure"+task.getException().getMessage());

@@ -26,4 +26,5 @@ public interface LocationDataDao {
 
     @Query("SELECT * FROM locationData WHERE tripId =:tripId")
     LiveData<List<LocationData>> getAllLocationData(int tripId);
+
 }

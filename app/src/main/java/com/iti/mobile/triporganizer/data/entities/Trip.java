@@ -8,7 +8,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -17,24 +16,22 @@ import static androidx.room.ForeignKey.CASCADE;
 public class Trip implements Parcelable{
     @PrimaryKey(autoGenerate = true)
     private long id;
+    @ColumnInfo(name = "userId", index = true)
     private String userId;
     private String tripName;
     private String status;
     @Ignore
     private LocationData locationData;
 
-    private boolean isRound;
-
     public Trip() {
     }
 
-    public Trip(long id, String userId, String tripName, String status, LocationData locationData, boolean isRound) {
+    public Trip(long id, String userId, String tripName, String status, LocationData locationData) {
         this.id = id;
         this.userId = userId;
         this.tripName = tripName;
         this.status = status;
         this.locationData = locationData;
-        this.isRound = isRound;
     }
 
     protected Trip(Parcel in) {
@@ -42,7 +39,6 @@ public class Trip implements Parcelable{
         userId = in.readString();
         tripName = in.readString();
         status = in.readString();
-        isRound = in.readByte() != 0;
     }
 
     @Override
@@ -51,7 +47,6 @@ public class Trip implements Parcelable{
         dest.writeString(userId);
         dest.writeString(tripName);
         dest.writeString(status);
-        dest.writeByte((byte) (isRound ? 1 : 0));
     }
 
     @Override
@@ -111,19 +106,11 @@ public class Trip implements Parcelable{
         this.locationData = locationData;
     }
 
-    public boolean isRound() {
-        return isRound;
-    }
-
-    public void setRound(boolean round) {
-        isRound = round;
-    }
 
     @Override
     public boolean equals(@Nullable Object obj) {
         Trip data = (Trip) obj;
         return data == null || (tripName.equals(data.getTripName()) && locationData == data.getLocationData()
-                && isRound == data.isRound()
                 && status.equals(data.getStatus()));
     }
 

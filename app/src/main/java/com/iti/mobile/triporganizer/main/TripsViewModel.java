@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.data.firebase.AuthenticationFirebase;
 import com.iti.mobile.triporganizer.data.repository.notes.NoteRepositoryRoomImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryFirebaseImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryRoomImp;
@@ -18,16 +19,17 @@ public class TripsViewModel extends ViewModel {
     private TripRepositoryFirebaseImp tripRepositoryFirebaseImp;
     private TripRepositoryRoomImp tripRepositoryRoomImp;
     private NoteRepositoryRoomImp noteRepositoryRoomImp;
-
+    private AuthenticationFirebase auth;
     @Inject
-    public TripsViewModel(TripRepositoryFirebaseImp tripRepositoryFirebaseImp, TripRepositoryRoomImp tripRepositoryRoomImp, NoteRepositoryRoomImp noteRepositoryRoomImp) {
+    public TripsViewModel(AuthenticationFirebase auth, TripRepositoryFirebaseImp tripRepositoryFirebaseImp, TripRepositoryRoomImp tripRepositoryRoomImp, NoteRepositoryRoomImp noteRepositoryRoomImp) {
         this.tripRepositoryFirebaseImp = tripRepositoryFirebaseImp;
         this.tripRepositoryRoomImp = tripRepositoryRoomImp;
         this.noteRepositoryRoomImp = noteRepositoryRoomImp;
+        this.auth = auth;
     }
 
-    public LiveData<List<TripAndLocation>> getTripsList(String uId){
-        return tripRepositoryRoomImp.getTripsFromRoom(uId);
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String uId){
+        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
     }
 
     public void addTrip(Trip trip){
@@ -50,6 +52,13 @@ public class TripsViewModel extends ViewModel {
     }
     public void deleteNote(Note note, String userId){
         noteRepositoryRoomImp.deleteNote(note, userId);
+    }
+    public String getCurrentUserId(){
+        return auth.getCurrentUserId();
+    }
+
+    public LiveData<List<TripAndLocation>> getTripsFromFirebase(String userId){
+        return tripRepositoryRoomImp.getTripsFromFirebase(userId);
     }
 
 }

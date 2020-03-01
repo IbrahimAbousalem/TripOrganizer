@@ -6,6 +6,8 @@ import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.data.firebase.TripsFirebase;
+import com.iti.mobile.triporganizer.data.room.TripsRoom;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,7 +16,7 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
     TripsFirebase tripsFirebase;
 
     @Inject
-    public TripRepositoryFirebaseImp(TripsFirebase tripsFirebase){
+    public TripRepositoryFirebaseImp(TripsFirebase tripsFirebas){
         this.tripsFirebase = tripsFirebase;
     }
 
@@ -35,13 +37,13 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
 
     //think more about this..
     @Override
-    public LiveData<List<TripAndLocation>> getTripsFromRoom(String userId) {
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId) {
         return null;
     }
 
     @Override
-    public LiveData<List<Trip>> getTripsFromFirebase(String userId) {
-        return tripsFirebase.getTripsForUser(userId);
+    public LiveData<List<TripAndLocation>> getTripsFromFirebase(String userId) {
+        return null;
     }
 
     @Override

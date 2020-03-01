@@ -63,39 +63,22 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         tripsViewModel = new ViewModelProvider(this, providerFactory).get(TripsViewModel.class);
         controller = Navigation.findNavController(view);
         tripsAdapter = new TripsAdapter();
-        //createDummyTrip();
-       // tripsViewModel.addTrip(data);
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
-
-        tripsViewModel.getTripsList(firebaseAuth.getCurrentUser().getUid()).observe(requireActivity(), tripAndLocationList -> {
+        String userId = tripsViewModel.getCurrentUserId();
+        tripsViewModel.getUpComingTripsFromRoom(userId).observe(requireActivity(), tripAndLocationList -> {
             List<TripAndLocation> tripAndLocations = tripAndLocationList;
-            tripsAdapter.submitList(tripAndLocationList);
-            Log.d("data", "we have trips .. ");
+            if(tripAndLocationList.isEmpty()){
+                tripsViewModel.getTripsFromFirebase(userId).observe(requireActivity(), tripAndLocationList1 ->{
+                    tripsAdapter.submitList(tripAndLocationList);
+                });
+            }else {
+                tripsAdapter.submitList(tripAndLocationList);
+                Log.d("data", "we have trips .. ");
+            }
         });
 
     }
-
-//    private void createDummyTrip() {
-//        data = new Trip();
-//        data.setTripName("Test Trip one");
-//        data.setId(9);
-//        data.setRound(false);
-//        data.setUserId("b3JWEfSAnRf3UjJRZvyb17frnE43");
-//        data.setStatus("Past");
-//        LocationData locationData = new LocationData();
-//        locationData.setId(8);
-//        locationData.setTripId(9);
-//        locationData.setStartDate(new Date());
-//        locationData.setStartTripAddressName("Cairo");
-//        locationData.setStartTripEndAddressName("Alexandria");
-//        locationData.setStartTripStartPoint(151534);
-//        locationData.setStartTripEndPoint(54545787);
-//        data.setLocationData(locationData);
-//        note = new Note("Note 1", 9, false);
-//    }
-
-
 
     private void initViews(View view) {
         tripsRecyclerView = view.findViewById(R.id.tripsRecyclerView);

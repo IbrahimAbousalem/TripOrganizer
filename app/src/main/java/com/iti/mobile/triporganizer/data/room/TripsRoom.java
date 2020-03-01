@@ -13,6 +13,7 @@ import com.iti.mobile.triporganizer.data.room.dao.LocationDataDao;
 import com.iti.mobile.triporganizer.data.room.dao.NoteDao;
 import com.iti.mobile.triporganizer.data.room.dao.TripDao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,8 +41,8 @@ public class TripsRoom {
         this.db = db;
     }
 
-    public LiveData<List<TripAndLocation>> getAllTrips(String userId){
-        return tripDao.getAllTrips(userId);
+    public LiveData<List<TripAndLocation>> getAllUpComingTrips(String userId){
+        return tripDao.getAllHistoryTrips(userId, new Date().getTime());
     }
 
     public void addTrip(Trip trip){

@@ -80,12 +80,12 @@ public class TripsFirebase {
         mLocationOne.put(FirestoreConstatnts.roundTripStartPointLng, trip.getLocationData().getRoundTripStartPointLng());
         mLocationOne.put(FirestoreConstatnts.roundTripStartAddressName, trip.getLocationData().getRoundTripStartAddressName());
         mLocationOne.put(FirestoreConstatnts.roundDate, trip.getLocationData().getRoundDate());
+        mLocationOne.put(FirestoreConstatnts.isRound, trip.getLocationData().isRound());
 
         mTrip.put(FirestoreConstatnts.id, trip.getId());
         mTrip.put(FirestoreConstatnts.userId, trip.getUserId());
         mTrip.put(FirestoreConstatnts.locationData, mLocationOne);
         mTrip.put(FirestoreConstatnts.tripName, trip.getTripName());
-        mTrip.put(FirestoreConstatnts.isRound, trip.isRound());
         mTrip.put(FirestoreConstatnts.status, trip.getStatus());
 
         return reference.update(mTrip).isSuccessful();
