@@ -197,6 +197,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //Forget Password ---------------------------------------------------------------
     private void forgetPassword() {
         //controller.navigate(R.id.action_loginFragment_to_homeFragment);
+        controller.navigate(R.id.action_loginFragment_to_profileFragment3);
     }
 //-----------------------------------------------------------------------------
 

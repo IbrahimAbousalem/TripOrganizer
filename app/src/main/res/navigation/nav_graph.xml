@@ -21,6 +21,9 @@
             app:destination="@id/main2Activity"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_loginFragment_to_profileFragment3"
+            app:destination="@id/profileFragment3" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -38,4 +41,9 @@
         android:name="com.iti.mobile.triporganizer.main.Main2Activity"
         android:label="activity_main2"
         tools:layout="@layout/activity_main2" />
+    <fragment
+        android:id="@+id/profileFragment3"
+        android:name="com.iti.mobile.triporganizer.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

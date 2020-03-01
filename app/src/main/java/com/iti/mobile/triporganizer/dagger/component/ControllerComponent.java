@@ -11,6 +11,7 @@ import com.iti.mobile.triporganizer.login.LoginFragment;
 import com.iti.mobile.triporganizer.base.MainActivity;
 import com.iti.mobile.triporganizer.login.TestHomeActivity;
 import com.iti.mobile.triporganizer.main.HomeFragment;
+import com.iti.mobile.triporganizer.profile.ProfileFragment;
 import com.iti.mobile.triporganizer.register.RegisterFragment;
 
 import dagger.Subcomponent;
@@ -27,4 +28,5 @@ public interface ControllerComponent {
     void inject(DetailsFragment details);
     void inject(AddTripFragment addTrip);
     void inject(TestHomeActivity test);
+    void inject(ProfileFragment profileFragment);
 }

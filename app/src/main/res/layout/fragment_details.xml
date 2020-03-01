@@ -42,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@+id/bkImageView" />
 
         <FrameLayout
-            android:id="@+id/deatilsFragmentContainer"
+            android:id="@+id/profileFragmentContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
