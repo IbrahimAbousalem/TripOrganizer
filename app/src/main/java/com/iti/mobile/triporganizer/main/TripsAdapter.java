@@ -38,7 +38,9 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
         public boolean areContentsTheSame(@NonNull TripAndLocation oldItem, @NonNull TripAndLocation newItem) {
             return oldItem.getTrip().getStatus().equals(newItem.getTrip().getStatus())&&
                     oldItem.getTrip().getUserId().equals(newItem.getTrip().getUserId())&&
-                    oldItem.getLocationDataList().getStartDate().getTime()==newItem.getLocationDataList().getStartDate().getTime();
+                    oldItem.getLocationDataList().getStartDate().getTime()==newItem.getLocationDataList().getStartDate().getTime()&&
+                    oldItem.getTrip().getTripName().equals(newItem.getTrip().getTripName())&&
+                    oldItem.getLocationDataList().getId() == newItem.getLocationDataList().getId();
         }
     };
 
@@ -75,7 +77,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             tripsViewHolder.setTripNameTv(trip.getTrip().getTripName());
             tripsViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
             tripsViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
-        }else {
+        }else if (holder instanceof  UpcomingTripsTextViewHolder){
             TripAndLocation trip = getItem(position);
             UpcomingTripsTextViewHolder upcomingTripsTextViewHolder = (UpcomingTripsTextViewHolder) holder;
             upcomingTripsTextViewHolder.setTripNameTv(trip.getTrip().getTripName());
@@ -88,13 +90,10 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
     public int getItemViewType(int position) {
         switch (position){
             case 0:
-                viewType = TYPE_HEADER;
                 return TYPE_HEADER;
             case 1:
-                viewType = TYPE_Text;
                 return TYPE_Text;
             default:
-                viewType = TYPE_ITEM;
                 return TYPE_ITEM;
         }
 
