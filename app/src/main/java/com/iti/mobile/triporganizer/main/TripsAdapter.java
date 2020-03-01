@@ -19,9 +19,10 @@ import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import java.util.Objects;
 
 public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.ViewHolder> {
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
-    private static final int TYPE_Text = 2;
+    public static final int TYPE_HEADER = 0;
+    public static final int TYPE_ITEM = 1;
+    public static final int TYPE_Text = 2;
+    public static  int viewType;
 
     public TripsAdapter() {
         super(diffCallback);
@@ -49,7 +50,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
                 View upcomingView = LayoutInflater.from(parent.getContext()).inflate(R.layout.first_trip_card, parent, false);
                 return new UpcomingTripViewHolder(upcomingView);
             case TYPE_ITEM:
-                View textView = LayoutInflater.from(parent.getContext()).inflate(R.layout.past_trip_card, parent, false);
+                View textView = LayoutInflater.from(parent.getContext()).inflate(R.layout.trip_card, parent, false);
                 return new TripsViewHolder(textView);
             case TYPE_Text:
                 View pastTripsView = LayoutInflater.from(parent.getContext()).inflate(R.layout.upcomig_trips_text_item, parent, false);
@@ -73,14 +74,12 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             TripsViewHolder tripsViewHolder = (TripsViewHolder) holder;
             tripsViewHolder.setTripNameTv(trip.getTrip().getTripName());
             tripsViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
-            tripsViewHolder.setTripStatusTv(trip.getTrip().getStatus());
             tripsViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
         }else {
             TripAndLocation trip = getItem(position);
             UpcomingTripsTextViewHolder upcomingTripsTextViewHolder = (UpcomingTripsTextViewHolder) holder;
             upcomingTripsTextViewHolder.setTripNameTv(trip.getTrip().getTripName());
             upcomingTripsTextViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
-            upcomingTripsTextViewHolder.setTripStatusTv(trip.getTrip().getStatus());
             upcomingTripsTextViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
         }
     }
@@ -88,9 +87,15 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
     @Override
     public int getItemViewType(int position) {
         switch (position){
-            case 0: return TYPE_HEADER;
-            case 1: return TYPE_Text;
-            default: return TYPE_ITEM;
+            case 0:
+                viewType = TYPE_HEADER;
+                return TYPE_HEADER;
+            case 1:
+                viewType = TYPE_Text;
+                return TYPE_Text;
+            default:
+                viewType = TYPE_ITEM;
+                return TYPE_ITEM;
         }
 
     }
@@ -106,7 +111,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
             startBtn = itemView.findViewById(R.id.startBtn);
             viewBtn = itemView.findViewById(R.id.viewBtn);
-           // itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_mainFragment2_to_detailsFragment));
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_detailsFragment));
         }
 
 
@@ -123,15 +128,13 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             tripLocTv.setText(location);
         }
     }
-    private class TripsViewHolder extends RecyclerView.ViewHolder{
+    public class TripsViewHolder extends RecyclerView.ViewHolder{
         private TextView tripNameTv, tripDateTv, tripLocTv;
-        private Button statusTv;
         private TripsViewHolder(@NonNull View itemView) {
             super(itemView);
             tripNameTv = itemView.findViewById(R.id.tripNameTv);
             tripDateTv = itemView.findViewById(R.id.tripDateTv);
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
-            statusTv = itemView.findViewById(R.id.statusBtn);
           //  itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_mainFragment2_to_detailsFragment));
         }
 
@@ -141,24 +144,19 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
         private void setTripDateTv(String tripDate) {
             tripDateTv.setText(tripDate);
         }
-        private void setTripStatusTv(String status) {
-            statusTv.setText(status);
-        }
         private void setTripLocTv(String location) {
             tripLocTv.setText(location);
         }
     }
-    private class UpcomingTripsTextViewHolder extends RecyclerView.ViewHolder{
+    public class UpcomingTripsTextViewHolder extends RecyclerView.ViewHolder{
         private TextView upcomig_textView;
         private TextView tripNameTv, tripDateTv, tripLocTv;
-        private Button statusTv;
         private UpcomingTripsTextViewHolder(@NonNull View itemView) {
             super(itemView);
             upcomig_textView = itemView.findViewById(R.id.upcomig_textView);
             tripNameTv = itemView.findViewById(R.id.tripNameTv);
             tripDateTv = itemView.findViewById(R.id.tripDateTv);
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
-            statusTv = itemView.findViewById(R.id.statusBtn);
            // itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_historyFragment));
         }
         private void setTripNameTv(String tripName) {
@@ -166,9 +164,6 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
         }
         private void setTripDateTv(String tripDate) {
             tripDateTv.setText(tripDate);
-        }
-        private void setTripStatusTv(String status) {
-            statusTv.setText(status);
         }
         private void setTripLocTv(String location) {
             tripLocTv.setText(location);
