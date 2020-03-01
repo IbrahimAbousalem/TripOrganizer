@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -39,6 +40,7 @@ import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.databinding.FragmentAddTripBinding;
 import com.iti.mobile.triporganizer.details.NoteAdapter;
+import com.iti.mobile.triporganizer.utils.AlarmUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,7 +67,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     private AutocompleteSupportFragment endPointAutocompleteFragment;
     private PlacesClient placesClient;
 
-    NavController controller;
+    private NavController controller;
     @Inject
     ViewModelProviderFactory providerFactory;
     AddTripViewModel addTripViewModel;
@@ -346,9 +348,14 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             trip.setUserId(firebaseAuth.getCurrentUser().getUid());
             trip.setStatus("UpComing");
             trip.setLocationData(locationData);
-            addTripViewModel.addTripAndNotes(trip, notesList);
+            addTripViewModel.addTripAndNotes(trip, notesList).observe(requireActivity(), new Observer<Trip>() {
+                @Override
+                public void onChanged(Trip trip) {
+                    AlarmUtils.startAlarm(getContext(), trip.getLocationData().getStartDate().getTime(),trip.getTripName(), String.valueOf(trip.getId()), String.valueOf(trip.getLocationData().getStartTripEndPointLat()), String.valueOf(trip.getLocationData().getStartTripEndPointLng()));
+                    getActivity().onBackPressed();
+                }
+            });
         }
-        //getActivity().onBackPressed();
     }
 
     private boolean isValidData(String tripName, String startAddress, String endAddress, String date1, Date formatedDate1, String time1, String date2, Date formatedDate2, String time2,boolean isRound) {

@@ -16,21 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".alarm.SetAlarmDummyActivity">
-        </activity>
+        <activity android:name=".main.Main2Activity"/>
+        <activity android:name=".alarm.SetAlarmDummyActivity"/>
 
         <receiver
             android:name=".alarm.AlarmBroadCastReceiver"
             android:enabled="true"
-            android:exported="false" >
-
-        </receiver>
+            android:exported="false"/>
 
         <service
             android:name=".alarm.AlarmService"
             android:enabled="true"
-            android:exported="true"
-             ></service> <!-- <activity android:name=".home.HomeActivity" /> -->
+            android:exported="true" /> <!-- <activity android:name=".home.HomeActivity" /> -->
         <activity android:name=".dialog.TestDialogActivity" />
 
         <meta-data
@@ -57,9 +54,11 @@
         <activity android:name=".base.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".appHead.ChatHeadActivity"/>
     </application>
 
 </manifest>

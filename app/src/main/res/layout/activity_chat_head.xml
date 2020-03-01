@@ -5,55 +5,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
-    tools:context=".ChatHeadActivity">
+    tools:context=".appHead.ChatHeadActivity">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btnShowHead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Show Head"
-
-            android:background="@drawable/bg_round"
-            android:textColor="@color/blue" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <Button
-            android:id="@+id/btnShowReadHead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Show Custom Head"
-            android:background="@drawable/bg_round"
-            android:textColor="@color/blue" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <Button
-            android:id="@+id/btnUpdateBadge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Update Badge"
-            android:background="@drawable/bg_round"
-            android:textColor="@color/blue" />
-
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

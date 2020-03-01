@@ -50,8 +50,8 @@ public class TripRepositoryRoomImp implements TripsRepository {
     }
 
     @Override
-    public void addTripAndNotes(Trip trip, List<Note> notes) {
-        tripsRoom.addTripAndNotes(trip, notes);
+    public LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes) {
+        return tripsRoom.addTripAndNotes(trip, notes);
     }
 
 }

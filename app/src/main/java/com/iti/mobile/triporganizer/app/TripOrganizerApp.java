@@ -51,7 +51,7 @@ public class TripOrganizerApp extends Application {
         //alarmService.stopForeground(true);
         alarmService.destroyService();
     }
-    private void stopSound(){
+    public void stopSound(){
         if (alarmService !=null){
             alarmService.stopRingTone();
         }
@@ -60,4 +60,9 @@ public class TripOrganizerApp extends Application {
         return alarmService;
     }
 
+    @Override
+    public void onTerminate() {
+        alarmService.destroyService();
+        super.onTerminate();
+    }
 }

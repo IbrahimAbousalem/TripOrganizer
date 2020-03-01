@@ -29,16 +29,16 @@ public class MainFragment extends Fragment {
     private NavController navController;
 
     private FloatingActionButton add_button;
-    BottomNavigationView bottomNavigation;
+    private BottomNavigationView bottomNavigation;
     private final HomeFragment homeFragment = new HomeFragment();
     private final HistoryFragment historyFragment = new HistoryFragment();
-    Fragment activeFragment= homeFragment;
+    private Fragment activeFragment= homeFragment;
     public MainFragment() {
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -68,7 +68,7 @@ public class MainFragment extends Fragment {
 
     private void handleActions() {
         add_button.setOnClickListener((view)->{
-            navController.navigate(R.id.action_mainFragment2_to_addTripFragment);
+            //navController.navigate(R.id.action_mainFragment2_to_addTripFragment);
         });
     }
     private BottomNavigationView.OnNavigationItemReselectedListener onNavigationItemReselectedListener = new BottomNavigationView.OnNavigationItemReselectedListener() {
@@ -77,13 +77,13 @@ public class MainFragment extends Fragment {
             switch (item.getItemId()){
                 case R.id.homeFragment:
                     FragmentUtils.hideFragment((AppCompatActivity) getContext(),activeFragment);
-                    showHomeFragment();
+                 //   showHomeFragment();
                     activeFragment = homeFragment;
                     break;
 
                 case R.id.historyFragment:
                     FragmentUtils.hideFragment((AppCompatActivity) getContext(),activeFragment);
-                    showHistoryFragment();
+                  //  showHistoryFragment();
                     activeFragment = historyFragment;
                     break;
 
@@ -96,11 +96,11 @@ public class MainFragment extends Fragment {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()){
                 case R.id.homeFragment:
-                    showHomeFragment();
+                  //  showHomeFragment();
                     return  true;
 
                 case R.id.historyFragment:
-                    showHistoryFragment();
+                    //showHistoryFragment();
                     return true;
 
             }
@@ -109,13 +109,14 @@ public class MainFragment extends Fragment {
 
     };
 
-    private void showHistoryFragment() {
 
-        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, historyFragment, HistoryFragment.TAG, false);
-    }
-
-    private void showHomeFragment() {
-
-        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, homeFragment, HomeFragment.TAG, false);
-    }
+//    private void showHistoryFragment() {
+//
+//        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, historyFragment, HistoryFragment.TAG, false);
+//    }
+//
+//    private void showHomeFragment() {
+//
+//        FragmentUtils.showFragment((AppCompatActivity) getActivity(), R.id.frame_container, homeFragment, HomeFragment.TAG, false);
+//    }
 }

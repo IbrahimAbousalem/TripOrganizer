@@ -3,6 +3,7 @@ package com.iti.mobile.triporganizer.data.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import androidx.annotation.Nullable;
@@ -15,7 +16,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "locationData", foreignKeys = @ForeignKey(entity = Trip.class, parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
-public class LocationData implements Parcelable {
+public class LocationData implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "locationId")
@@ -79,17 +80,17 @@ public class LocationData implements Parcelable {
         roundTripEndPointLng = in.readDouble();
     }
 
-    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
-        @Override
-        public LocationData createFromParcel(Parcel in) {
-            return new LocationData(in);
-        }
-
-        @Override
-        public LocationData[] newArray(int size) {
-            return new LocationData[size];
-        }
-    };
+//    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
+//        @Override
+//        public LocationData createFromParcel(Parcel in) {
+//            return new LocationData(in);
+//        }
+//
+//        @Override
+//        public LocationData[] newArray(int size) {
+//            return new LocationData[size];
+//        }
+//    };
 
     public long getId() {
         return id;
@@ -222,33 +223,30 @@ public class LocationData implements Parcelable {
     @Override
     public boolean equals(@Nullable Object obj) {
         LocationData location = (LocationData) obj;
-        if (location != null && (tripId != location.getTripId() || !startTripAddressName.equals(location.getStartTripAddressName()) || !startTripEndAddressName.equals(location.getStartTripEndAddressName())
-                || startTripStartPointLat != location.getStartTripStartPointLat() || startTripStartPointLng != location.getStartTripStartPointLng() ||startTripEndPointLat != location.getStartTripEndPointLat() || startTripEndPointLng != location.getStartTripEndPointLng() ||startDate !=location.getStartDate())) {
-            return false;
-        }
-        return true;
+        return location == null || (tripId == location.getTripId() && startTripAddressName.equals(location.getStartTripAddressName()) && startTripEndAddressName.equals(location.getStartTripEndAddressName())
+                && startTripStartPointLat == location.getStartTripStartPointLat() && startTripStartPointLng == location.getStartTripStartPointLng() && startTripEndPointLat == location.getStartTripEndPointLat() && startTripEndPointLng == location.getStartTripEndPointLng() && startDate == location.getStartDate());
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeLong(tripId);
-        dest.writeString(startTripAddressName);
-        dest.writeDouble(startTripStartPointLat);
-        dest.writeDouble(startTripStartPointLng);
-        dest.writeString(startTripEndAddressName);
-        dest.writeDouble(startTripEndPointLat);
-        dest.writeDouble(startTripEndPointLng);
-        dest.writeString(roundTripStartAddressName);
-        dest.writeDouble(roundTripStartPointLat);
-        dest.writeDouble(roundTripStartPointLng);
-        dest.writeString(roundTripEndAddressName);
-        dest.writeDouble(roundTripEndPointLat);
-        dest.writeDouble(roundTripEndPointLng);
-    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeLong(id);
+//        dest.writeLong(tripId);
+//        dest.writeString(startTripAddressName);
+//        dest.writeDouble(startTripStartPointLat);
+//        dest.writeDouble(startTripStartPointLng);
+//        dest.writeString(startTripEndAddressName);
+//        dest.writeDouble(startTripEndPointLat);
+//        dest.writeDouble(startTripEndPointLng);
+//        dest.writeString(roundTripStartAddressName);
+//        dest.writeDouble(roundTripStartPointLat);
+//        dest.writeDouble(roundTripStartPointLng);
+//        dest.writeString(roundTripEndAddressName);
+//        dest.writeDouble(roundTripEndPointLat);
+//        dest.writeDouble(roundTripEndPointLng);
+//    }
 }

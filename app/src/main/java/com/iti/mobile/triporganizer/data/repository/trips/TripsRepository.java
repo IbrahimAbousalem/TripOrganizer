@@ -14,5 +14,5 @@ public interface TripsRepository {
     boolean  updateTrip(Trip trip);
     LiveData<List<TripAndLocation>> getTripsFromRoom(String userId);
     LiveData<List<Trip>> getTripsFromFirebase(String userId);
-    void addTripAndNotes(Trip trip, List<Note> notes);
+    LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes);
 }

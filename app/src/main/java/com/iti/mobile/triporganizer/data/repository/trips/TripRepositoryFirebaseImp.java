@@ -45,8 +45,8 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
     }
 
     @Override
-    public void addTripAndNotes(Trip trip, List<Note> notes) {
-
+    public LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes) {
+        return null;
     }
 
 }
