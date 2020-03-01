@@ -5,9 +5,8 @@ import android.os.Parcelable;
 
 import androidx.room.Embedded;
 
-import java.io.Serializable;
 
-public class TripAndLocation implements Serializable {
+public class TripAndLocation implements Parcelable {
     @Embedded
     private Trip trip;
 
@@ -22,17 +21,27 @@ public class TripAndLocation implements Serializable {
         locationDataList = in.readParcelable(LocationData.class.getClassLoader());
     }
 
-//    public static final Creator<TripAndLocation> CREATOR = new Creator<TripAndLocation>() {
-//        @Override
-//        public TripAndLocation createFromParcel(Parcel in) {
-//            return new TripAndLocation(in);
-//        }
-//
-//        @Override
-//        public TripAndLocation[] newArray(int size) {
-//            return new TripAndLocation[size];
-//        }
-//    };
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(trip, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<TripAndLocation> CREATOR = new Creator<TripAndLocation>() {
+        @Override
+        public TripAndLocation createFromParcel(Parcel in) {
+            return new TripAndLocation(in);
+        }
+
+        @Override
+        public TripAndLocation[] newArray(int size) {
+            return new TripAndLocation[size];
+        }
+    };
 
     public Trip getTrip() {
         return trip;
@@ -50,14 +59,4 @@ public class TripAndLocation implements Serializable {
         this.locationDataList = locationDataList;
     }
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeParcelable(trip, flags);
-//        dest.writeParcelable(locationDataList, flags);
-//    }
 }

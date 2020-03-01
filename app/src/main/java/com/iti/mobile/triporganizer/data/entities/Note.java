@@ -8,17 +8,16 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "notes", foreignKeys = @ForeignKey(entity = Trip.class,  parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
+@Entity(tableName = "notes", indices = {@Index(value = {"message"}, unique = true)}, foreignKeys = @ForeignKey(entity = Trip.class,  parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
 public class Note implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
-    @Ignore
-    private String fireNoteId;
     private String message;
     @ColumnInfo(name = "tripId", index = true)
     private long tripId;
@@ -36,7 +35,6 @@ public class Note implements Parcelable {
 
     protected Note(Parcel in) {
         id = in.readLong();
-        fireNoteId = in.readString();
         message = in.readString();
         tripId = in.readLong();
         status = in.readByte() != 0;
@@ -53,14 +51,6 @@ public class Note implements Parcelable {
             return new Note[size];
         }
     };
-
-    public String getFireNoteId() {
-        return fireNoteId;
-    }
-
-    public void setFireNoteId(String fireNoteId) {
-        this.fireNoteId = fireNoteId;
-    }
 
     public String getMessage() {
         return message;
@@ -112,7 +102,6 @@ public class Note implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeString(fireNoteId);
         dest.writeString(message);
         dest.writeLong(tripId);
         dest.writeByte((byte) (status ? 1 : 0));

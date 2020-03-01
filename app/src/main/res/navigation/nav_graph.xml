@@ -17,11 +17,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_loginFragment_to_main2Activity"
-            app:destination="@id/main2Activity"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
-        <action
             android:id="@+id/action_loginFragment_to_profileFragment3"
             app:destination="@id/profileFragment3" />
     </fragment>
@@ -29,21 +24,20 @@
         android:id="@+id/registerFragment"
         android:name="com.iti.mobile.triporganizer.register.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
-        <action
-            android:id="@+id/action_registerFragment_to_main2Activity"
-            app:destination="@id/main2Activity"
-            app:popUpTo="@id/registerFragment"
-            app:popUpToInclusive="true"/>
-    </fragment>
-    <activity
-        android:id="@+id/main2Activity"
-        android:name="com.iti.mobile.triporganizer.main.Main2Activity"
-        android:label="activity_main2"
-        tools:layout="@layout/activity_main2" />
+        tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/profileFragment3"
         android:name="com.iti.mobile.triporganizer.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/addTripFragment"
+        android:name="com.iti.mobile.triporganizer.add_trip.AddTripFragment"
+        android:label="fragment_add_trip"
+        tools:layout="@layout/fragment_add_trip" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
 </navigation>

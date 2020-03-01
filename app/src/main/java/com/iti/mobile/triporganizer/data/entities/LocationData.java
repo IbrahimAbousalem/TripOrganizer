@@ -11,17 +11,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "locationData", foreignKeys = @ForeignKey(entity = Trip.class, parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
-public class LocationData implements Serializable {
+@Entity(tableName = "locationData",indices = {@Index(value = {"startDate", "roundDate"}, unique = true)} , foreignKeys = @ForeignKey(entity = Trip.class, parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
+public class LocationData implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "locationId")
     private long id;
-    @ColumnInfo(name = "tripId", index = true)
     private long tripId;
     private String startTripAddressName;
     private double startTripStartPointLat;
@@ -80,17 +80,17 @@ public class LocationData implements Serializable {
         roundTripEndPointLng = in.readDouble();
     }
 
-//    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
-//        @Override
-//        public LocationData createFromParcel(Parcel in) {
-//            return new LocationData(in);
-//        }
-//
-//        @Override
-//        public LocationData[] newArray(int size) {
-//            return new LocationData[size];
-//        }
-//    };
+    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
+        @Override
+        public LocationData createFromParcel(Parcel in) {
+            return new LocationData(in);
+        }
+
+        @Override
+        public LocationData[] newArray(int size) {
+            return new LocationData[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -226,27 +226,27 @@ public class LocationData implements Serializable {
         return location == null || (tripId == location.getTripId() && startTripAddressName.equals(location.getStartTripAddressName()) && startTripEndAddressName.equals(location.getStartTripEndAddressName())
                 && startTripStartPointLat == location.getStartTripStartPointLat() && startTripStartPointLng == location.getStartTripStartPointLng() && startTripEndPointLat == location.getStartTripEndPointLat() && startTripEndPointLng == location.getStartTripEndPointLng() && startDate == location.getStartDate());
     }
-//
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeLong(id);
-//        dest.writeLong(tripId);
-//        dest.writeString(startTripAddressName);
-//        dest.writeDouble(startTripStartPointLat);
-//        dest.writeDouble(startTripStartPointLng);
-//        dest.writeString(startTripEndAddressName);
-//        dest.writeDouble(startTripEndPointLat);
-//        dest.writeDouble(startTripEndPointLng);
-//        dest.writeString(roundTripStartAddressName);
-//        dest.writeDouble(roundTripStartPointLat);
-//        dest.writeDouble(roundTripStartPointLng);
-//        dest.writeString(roundTripEndAddressName);
-//        dest.writeDouble(roundTripEndPointLat);
-//        dest.writeDouble(roundTripEndPointLng);
-//    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(tripId);
+        dest.writeString(startTripAddressName);
+        dest.writeDouble(startTripStartPointLat);
+        dest.writeDouble(startTripStartPointLng);
+        dest.writeString(startTripEndAddressName);
+        dest.writeDouble(startTripEndPointLat);
+        dest.writeDouble(startTripEndPointLng);
+        dest.writeString(roundTripStartAddressName);
+        dest.writeDouble(roundTripStartPointLat);
+        dest.writeDouble(roundTripStartPointLng);
+        dest.writeString(roundTripEndAddressName);
+        dest.writeDouble(roundTripEndPointLat);
+        dest.writeDouble(roundTripEndPointLng);
+    }
 }
