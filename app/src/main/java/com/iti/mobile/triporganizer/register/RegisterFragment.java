@@ -53,7 +53,7 @@ public class RegisterFragment extends Fragment {
     private void updateUi(String message) {
         hideProgressBar();
         if (message != null&&!message.isEmpty()&&!message.contains("Error")) {
-            controller.navigate(R.id.action_registerFragment_to_main2Activity);
+            controller.navigate(R.id.action_registerFragment_to_homeFragment);
         } else {
             displayError(message);
         }
