@@ -46,7 +46,7 @@ public class HistoryDetailFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_history_detail2, container, false);
+        View view = inflater.inflate(R.layout.fragment_history_detail, container, false);
 
         mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".history.HistoryDetailFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- include main content -->
+    <!--<include layout="@layout/map_history" />-->
+    <fragment
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/map"/>
+    <!-- include bottom sheet -->
+    <include layout="@layout/bottomsheet_layout"        />
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

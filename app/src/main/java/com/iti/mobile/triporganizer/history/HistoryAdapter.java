@@ -60,7 +60,7 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
             tripDateTV = itemView.findViewById(R.id.tripDateTv);
             tripLocationTV = itemView.findViewById(R.id.tripLocTv);
             tripStatusBtn = itemView.findViewById(R.id.statusBtn);
-            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_historyFragment_to_historyDetailFragment2));
+            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_historyFragment_to_historyDetailFragment));
         }
 
         public void setTripNameTV(String tripName) {
