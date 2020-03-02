@@ -124,5 +124,9 @@
         android:id="@+id/historyDetailFragment"
         android:name="com.iti.mobile.triporganizer.history.HistoryDetailFragment"
         android:label="fragment_history_detail"
-        tools:layout="@layout/fragment_history_detail" />
+        tools:layout="@layout/fragment_history_detail" >
+            <argument
+                android:name="tripAndLocationHistory"
+                app:argType="com.iti.mobile.triporganizer.data.entities.TripAndLocation" />
+        </fragment>
 </navigation>

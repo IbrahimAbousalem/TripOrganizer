@@ -48,6 +48,8 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
         holder.setTripDateTV(DateUtils.simpleDateFormatForYears_MonthsHours_Minutes.format(getItem(position).getLocationDataList().getStartDate()));
         holder.setTripLocationTV(getItem(position).getLocationDataList().getStartTripAddressName());
         holder.setTripStatusTV(getItem(position).getTrip().getStatus());
+        HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(getItem(position));
+        holder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(historyFragmentDirections));
     }
 
     class HistoryViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +62,7 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
             tripDateTV = itemView.findViewById(R.id.tripDateTv);
             tripLocationTV = itemView.findViewById(R.id.tripLocTv);
             tripStatusBtn = itemView.findViewById(R.id.statusBtn);
-            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_historyFragment_to_historyDetailFragment));
+
         }
 
         public void setTripNameTV(String tripName) {

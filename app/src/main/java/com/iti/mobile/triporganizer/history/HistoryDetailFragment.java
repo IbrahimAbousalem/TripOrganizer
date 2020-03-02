@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 
 
 import org.json.JSONObject;
@@ -34,6 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class HistoryDetailFragment extends Fragment implements
         OnMapReadyCallback {
@@ -42,16 +44,21 @@ public class HistoryDetailFragment extends Fragment implements
     MarkerOptions origin, destination;
 
     BottomSheetBehavior bottomSheetBehavior ;
+    private TripAndLocation receivedTripAndLocationHistory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history_detail, container, false);
-
+        receivedTripAndLocationHistory = HistoryDetailFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getTripAndLocationHistory();
         mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        origin = new MarkerOptions().position(new LatLng(12.9121, 77.6446)).title("HSR Layout").snippet("origin");
-        destination = new MarkerOptions().position(new LatLng(12.9304, 77.6784)).title("Bellandur").snippet("destination");
+        origin = new MarkerOptions().position(new LatLng(receivedTripAndLocationHistory.getLocationDataList().getStartTripStartPointLat(),
+                receivedTripAndLocationHistory.getLocationDataList().getStartTripStartPointLng())).title(receivedTripAndLocationHistory.getTrip().getTripName())
+                .snippet(receivedTripAndLocationHistory.getLocationDataList().getStartTripAddressName());
+        destination = new MarkerOptions().position(new LatLng(receivedTripAndLocationHistory.getLocationDataList().getStartTripEndPointLat(),
+                receivedTripAndLocationHistory.getLocationDataList().getStartTripEndPointLng())).title(receivedTripAndLocationHistory.getTrip().getTripName())
+                .snippet(receivedTripAndLocationHistory.getLocationDataList().getStartTripEndAddressName());
 
        //  Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
