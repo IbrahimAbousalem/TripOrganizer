@@ -47,7 +47,7 @@ public class ChatHeadService extends Service implements LifecycleOwner {
 
         this.intent = intent ;
         tripId = intent.getStringExtra("tripId");
-          return START_STICKY;
+        return super.onStartCommand(intent,flags,startId);
     }
     @Override
     public IBinder onBind(Intent intent) {
@@ -116,26 +116,32 @@ public class ChatHeadService extends Service implements LifecycleOwner {
        RecyclerView recyclerView     = mFloatingView.findViewById(R.id.RV);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<Note> notes = new ArrayList<>();
-        Note note1 = new Note();
-        note1.setMessage("ssssssss");
-        Note note2 = new Note();
-        note2.setMessage("ssssssss");
-        Note note3 = new Note();
-        note3.setMessage("ssssssss");
-        Note note4 = new Note();
-        note4.setMessage("ssssssss");
-        Note note5 = new Note();
-        note5.setMessage("ssssssss");
-        notes.add(note1);
-        notes.add(note2);
-        notes.add(note3);
-        notes.add(note4);
-        notes.add(note5);
+//        List<Note> notes = new ArrayList<>();
+//        Note note1 = new Note();
+//        note1.setMessage("ssssssss");
+//        Note note2 = new Note();
+//        note2.setMessage("ssssssss");
+//        Note note3 = new Note();
+//        note3.setMessage("ssssssss");
+//        Note note4 = new Note();
+//        note4.setMessage("ssssssss");
+//        Note note5 = new Note();
+//        note5.setMessage("ssssssss");
+//        notes.add(note1);
+//        notes.add(note2);
+//        notes.add(note3);
+//        notes.add(note4);
+//        notes.add(note5);
 
 
-        NoteAdapter noteAdapter = new NoteAdapter(ChatHeadService.this,notes);
-        recyclerView.setAdapter(noteAdapter);
+        noteDao.getAllNote(Integer.parseInt(tripId)).observe(this, notes -> {
+            NoteAdapter noteAdapter = new NoteAdapter(ChatHeadService.this,notes);
+            recyclerView.setAdapter(noteAdapter);
+        });
+
+
+
+
 
 
         Button endTripBT = mFloatingView.findViewById(R.id.endTripBT);

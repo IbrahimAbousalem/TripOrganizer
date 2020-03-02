@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
 import com.iti.mobile.triporganizer.appHead.ChatHeadService;
@@ -34,6 +36,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
     private  PendingIntent pendingIntent;
     private TripOrganizerApp tripOrganizerApp;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
         tripOrganizerApp = (TripOrganizerApp) context.getApplicationContext();
@@ -62,8 +65,10 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             //show the chat head
 
 
-            context.startService(new Intent(context, ChatHeadService.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
-            if (tripOrganizerApp.getAlarmService()!=null){
+            if (Settings.canDrawOverlays(context)) {
+                context.startService(new Intent(context, ChatHeadService.class).putExtra("tripId", intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            }
+             if (tripOrganizerApp.getAlarmService()!=null){
                 tripOrganizerApp.stopAlarmService();
             }
             //context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
