@@ -75,6 +75,7 @@ public class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         if (mp !=null){
             mp.stop();
             mp.reset();
@@ -82,7 +83,7 @@ public class AlarmService extends Service {
             mp = null;
         }
         stopForeground(true);
-        super.onDestroy();
+
     }
 
     @Override

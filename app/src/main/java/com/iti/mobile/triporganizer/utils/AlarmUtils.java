@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import com.iti.mobile.triporganizer.alarm.AlarmBroadCastReceiver;
-import com.iti.mobile.triporganizer.data.entities.Trip;
 
 public class AlarmUtils {
 
@@ -25,7 +27,7 @@ public class AlarmUtils {
         alarmIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
 
         //request code for pending intent must be unique on application level
-        return PendingIntent.getBroadcast(context,  7, alarmIntent, 0);
+        return PendingIntent.getBroadcast(context,  Integer.parseInt(tripId), alarmIntent, 0);
     }
 
 
@@ -50,7 +52,20 @@ public class AlarmUtils {
     public static void startAlarm(Context context, long triggerAtMillis, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+            }else {alarmManager.setExact(AlarmManager.RTC, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));}
+        }
+    }
+
+    public static void startAlarmForSnooze(@NonNull Context context, long triggerAtMillis, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+            }else {
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+            }
         }
     }
 
