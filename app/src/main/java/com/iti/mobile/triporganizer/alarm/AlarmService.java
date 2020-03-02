@@ -15,7 +15,7 @@ import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 public class AlarmService extends Service {
     MediaPlayer mp;
     Vibrator vibrator;
-    private static final int foregroundId = 1;
+    public static final int foregroundId = 1;
     public AlarmService() {
 
 

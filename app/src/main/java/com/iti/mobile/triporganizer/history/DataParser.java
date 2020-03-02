@@ -1,4 +1,4 @@
-package com.iti.mobile.triporganizer.drawRoute;
+package com.iti.mobile.triporganizer.history;
 
 import com.google.android.gms.maps.model.LatLng;
 

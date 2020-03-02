@@ -20,8 +20,10 @@ public class NotificationsUtils {
     private static final String notificationDescription ="shows notification on trip due date";
     private static final String channelId = "tripsNotification";
     private static final String notificationTitle = "tou have a trip coming";
+    private static final String notificationTitleForStartedTrip = "trip in progress";
     public static final String Action_Snooze = "snooze";
     public static final String Action_Start = "start";
+    public static final String Action_End = "end";
     public static final String Action_Cancel = "cancel";
     private static final int notificationId = 1;
     public static Notification makeStatusNotification(String message, Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
@@ -57,6 +59,37 @@ public class NotificationsUtils {
        // NotificationManagerCompat.from(context).notify(notificationId, builder.build());
         return builder.build();
     }
+    public static Notification makeStatusNotificationForStartedTrip(String message, Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel =
+                    new NotificationChannel(channelId, channelName, importance);
+            channel.setDescription(notificationDescription);
+
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(notificationTitleForStartedTrip)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.end),
+                        createEndIntent(context, tripId, destnationLatitude, destinatinLongtiude))
+                .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
+                        createCancelIntent(context))
+
+                .setVibrate(new long[0]);
+
+        // NotificationManagerCompat.from(context).notify(notificationId, builder.build());
+        return builder.build();
+    }
     private static PendingIntent createSnoozeIntent(Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude){
         Intent snoozeIntent = new Intent(context, AlarmBroadCastReceiver.class);
         snoozeIntent.putExtra("tripName", tripName);
@@ -67,7 +100,7 @@ public class NotificationsUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         }
-        return PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), snoozeIntent, 0);
     }
     private static PendingIntent createStartIntent(Context context, String tripId, String destnationLatitude, String destinatinLongtiude){
         Intent startIntent = new Intent(context, AlarmBroadCastReceiver.class);
@@ -80,6 +113,18 @@ public class NotificationsUtils {
         startIntent.putExtra("destnationLatitude", destnationLatitude);
         startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
         return PendingIntent.getBroadcast(context, 1, startIntent, 0);
+    }
+    private static PendingIntent createEndIntent(Context context, String tripId, String destnationLatitude, String destinatinLongtiude){
+        Intent startIntent = new Intent(context, AlarmBroadCastReceiver.class);
+        startIntent.setAction(Action_End);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+
+        }
+        startIntent.putExtra("tripId",tripId);
+        startIntent.putExtra("destnationLatitude", destnationLatitude);
+        startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
+        return PendingIntent.getBroadcast(context, 3, startIntent, 0);
     }
     private static PendingIntent createCancelIntent(Context context){
         Intent cancelIntent = new Intent(context, AlarmBroadCastReceiver.class);

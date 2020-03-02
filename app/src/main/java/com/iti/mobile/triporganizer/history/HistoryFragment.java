@@ -67,7 +67,7 @@ public class HistoryFragment extends Fragment {
         controller = Navigation.findNavController(view);
         String userId = historyViewModel.getCurrentUserId();
         historyViewModel.getAllHistoryTrips(userId).observe(getActivity(), tripAndLocationList -> {
-            //adapter.submitList(tripAndLocationList);
+            adapter.submitList(tripAndLocationList);
             //get it from firebase.
         });
 
