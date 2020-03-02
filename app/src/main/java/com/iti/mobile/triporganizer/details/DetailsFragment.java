@@ -10,7 +10,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -57,7 +56,6 @@ import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.iti.mobile.triporganizer.utils.DetailsUtils.generateDates;
 import static com.iti.mobile.triporganizer.utils.DetailsUtils.isValidData;
 import static com.iti.mobile.triporganizer.utils.Flags.DATE1;
 import static com.iti.mobile.triporganizer.utils.Flags.DATE2;
@@ -70,10 +68,16 @@ import static com.iti.mobile.triporganizer.utils.Flags.TRIP_TYPE_SINGLE;
 import static com.iti.mobile.triporganizer.utils.Flags.VIEW_TRIP_FLAG;
 import static com.iti.mobile.triporganizer.utils.Tags.DATE;
 import static com.iti.mobile.triporganizer.utils.Tags.DATE_COMPARE;
+import static com.iti.mobile.triporganizer.utils.Tags.DATE_COMPARE_CURRENT;
+import static com.iti.mobile.triporganizer.utils.Tags.ENDDATE;
+import static com.iti.mobile.triporganizer.utils.Tags.ENDTIME;
 import static com.iti.mobile.triporganizer.utils.Tags.END_POINT;
+import static com.iti.mobile.triporganizer.utils.Tags.STARTDATE;
+import static com.iti.mobile.triporganizer.utils.Tags.STARTTIME;
 import static com.iti.mobile.triporganizer.utils.Tags.START_POINT;
 import static com.iti.mobile.triporganizer.utils.Tags.TIME;
 import static com.iti.mobile.triporganizer.utils.Tags.TIME_COMPARE;
+import static com.iti.mobile.triporganizer.utils.Tags.TIME_COMPARE_CURRENT;
 import static com.iti.mobile.triporganizer.utils.Tags.TRIP_NAME;
 
 /**
@@ -165,6 +169,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         binding.editBtn.setOnClickListener(this);
         binding.viewBtn.setOnClickListener(this);
         binding.saveTripFab.setOnClickListener(this);
+        binding.tripNameEt.setOnClickListener(this);
         binding.date1Tv.setOnClickListener(this);
         binding.date2Tv.setOnClickListener(this);
         binding.time1Tv.setOnClickListener(this);
@@ -186,6 +191,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleStartPointPlacesSelected(AutocompleteSupportFragment startPointAutocompleteFragment) {
+        ((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+                .setError(null);
         startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,
                Place.Field.LAT_LNG,Place.Field.ADDRESS));
         startPointAutocompleteFragment.setHint(getString(R.string.estart_point));
@@ -210,6 +217,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleEndPointPlacesSelected(AutocompleteSupportFragment endPointAutocompleteFragment) {
+        ((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+                .setError(null);
         endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
         endPointAutocompleteFragment.setHint(getString(R.string.eend_point));
         endPointAutocompleteFragment.setCountry("EG");
@@ -320,6 +329,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showTime(int time) {
+        binding.time1Tv.setError(null);
+        binding.time2Tv.setError(null);
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
@@ -346,6 +357,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showDatePicker(int date) {
+        binding.date1Tv.setError(null);
+        binding.date2Tv.setError(null);
         final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
@@ -400,11 +413,22 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private void saveTrip() {
         String tripName=binding.tripNameEt.getText().toString();
         String date1=binding.date1Tv.getText().toString().trim();
+        String datetextview=binding.date1Tv.getText().toString().trim();
         String time1=binding.time1Tv.getText().toString().trim();
         String date2=binding.date2Tv.getText().toString().trim();
         String time2=binding.time2Tv.getText().toString().trim();
         Date formatedDate1 = null;
         Date formatedDate2 = null;
+
+        /////////////////////////////////////////////////////////////////////////
+        String dateTv1 = binding.date1Tv.getText().toString().trim();
+        String timeTv1 = binding.time1Tv.getText().toString().trim();
+        String dateTv2 = binding.date2Tv.getText().toString().trim();
+        String timeTv2 = binding.time2Tv.getText().toString().trim();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
         try {
             if (!date1.isEmpty()) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -428,18 +452,26 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 e.printStackTrace();
             }
         }
-        setLocationData(formatedDate1,startPonitLat,startPonitLng,endPonitLat,endPonitLng,startAddress,endAddress);
+        setLocationData(formatedDate1,formatedDate2,startPonitLat,startPonitLng,endPonitLat,endPonitLng,startAddress,endAddress);
         if(isRound){
-            setLocationData(formatedDate1,endPonitLat,endPonitLng,startPonitLat,startPonitLng,endAddress,startAddress);
+            setLocationData(formatedDate1,formatedDate2,endPonitLat,endPonitLng,startPonitLat,startPonitLng,endAddress,startAddress);
         }
-        setTripData(tripName,isRound,firebaseAuth.getCurrentUser().getUid(),"UpComing",locationData);
+        setTripData(isRound,tripName,"hZDY3CF3aWU5WjC6fNHmck2dBz02","UpComing",locationData);
 
-        isValidData(trip,isRound,null,binding,startPointAutocompleteFragment,endPointAutocompleteFragment,generateErrorsMessages(),DETAILSTRIP_FRAGMENTBINDING,generateDates(date1,date2,time1,time2));
-        if (isValidData(trip,isRound,null,binding,startPointAutocompleteFragment,endPointAutocompleteFragment,generateErrorsMessages(),DETAILSTRIP_FRAGMENTBINDING,generateDates(date1,date2,time1,time2))) {
+       isValidData(trip,isRound,null,binding,startPointAutocompleteFragment,endPointAutocompleteFragment,generateErrorsMessages(),DETAILSTRIP_FRAGMENTBINDING,generateDates(dateTv1,dateTv2,timeTv1,timeTv2));
+        if (isValidData(trip,isRound,null,binding,startPointAutocompleteFragment,endPointAutocompleteFragment,generateErrorsMessages(),DETAILSTRIP_FRAGMENTBINDING,generateDates(dateTv1,dateTv2,timeTv1,timeTv2))) {
             detailsViewModel.updateTrip(trip);
+            //detailsViewModel.addTripAndNotes(trip, notesList);
         }
     }
-
+    private HashMap<String,String> generateDates(String date1,String date2,String time1,String time2){
+        HashMap<String, String> hash_map = new HashMap<String, String>();
+        hash_map.put(STARTDATE,date1);
+        hash_map.put(ENDDATE,date2);
+        hash_map.put(STARTTIME,time1);
+        hash_map.put(ENDTIME,time2);
+        return hash_map;
+    }
     private HashMap<String,String> generateErrorsMessages(){
         HashMap<String, String> hash_map = new HashMap<String, String>();
         hash_map.put(TRIP_NAME,getResources().getString(R.string.plzEnterTripName));
@@ -448,19 +480,22 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         hash_map.put(DATE,getResources().getString(R.string.plzPickDate));
         hash_map.put(TIME,getResources().getString(R.string.plzPickTime));
         hash_map.put(DATE_COMPARE,getString(R.string.plzPickValidStartDate));
+        hash_map.put(DATE_COMPARE_CURRENT,getString(R.string.plzPickValidStartDate_current));
         hash_map.put(TIME_COMPARE,getString(R.string.plzPickValidStartTime));
+        hash_map.put(TIME_COMPARE_CURRENT,getString(R.string.plzPickValidStartTime_current));
         return hash_map;
     }
 
-    private void setTripData(String tripName, boolean isRound, String uid, String upComing, LocationData locationData) {
+    private void setTripData(boolean isRound,String tripName,String uid, String upComing, LocationData locationData) {
         trip.setTripName(tripName);
-        trip.setRound(isRound);
         trip.setUserId(uid);
         trip.setStatus(upComing);
         trip.setLocationData(locationData);
+        trip.getLocationData().setRound(isRound);
     }
-    private void setLocationData(Date formatedDate1, double startPonitLat, double startPonitLng, double endPonitLat, double endPonitLng, String startAddress, String endAddress) {
+    private void setLocationData(Date formatedDate1,Date formatedDate2 ,double startPonitLat, double startPonitLng, double endPonitLat, double endPonitLng, String startAddress, String endAddress) {
         locationData.setStartDate(formatedDate1);
+        locationData.setRoundDate(formatedDate2);
         locationData.setStartTripStartPointLat(startPonitLat);
         locationData.setStartTripStartPointLng(startPonitLng);
         locationData.setStartTripEndPointLat(endPonitLat);

@@ -25,7 +25,7 @@ public class AlarmUtils {
         alarmIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
 
         //request code for pending intent must be unique on application level
-        return PendingIntent.getBroadcast(context, 101, alarmIntent, 0);
+        return PendingIntent.getBroadcast(context,  7, alarmIntent, 0);
     }
 
 

@@ -16,9 +16,13 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
+import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.iti.mobile.triporganizer.alarm.AlarmService.foregroundId;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_Cancel;
+import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_End;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_Snooze;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_Start;
 
@@ -50,11 +54,14 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             serviceIntent.putExtra("tripId", tripId);
             serviceIntent.putExtra("destnationLatitude", desLat);
             serviceIntent.putExtra("destinatinLongtiude", destLon);
-            AlarmUtils.startAlarm(context,1*60*1000, tripName, tripId, desLat, destLon);
+            AlarmUtils.startAlarm(context, 61*1000, tripName, tripId, desLat, destLon);
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
-           // context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            if (tripOrganizerApp.getAlarmService()!=null){
+                tripOrganizerApp.stopAlarmService();
+            }
+            context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
             String tripId, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             desLat = intent.getStringExtra("destnationLatitude");
@@ -64,9 +71,19 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             mapIntent.setPackage("com.google.android.apps.maps");
             context.startActivity(mapIntent);
             tripOrganizerApp.stopSound();
+            tripOrganizerApp.getAlarmService().stopForeground(true);
+            tripOrganizerApp.getAlarmService().startForeground(foregroundId, NotificationsUtils.makeStatusNotificationForStartedTrip("started trip", getApplicationContext(),"started trip", tripId, desLat, destLon));
+
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Cancel)){
             tripOrganizerApp.stopAlarmService();
 
+        } else if (intent.getAction() != null && intent.getAction().equals(Action_End)){
+
+            String tripId, desLat, destLon;
+            tripId = intent.getStringExtra("tripId");
+            desLat = intent.getStringExtra("destnationLatitude");
+            destLon = intent.getStringExtra("destinatinLongtiude");
+            //TODO do databasse changes
         }
         else {
             //bind service
