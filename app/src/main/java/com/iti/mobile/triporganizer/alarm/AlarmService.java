@@ -63,6 +63,7 @@ public class AlarmService extends Service {
             mp.stop();
             mp.reset();
             mp.release();
+            mp = null;
 
         }
         if (vibrator != null) {
