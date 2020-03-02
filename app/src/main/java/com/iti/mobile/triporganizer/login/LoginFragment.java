@@ -90,7 +90,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             controller.navigate(R.id.action_loginFragment_to_main2Activity);
         }
 
-        setUpViews(view);
+        setUpViews();
     }
 
     @Override
@@ -197,7 +197,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //Forget Password ---------------------------------------------------------------
     private void forgetPassword() {
         //controller.navigate(R.id.action_loginFragment_to_homeFragment);
-        controller.navigate(R.id.action_loginFragment_to_profileFragment3);
+        //controller.navigate(R.id.action_loginFragment_to_profileFragment3);
+        controller.navigate(R.id.action_loginFragment_to_detailsFragment);
     }
 //-----------------------------------------------------------------------------
 
@@ -239,7 +240,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void setUpViews(View view) {
+    private void setUpViews() {
         binding.forgetPasswordTv.setOnClickListener(this);
         binding.signInBtn.setOnClickListener(this);
         binding.facebookImageView.setOnClickListener(this);

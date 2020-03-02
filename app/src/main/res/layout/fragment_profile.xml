@@ -7,9 +7,12 @@
     tools:context=".profile.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/profileFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/d_16"
         android:layout_marginTop="16dp"
@@ -18,7 +21,8 @@
         android:background="@drawable/rounded_card_no_clr"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".profile.ProfileFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/task_toolbar"
@@ -31,7 +35,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="@string/profile" />
+            app:title="@string/profile" >
+            <ImageView
+                android:id="@+id/editImgView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_edit_gray_24dp"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/d_10"
+                />
+        </androidx.appcompat.widget.Toolbar>
 
         <ImageView
             android:id="@+id/profileImageView"
@@ -49,7 +62,8 @@
             android:id="@+id/userNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/d_16"
+            android:layout_marginBottom="@dimen/d_32"
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -70,24 +84,40 @@
             android:id="@+id/userEmailEt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="@dimen/d_32"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginBottom="64dp"
             android:drawableLeft="@drawable/ic_email"
             android:drawablePadding="@dimen/d_10"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userNameEt" />
-
+            app:layout_constraintTop_toBottomOf="@+id/userNameTv" />
+        <TextView
+            android:id="@+id/userEmailViewTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_32"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginBottom="@dimen/d_16"
+            android:drawableLeft="@drawable/ic_email"
+            android:drawablePadding="@dimen/d_10"
+            android:padding="@dimen/d_10"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userNameTv" />
         <EditText
             android:id="@+id/userNameEt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="@dimen/d_32"
+            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginBottom="@dimen/d_32"
             android:drawableLeft="@drawable/ic_person_outline_24dp"
             android:drawablePadding="@dimen/d_10"
             android:ems="10"
@@ -96,23 +126,40 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.431"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userNameTv" />
-
+            app:layout_constraintTop_toBottomOf="@+id/userEmailEt" />
         <TextView
-            android:id="@+id/logoutTv"
-            android:textColor="@color/colorPrimary"
+            android:id="@+id/userNameViewTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:drawableLeft="@drawable/ic_logout_24dp"
+            android:layout_marginStart="@dimen/d_32"
+            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginBottom="@dimen/d_16"
+            android:drawableLeft="@drawable/ic_person_outline_24dp"
             android:drawablePadding="@dimen/d_10"
+            android:ems="10"
+            android:padding="@dimen/d_10"
+            android:inputType="textPersonName"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.431"
+            app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userEmailViewTv" />
+        <Button
+            android:id="@+id/logoutBtn"
+            android:textColor="@android:color/white"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="86dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="86dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/rounded_btn_clr_orange"
             android:text="@string/logout"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userEmailEt" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameViewTv"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
             android:id="@+id/saveBtn"
@@ -130,7 +177,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoutTv" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameEt" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

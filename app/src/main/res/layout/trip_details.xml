@@ -8,7 +8,7 @@
     android:background="@drawable/rounded_card_no_clr">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tripTitleTv"
         style="@style/titles_details"
         android:layout_marginTop="32dp"
         android:text="@string/title"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/tripTitleTv" />
 
     <TextView
         android:id="@+id/tripNameTv"
@@ -39,7 +39,7 @@
         tools:text="TripName" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/startPointTitleTv"
         style="@style/titles_details"
         android:text="@string/start_point"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        app:layout_constraintTop_toBottomOf="@+id/startPointTitleTv">
 
         <fragment
             android:id="@+id/startAutoCompleteFragment"
@@ -78,7 +78,7 @@
         tools:text="StartPoint" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/endPointTitleTv"
         style="@style/titles_details"
         android:text="@string/end_point"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
+        app:layout_constraintTop_toBottomOf="@+id/endPointTitleTv">
 
         <fragment
             android:id="@+id/endAutoCompleteFragment"

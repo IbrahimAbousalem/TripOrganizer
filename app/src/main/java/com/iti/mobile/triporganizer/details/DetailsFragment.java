@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -30,6 +31,7 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
@@ -38,13 +40,16 @@ import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
+import com.iti.mobile.triporganizer.utils.AlarmUtils;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -52,14 +57,24 @@ import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.iti.mobile.triporganizer.utils.DetailsUtils.generateDates;
+import static com.iti.mobile.triporganizer.utils.DetailsUtils.isValidData;
 import static com.iti.mobile.triporganizer.utils.Flags.DATE1;
 import static com.iti.mobile.triporganizer.utils.Flags.DATE2;
+import static com.iti.mobile.triporganizer.utils.Flags.DETAILSTRIP_FRAGMENTBINDING;
 import static com.iti.mobile.triporganizer.utils.Flags.EDIT_TRIP_FLAG;
 import static com.iti.mobile.triporganizer.utils.Flags.TIME1;
 import static com.iti.mobile.triporganizer.utils.Flags.TIME2;
 import static com.iti.mobile.triporganizer.utils.Flags.TRIP_TYPE_ROUND;
 import static com.iti.mobile.triporganizer.utils.Flags.TRIP_TYPE_SINGLE;
 import static com.iti.mobile.triporganizer.utils.Flags.VIEW_TRIP_FLAG;
+import static com.iti.mobile.triporganizer.utils.Tags.DATE;
+import static com.iti.mobile.triporganizer.utils.Tags.DATE_COMPARE;
+import static com.iti.mobile.triporganizer.utils.Tags.END_POINT;
+import static com.iti.mobile.triporganizer.utils.Tags.START_POINT;
+import static com.iti.mobile.triporganizer.utils.Tags.TIME;
+import static com.iti.mobile.triporganizer.utils.Tags.TIME_COMPARE;
+import static com.iti.mobile.triporganizer.utils.Tags.TRIP_NAME;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,6 +91,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private DetailsViewModel detailsViewModel;
     private FragmentDetailsBinding binding;
 
+    @Inject
+    FirebaseAuth firebaseAuth;
 
     NavController controller;
     NoteAdapter noteAdapter;
@@ -89,13 +106,14 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private double endPonitLng;
     private String startAddress;
     private String endAddress;
-    private String name;
+    private boolean isRound = false;
+    private Trip trip;
+    private LocationData locationData;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
     private int hour1, minute1, hour2, minute2, year1, year2, month1, month2, day1, day2;
 
-    private Trip trip;
-    private LocationData locationData;
+
     private PlacesClient placesClient;
 
     public DetailsFragment() {
@@ -106,17 +124,21 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
-        detailsViewModel = new ViewModelProvider(this, providerFactory).get(DetailsViewModel.class);
+        detailsViewModel=new ViewModelProvider(this,providerFactory).get(DetailsViewModel.class);
+
         tripTypeChoice=TRIP_TYPE_SINGLE;
         tripActionChoice=VIEW_TRIP_FLAG;
         notesList=new ArrayList<>();
         controller = Navigation.findNavController(view);
         trip = new Trip();
         locationData = new LocationData();
+        setUpViews(view);
+        setUpDummyData();
         switch (tripActionChoice) {
             case VIEW_TRIP_FLAG:
                 viewTrip(tripTypeChoice, tripActionChoice);
                 break;
+
             case EDIT_TRIP_FLAG:
                 editTrip(tripTypeChoice, tripActionChoice);
                 break;
@@ -130,9 +152,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         View view = binding.getRoot();
         return view;
     }
-
-    // edit ->> 3nde trip bs m3ndesh notes or 3nde  bltaly lma ad8t ok y3ml save ll notes + update ll trips
-    // (Missing) new trip -> ana m3ndesh trip wla notes f deh momkn n3mlha function lw7dha mn sf7a lw7da 3lshan el save y3ml add l trip nad add l notes ... + el alamrm
     private void showNotesList(View root) {
         if (notesList.size() > 0) {
             noteAdapter = new NoteAdapter(getContext(), notesList);
@@ -238,7 +257,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             case R.id.time2Tv:
                 showTime(TIME2);
                 break;
-            case R.id.addTripFab:
+            case R.id.saveTripFab:
                 saveTrip();
                 break;
             case R.id.singleBtn:
@@ -359,42 +378,101 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private void goToHomeActivity() {
 
     }
+    private void setUpDummyData(){
+        binding.tripNameTv.setText("Trip1");
+        binding.tripNameEt.setText("Trip1");
+        ((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+                .setText("cairo");
+        binding.startPointTv.setText("cairo");
+        ((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+                .setText("alex");
+        binding.endPointTv.setText("Alex");
+        binding.date1ViewTv.setText("1/3/2020");
+        binding.date1Tv.setText("1/3/2020");
+        binding.time1ViewTv.setText("10:40");
+        binding.time1Tv.setText("10:40");
+        binding.date2ViewTv.setText("2/3/2020");
+        binding.date2Tv.setText("1/3/2020");
+        binding.time2ViewTv.setText("11:30");
+        binding.time2Tv.setText("10:40");
 
+    }
     private void saveTrip() {
-        //TODO : check the roundTrip after the startTrip
         String tripName=binding.tripNameEt.getText().toString();
-        String date1=binding.date1Tv.getText().toString();
-        String time1=binding.time1Tv.getText().toString();
-        String date2=binding.date2Tv.getText().toString();
-        String time2=binding.time2Tv.getText().toString();
+        String date1=binding.date1Tv.getText().toString().trim();
+        String time1=binding.time1Tv.getText().toString().trim();
+        String date2=binding.date2Tv.getText().toString().trim();
+        String time2=binding.time2Tv.getText().toString().trim();
+        Date formatedDate1 = null;
+        Date formatedDate2 = null;
         try {
-            SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            date1 = date1 + " " + time1;
-            Date formatedDate=format.parse(date1);
-            Log.d(TAG, formatedDate.toString());
-            locationData.setStartDate(formatedDate);
-            Log.d(TAG,"saved formatted"+date1);
+            if (!date1.isEmpty()) {
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                date1 = date1 + " " + time1;
+                formatedDate1 = format.parse(date1);
+                Log.d(TAG, formatedDate1.toString());
+                Log.d(TAG, "saved formatted" + date1);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (isRound) {
+            try {
+                if (!date2.isEmpty()) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    date2 = date2 + " " + time2;
+                    formatedDate2 = format.parse(date2);
+                    Log.d(TAG, formatedDate2.toString());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        setLocationData(formatedDate1,startPonitLat,startPonitLng,endPonitLat,endPonitLng,startAddress,endAddress);
+        if(isRound){
+            setLocationData(formatedDate1,endPonitLat,endPonitLng,startPonitLat,startPonitLng,endAddress,startAddress);
+        }
+        setTripData(tripName,isRound,firebaseAuth.getCurrentUser().getUid(),"UpComing",locationData);
+
+        isValidData(trip,isRound,null,binding,startPointAutocompleteFragment,endPointAutocompleteFragment,generateErrorsMessages(),DETAILSTRIP_FRAGMENTBINDING,generateDates(date1,date2,time1,time2));
+        if (isValidData(trip,isRound,null,binding,startPointAutocompleteFragment,endPointAutocompleteFragment,generateErrorsMessages(),DETAILSTRIP_FRAGMENTBINDING,generateDates(date1,date2,time1,time2))) {
+            detailsViewModel.updateTrip(trip);
+        }
+    }
+
+    private HashMap<String,String> generateErrorsMessages(){
+        HashMap<String, String> hash_map = new HashMap<String, String>();
+        hash_map.put(TRIP_NAME,getResources().getString(R.string.plzEnterTripName));
+        hash_map.put(START_POINT,getResources().getString(R.string.plzEnterStartPoint));
+        hash_map.put(END_POINT,getResources().getString(R.string.plzEnterEndPoint));
+        hash_map.put(DATE,getResources().getString(R.string.plzPickDate));
+        hash_map.put(TIME,getResources().getString(R.string.plzPickTime));
+        hash_map.put(DATE_COMPARE,getString(R.string.plzPickValidStartDate));
+        hash_map.put(TIME_COMPARE,getString(R.string.plzPickValidStartTime));
+        return hash_map;
+    }
+
+    private void setTripData(String tripName, boolean isRound, String uid, String upComing, LocationData locationData) {
+        trip.setTripName(tripName);
+        trip.setRound(isRound);
+        trip.setUserId(uid);
+        trip.setStatus(upComing);
+        trip.setLocationData(locationData);
+    }
+    private void setLocationData(Date formatedDate1, double startPonitLat, double startPonitLng, double endPonitLat, double endPonitLng, String startAddress, String endAddress) {
+        locationData.setStartDate(formatedDate1);
         locationData.setStartTripStartPointLat(startPonitLat);
         locationData.setStartTripStartPointLng(startPonitLng);
         locationData.setStartTripEndPointLat(endPonitLat);
         locationData.setStartTripEndPointLng(endPonitLng);
         locationData.setStartTripAddressName(startAddress);
         locationData.setStartTripEndAddressName(endAddress);
-        trip.setTripName(tripName);
-        trip.setRound(false);
-        trip.setUserId("hZDY3CF3aWU5WjC6fNHmck2dBz02");
-        trip.setStatus("UpComing");
-        trip.setLocationData(locationData);
-        detailsViewModel.addTripAndNotes(trip, notesList);
     }
 
     private void viewTrip(int tripTypeChoice, int tripActionChoice) {
         tripActionChoice = VIEW_TRIP_FLAG;
         focusViewButton();
-        disableEditText();
+        showTextViewHideEditText();
         showTripType(tripTypeChoice,tripActionChoice);
 
     }
@@ -402,7 +480,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private void editTrip(int tripTypeChoice, int tripActionChoice) {
        tripActionChoice= EDIT_TRIP_FLAG;
        focusEditButton();
-       enableEditText();
+       showEditTextHideTextView();
        showTripType(tripTypeChoice,tripActionChoice);
 
     }
@@ -419,11 +497,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         }
     }
     private void showSingleTrip() {
+        isRound = false;
         focusSingleButton();
         hideSecondDateTimeViews();
     }
 
     private void showRoundTrip(int tripActionChoice) {
+        isRound = true;
         focusRoundButton();
         switch (tripActionChoice) {
             case VIEW_TRIP_FLAG:
@@ -435,58 +515,68 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void disableEditText() {
+    private void showTextViewHideEditText() {
         binding.addNoteImageView.setVisibility(GONE);
         binding.tripNameEt.setVisibility(GONE);
+        binding.tripTitleTv.setVisibility(VISIBLE);
         binding.tripNameTv.setVisibility(VISIBLE);
         binding.startPointConstraintlayout.setVisibility(GONE);
+        binding.startPointTitleTv.setVisibility(VISIBLE);
         binding.startPointTv.setVisibility(VISIBLE);
         binding.endPointConstraintlayout.setVisibility(GONE);
+        binding.endPointTitleTv.setVisibility(VISIBLE);
         binding.endPointTv.setVisibility(VISIBLE);
         binding.date1Tv.setVisibility(GONE);
+        binding.date1TitleTv.setVisibility(VISIBLE);
         binding.date1ViewTv.setVisibility(VISIBLE);
         binding.time1Tv.setVisibility(GONE);
+        binding.time1TitleTv.setVisibility(VISIBLE);
         binding.time1ViewTv.setVisibility(VISIBLE);
         binding.saveTripFab.setVisibility(GONE);
     }
 
-    private void enableEditText() {
+    private void showEditTextHideTextView() {
         binding.addNoteImageView.setVisibility(VISIBLE);
         binding.tripNameEt.setVisibility(VISIBLE);
+        binding.tripTitleTv.setVisibility(GONE);
         binding.tripNameTv.setVisibility(GONE);
         binding.startPointConstraintlayout.setVisibility(VISIBLE);
+        binding.startPointTitleTv.setVisibility(GONE);
         binding.startPointTv.setVisibility(GONE);
         binding.endPointConstraintlayout.setVisibility(VISIBLE);
+        binding.endPointTitleTv.setVisibility(GONE);
         binding.endPointTv.setVisibility(GONE);
         binding.date1Tv.setVisibility(VISIBLE);
+        binding.date1TitleTv.setVisibility(GONE);
         binding.date1ViewTv.setVisibility(GONE);
         binding.time1Tv.setVisibility(VISIBLE);
+        binding.time1TitleTv.setVisibility(GONE);
         binding.time1ViewTv.setVisibility(GONE);
         binding.saveTripFab.setVisibility(VISIBLE);
     }
 
     private void showSecondDateTimeTextView() {
-        binding.date2TitleTv.setVisibility(VISIBLE);
         binding.date2Tv.setVisibility(GONE);
+        binding.date2TitleTv.setVisibility(VISIBLE);
         binding.date2ViewTv.setVisibility(VISIBLE);
-        binding.time2TitleTv.setVisibility(VISIBLE);
         binding.time2Tv.setVisibility(GONE);
+        binding.time2TitleTv.setVisibility(VISIBLE);
         binding.time2ViewTv.setVisibility(VISIBLE);
     }
 
     private void showSecondDateTimeEditText() {
-        binding.date2TitleTv.setVisibility(VISIBLE);
         binding.date2Tv.setVisibility(VISIBLE);
+        binding.date2TitleTv.setVisibility(GONE);
         binding.date2ViewTv.setVisibility(GONE);
-        binding.time2TitleTv.setVisibility(VISIBLE);
+        binding.time2TitleTv.setVisibility(GONE);
         binding.time2Tv.setVisibility(VISIBLE);
         binding.time2ViewTv.setVisibility(GONE);
     }
 
 
     private void hideSecondDateTimeViews() {
-        binding.date2TitleTv.setVisibility(GONE);
         binding.date2Tv.setVisibility(GONE);
+        binding.date2TitleTv.setVisibility(GONE);
         binding.date2ViewTv.setVisibility(GONE);
         binding.time2TitleTv.setVisibility(GONE);
         binding.time2Tv.setVisibility(GONE);
