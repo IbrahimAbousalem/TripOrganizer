@@ -100,7 +100,7 @@ public class NotificationsUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         }
-        return PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), snoozeIntent, 0);
     }
     private static PendingIntent createStartIntent(Context context, String tripId, String destnationLatitude, String destinatinLongtiude){
         Intent startIntent = new Intent(context, AlarmBroadCastReceiver.class);

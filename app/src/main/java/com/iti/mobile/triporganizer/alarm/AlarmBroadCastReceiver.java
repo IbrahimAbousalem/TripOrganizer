@@ -48,18 +48,21 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             //starts after 5 seconds
             //stop service
 
-            tripOrganizerApp.stopAlarmService();
-            String tripId, tripName, desLat,destLon;
+
+            String tripId, tripName, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             tripName = intent.getStringExtra("tripName");
             desLat = intent.getStringExtra("destnationLatitude");
             destLon = intent.getStringExtra("destinatinLongtiude");
-            Intent serviceIntent = new Intent(context, AlarmService.class);
-            serviceIntent.putExtra("tripName", tripName);
-            serviceIntent.putExtra("tripId", tripId);
-            serviceIntent.putExtra("destnationLatitude", desLat);
-            serviceIntent.putExtra("destinatinLongtiude", destLon);
-            AlarmUtils.startAlarm(context, 61*1000, tripName, tripId, desLat, destLon);
+//            Intent serviceIntent = new Intent(context, AlarmService.class);
+//            serviceIntent.putExtra("tripName", tripName);
+//            serviceIntent.putExtra("tripId", tripId);
+//            serviceIntent.putExtra("destnationLatitude", desLat);
+//            serviceIntent.putExtra("destinatinLongtiude", destLon);
+            //AlarmUtils.cancelAlarm(context, tripName, tripId, desLat, destLon);
+
+            AlarmUtils.startAlarmForSnooze(context, 240000, tripName, tripId, desLat, destLon);
+            tripOrganizerApp.stopAlarmService();
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
