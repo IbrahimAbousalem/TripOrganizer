@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
+import com.iti.mobile.triporganizer.appHead.ChatHeadService;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
 
@@ -54,7 +55,8 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
-           // context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+         //   context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            context.startActivity(new Intent(context, ChatHeadService.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
             String tripId, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             desLat = intent.getStringExtra("destnationLatitude");
