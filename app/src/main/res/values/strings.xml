@@ -54,6 +54,7 @@
     <string name="buy_items">Buy items from supermarket</string>
     <string name="later">LATER</string>
     <string name="cancel">Cancel</string>
+    <string name="end">End</string>
     <string name="delete_trip">Are you sure to delete trip ?!</string>
     <string name="no">No</string>
     <string name="delete">Delete</string>

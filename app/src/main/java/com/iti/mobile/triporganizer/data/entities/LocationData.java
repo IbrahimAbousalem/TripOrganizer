@@ -11,12 +11,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "locationData", foreignKeys = @ForeignKey(entity = Trip.class, parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
-public class LocationData implements Serializable {
+@Entity(tableName = "locationData", indices = {@Index(value = {"startDate", "roundDate"}, unique = true)} , foreignKeys = @ForeignKey(entity = Trip.class, parentColumns = "id", childColumns = "tripId", onDelete = CASCADE))
+public class LocationData implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "locationId")
@@ -37,6 +38,8 @@ public class LocationData implements Serializable {
     private double roundTripEndPointLat;
     private double roundTripEndPointLng;
 
+    private boolean isRound;
+
     private Date startDate;
     private Date roundDate;
 
@@ -44,7 +47,7 @@ public class LocationData implements Serializable {
     }
 
     @Ignore
-    public LocationData(long id, long tripId, String startTripAddressName, double startTripStartPointLat, double startTripStartPointLng, String startTripEndAddressName, double startTripEndPointLat, double startTripEndPointLng, String roundTripStartAddressName, double roundTripStartPointLat, double roundTripStartPointLng, String roundTripEndAddressName, double roundTripEndPointLat, double roundTripEndPointLng, Date startDate, Date roundDate) {
+    public LocationData(long id, long tripId, String startTripAddressName, double startTripStartPointLat, double startTripStartPointLng, String startTripEndAddressName, double startTripEndPointLat, double startTripEndPointLng, String roundTripStartAddressName, double roundTripStartPointLat, double roundTripStartPointLng, String roundTripEndAddressName, double roundTripEndPointLat, double roundTripEndPointLng, boolean isRound, Date startDate, Date roundDate) {
         this.id = id;
         this.tripId = tripId;
         this.startTripAddressName = startTripAddressName;
@@ -59,6 +62,7 @@ public class LocationData implements Serializable {
         this.roundTripEndAddressName = roundTripEndAddressName;
         this.roundTripEndPointLat = roundTripEndPointLat;
         this.roundTripEndPointLng = roundTripEndPointLng;
+        this.isRound = isRound;
         this.startDate = startDate;
         this.roundDate = roundDate;
     }
@@ -78,19 +82,20 @@ public class LocationData implements Serializable {
         roundTripEndAddressName = in.readString();
         roundTripEndPointLat = in.readDouble();
         roundTripEndPointLng = in.readDouble();
+        isRound = in.readByte() != 0;
     }
 
-//    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
-//        @Override
-//        public LocationData createFromParcel(Parcel in) {
-//            return new LocationData(in);
-//        }
-//
-//        @Override
-//        public LocationData[] newArray(int size) {
-//            return new LocationData[size];
-//        }
-//    };
+    public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
+        @Override
+        public LocationData createFromParcel(Parcel in) {
+            return new LocationData(in);
+        }
+
+        @Override
+        public LocationData[] newArray(int size) {
+            return new LocationData[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -220,33 +225,43 @@ public class LocationData implements Serializable {
         this.roundDate = roundDate;
     }
 
+    public boolean isRound() {
+        return isRound;
+    }
+
+    public void setRound(boolean round) {
+        isRound = round;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         LocationData location = (LocationData) obj;
         return location == null || (tripId == location.getTripId() && startTripAddressName.equals(location.getStartTripAddressName()) && startTripEndAddressName.equals(location.getStartTripEndAddressName())
                 && startTripStartPointLat == location.getStartTripStartPointLat() && startTripStartPointLng == location.getStartTripStartPointLng() && startTripEndPointLat == location.getStartTripEndPointLat() && startTripEndPointLng == location.getStartTripEndPointLng() && startDate == location.getStartDate());
     }
-//
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeLong(id);
-//        dest.writeLong(tripId);
-//        dest.writeString(startTripAddressName);
-//        dest.writeDouble(startTripStartPointLat);
-//        dest.writeDouble(startTripStartPointLng);
-//        dest.writeString(startTripEndAddressName);
-//        dest.writeDouble(startTripEndPointLat);
-//        dest.writeDouble(startTripEndPointLng);
-//        dest.writeString(roundTripStartAddressName);
-//        dest.writeDouble(roundTripStartPointLat);
-//        dest.writeDouble(roundTripStartPointLng);
-//        dest.writeString(roundTripEndAddressName);
-//        dest.writeDouble(roundTripEndPointLat);
-//        dest.writeDouble(roundTripEndPointLng);
-//    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(tripId);
+        dest.writeString(startTripAddressName);
+        dest.writeDouble(startTripStartPointLat);
+        dest.writeDouble(startTripStartPointLng);
+        dest.writeString(startTripEndAddressName);
+        dest.writeDouble(startTripEndPointLat);
+        dest.writeDouble(startTripEndPointLng);
+        dest.writeString(roundTripStartAddressName);
+        dest.writeDouble(roundTripStartPointLat);
+        dest.writeDouble(roundTripStartPointLng);
+        dest.writeString(roundTripEndAddressName);
+        dest.writeDouble(roundTripEndPointLat);
+        dest.writeDouble(roundTripEndPointLng);
+        dest.writeByte((byte) (isRound ? 1 : 0));
+    }
 }

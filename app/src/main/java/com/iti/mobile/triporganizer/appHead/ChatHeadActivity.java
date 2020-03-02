@@ -71,10 +71,9 @@ public class ChatHeadActivity extends AppCompatActivity {
                 .allowBounce(false)
                 .onFinishInflate(headView -> {
                     // your logic
-                    recyclerView     = headView.findViewById(R.id.RV);
+                    recyclerView  = headView.findViewById(R.id.RV);
                     recyclerView.setLayoutManager(new LinearLayoutManager(this));
                     noteDao.getAllNote(Integer.parseInt(tripId)).observe(this, notes -> {
-
                          NoteAdapter noteAdapter = new NoteAdapter(ChatHeadActivity.this,notes);
                          recyclerView.setAdapter(noteAdapter);
                     });

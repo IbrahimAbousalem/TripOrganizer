@@ -38,6 +38,7 @@ public class NotesRoom {
             notesFirebase.updateNote(note, userId);
         });
     }
+
     public void deleteNote(Note note, String userId){
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
             noteDao.deleteNote(note);

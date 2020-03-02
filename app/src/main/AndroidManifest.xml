@@ -20,7 +20,7 @@
         <activity android:name=".appHead.TestChatHeadActivity">
 
         </activity>
-        <activity android:name=".main.Main2Activity" />
+
         <activity android:name=".alarm.SetAlarmDummyActivity" />
 
         <meta-data

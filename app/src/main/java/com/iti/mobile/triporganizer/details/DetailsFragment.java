@@ -384,7 +384,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         locationData.setStartTripAddressName(startAddress);
         locationData.setStartTripEndAddressName(endAddress);
         trip.setTripName(tripName);
-        trip.setRound(false);
+        trip.getLocationData().setRound(false);
         trip.setUserId("hZDY3CF3aWU5WjC6fNHmck2dBz02");
         trip.setStatus("UpComing");
         trip.setLocationData(locationData);

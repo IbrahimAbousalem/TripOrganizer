@@ -1,7 +1,9 @@
 package com.iti.mobile.triporganizer.data.room;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.LocationData;
+import com.iti.mobile.triporganizer.data.entities.MapperClass;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
@@ -11,12 +13,15 @@ import com.iti.mobile.triporganizer.data.room.dao.LocationDataDao;
 import com.iti.mobile.triporganizer.data.room.dao.NoteDao;
 import com.iti.mobile.triporganizer.data.room.dao.TripDao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import static com.iti.mobile.triporganizer.utils.FirestoreConstatnts.TRIPS_COLLECTION;
 
 @ApplicationScope
 public class TripsRoom {
@@ -25,19 +30,19 @@ public class TripsRoom {
     private TripsFirebase tripsFirebase;
     private NoteDao noteDao;
     private NotesFirebase notesFirebase;
+    private FirebaseFirestore db;
     @Inject
-    public TripsRoom(TripDao tripDao, LocationDataDao locationDataDao, TripsFirebase tripsFirebase, NoteDao noteDao, NotesFirebase notesFirebase) {
+    public TripsRoom(FirebaseFirestore db, TripDao tripDao, LocationDataDao locationDataDao, TripsFirebase tripsFirebase, NoteDao noteDao, NotesFirebase notesFirebase) {
         this.tripDao = tripDao;
         this.locationDataDao = locationDataDao;
         this.tripsFirebase = tripsFirebase;
         this.noteDao =noteDao;
         this.notesFirebase = notesFirebase;
+        this.db = db;
     }
 
-    public LiveData<List<TripAndLocation>> getAllTrips(String userId){
-       LiveData<List<Trip>> data = tripsFirebase.getTripsForUser(userId);
-       List<Trip> ans = data.getValue();
-        return tripDao.getAllTrips(userId);
+    public LiveData<List<TripAndLocation>> getAllUpComingTrips(String userId){
+        return tripDao.getAllHistoryTrips(userId, new Date().getTime());
     }
 
     public void addTrip(Trip trip){
@@ -89,5 +94,18 @@ public class TripsRoom {
             tripsFirebase.deleteTrip(trip);
         });
     }
-
+    public LiveData<List<TripAndLocation>> getTripsForUser(String userId) {
+        MutableLiveData<List<TripAndLocation>> listLiveData = new MutableLiveData<>();
+        db.collection(TRIPS_COLLECTION).document(userId).collection("UserTrips").get().addOnCompleteListener(task -> {
+            List<Trip> trips = task.getResult().toObjects(Trip.class);
+            if(!trips.isEmpty()){
+                for(Trip tripObj: trips){
+                    addTrip(tripObj);
+                }
+                List<TripAndLocation> tripAndLocationList = MapperClass.mapTripList(trips);
+                listLiveData.postValue(tripAndLocationList);
+            }
+        });
+        return listLiveData;
+    }
 }
