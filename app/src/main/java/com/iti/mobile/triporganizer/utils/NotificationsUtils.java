@@ -19,7 +19,7 @@ public class NotificationsUtils {
     private static final String channelName ="tripsChannel";
     private static final String notificationDescription ="shows notification on trip due date";
     private static final String channelId = "tripsNotification";
-    private static final String notificationTitle = "tou have a trip coming";
+    private static final String notificationTitle = "you have a trip coming";
     private static final String notificationTitleForStartedTrip = "trip in progress";
     public static final String Action_Snooze = "snooze";
     public static final String Action_Start = "start";

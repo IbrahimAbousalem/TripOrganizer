@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.utils.DateUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.ViewHolder> {
@@ -68,8 +70,8 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             TripAndLocation trip = getItem(position);
             UpcomingTripViewHolder upcomingTripViewHolder = (UpcomingTripViewHolder) holder;
             upcomingTripViewHolder.setTripNameTv(trip.getTrip().getTripName());
-            upcomingTripViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
-            upcomingTripViewHolder.setTripTimeTv(trip.getLocationDataList().getStartDate().getHours() +":"+ trip.getLocationDataList().getStartDate().getMinutes());
+            upcomingTripViewHolder.setTripDateTv(DateUtils.simpleDateFormatForYears_Months.format(trip.getLocationDataList().getStartDate()));
+            upcomingTripViewHolder.setTripTimeTv(DateUtils.simpleDateFormatForHours_Minutes.format(trip.getLocationDataList().getStartDate()));
             upcomingTripViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
         }else if (holder instanceof  TripsViewHolder){
             TripAndLocation trip = getItem(position);
