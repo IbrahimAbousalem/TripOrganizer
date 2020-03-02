@@ -43,8 +43,6 @@ public class DetailsUtils {
         return true;
     }
     private static boolean handleEditTripBinding(Trip trip, boolean isRound, FragmentDetailsBinding detailsBinding, HashMap<String, String> errorMessages,AutocompleteSupportFragment startPointAutocompleteFragment,AutocompleteSupportFragment endPointAutocompleteFragment,HashMap<String,String> dates) {
-        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat timeFormat=new SimpleDateFormat("HH:mm");
 
         String startDate=dates.get(STARTDATE);
         String endDate=dates.get(ENDDATE);
@@ -58,12 +56,12 @@ public class DetailsUtils {
 
         try {
             if(!startDate.isEmpty()){
-                date1=dateFormat.parse(startDate);
+                date1= DateUtils.simpleDateFormatForYears_Months.parse(startDate);
                 Log.i(TAG,"////////////////////////////////////string date1 "+startDate);
                 Log.i(TAG,"////////////////////////////////////date1 "+date1.toString());
             }
             if(!startTime.isEmpty()){
-                time1=timeFormat.parse(startTime);
+                time1=DateUtils.simpleDateFormatForHours_Minutes.parse(startTime);
                 Log.i(TAG,"////////////////////////////////////string time1 "+startTime);
                 Log.i(TAG,"////////////////////////////////////time1 "+time1.toString());
             }
@@ -97,12 +95,12 @@ public class DetailsUtils {
         if(isRound){
             try {
                 if(!endDate.isEmpty()){
-                    date2=dateFormat.parse(endDate);
+                    date2 = DateUtils.simpleDateFormatForYears_Months.parse(endDate);
                     Log.i(TAG,"//////////////////////////////////// string date2 "+endDate);
                     Log.i(TAG,"//////////////////////////////////// date2 "+date2.toString());
                 }
                 if(!endTime.isEmpty()){
-                    time2=timeFormat.parse(endTime);
+                    time2 = DateUtils.simpleDateFormatForHours_Minutes.parse(endTime);
                     Log.i(TAG,"//////////////////////////////////// string time2 "+endTime);
                     Log.i(TAG,"//////////////////////////////////// time2"+time2.toString());
                 }
@@ -148,12 +146,12 @@ public class DetailsUtils {
 
         try {
             if(!startDate.isEmpty()){
-                date1=dateFormat.parse(startDate);
+                date1=DateUtils.simpleDateFormatForYears_Months.parse(startDate);
                 Log.i(TAG,"////////////////////////////////////string date1 "+startDate);
                 Log.i(TAG,"////////////////////////////////////date1 "+date1.toString());
             }
             if(!startTime.isEmpty()){
-                time1=timeFormat.parse(startTime);
+                time1=DateUtils.simpleDateFormatForHours_Minutes.parse(startTime);
                 Log.i(TAG,"////////////////////////////////////string time1 "+startTime);
                 Log.i(TAG,"////////////////////////////////////time1 "+time1.toString());
             }
@@ -187,12 +185,12 @@ public class DetailsUtils {
         if(isRound){
             try {
                 if(!endDate.isEmpty()){
-                    date2=dateFormat.parse(endDate);
+                    date2=DateUtils.simpleDateFormatForYears_Months.parse(endDate);
                     Log.i(TAG,"//////////////////////////////////// string date2 "+endDate);
                     Log.i(TAG,"//////////////////////////////////// date2 "+date2.toString());
                 }
                 if(!endTime.isEmpty()){
-                    time2=timeFormat.parse(endTime);
+                    time2=DateUtils.simpleDateFormatForHours_Minutes.parse(endTime);
                     Log.i(TAG,"//////////////////////////////////// string time2 "+endTime);
                     Log.i(TAG,"//////////////////////////////////// time2"+time2.toString());
                 }
