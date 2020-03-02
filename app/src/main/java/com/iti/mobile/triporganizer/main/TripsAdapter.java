@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.utils.DateUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.ViewHolder> {
@@ -68,21 +70,27 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             TripAndLocation trip = getItem(position);
             UpcomingTripViewHolder upcomingTripViewHolder = (UpcomingTripViewHolder) holder;
             upcomingTripViewHolder.setTripNameTv(trip.getTrip().getTripName());
-            upcomingTripViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
-            upcomingTripViewHolder.setTripTimeTv(trip.getLocationDataList().getStartDate().getHours() +":"+ trip.getLocationDataList().getStartDate().getMinutes());
+            upcomingTripViewHolder.setTripDateTv(DateUtils.simpleDateFormatForYears_Months.format(trip.getLocationDataList().getStartDate()));
+            upcomingTripViewHolder.setTripTimeTv(DateUtils.simpleDateFormatForHours_Minutes.format(trip.getLocationDataList().getStartDate()));
             upcomingTripViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
+            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
+            upcomingTripViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
         }else if (holder instanceof  TripsViewHolder){
             TripAndLocation trip = getItem(position);
             TripsViewHolder tripsViewHolder = (TripsViewHolder) holder;
             tripsViewHolder.setTripNameTv(trip.getTrip().getTripName());
             tripsViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
             tripsViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
+            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
+            tripsViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
         }else if (holder instanceof  UpcomingTripsTextViewHolder){
             TripAndLocation trip = getItem(position);
             UpcomingTripsTextViewHolder upcomingTripsTextViewHolder = (UpcomingTripsTextViewHolder) holder;
             upcomingTripsTextViewHolder.setTripNameTv(trip.getTrip().getTripName());
             upcomingTripsTextViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
             upcomingTripsTextViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
+            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
+            upcomingTripsTextViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
         }
     }
 
@@ -110,7 +118,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
             startBtn = itemView.findViewById(R.id.startBtn);
             viewBtn = itemView.findViewById(R.id.viewBtn);
-            itemView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_detailsFragment));
+
         }
 
 

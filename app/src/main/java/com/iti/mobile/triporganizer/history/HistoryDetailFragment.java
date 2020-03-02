@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.utils.DateUtils;
 
 
 import org.json.JSONObject;
@@ -34,10 +37,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HistoryDetailFragment extends Fragment implements
         OnMapReadyCallback {
     SupportMapFragment mapFragment ;
@@ -45,21 +46,23 @@ public class HistoryDetailFragment extends Fragment implements
     MarkerOptions origin, destination;
 
     BottomSheetBehavior bottomSheetBehavior ;
-    public HistoryDetailFragment() {
-        // Required empty public constructor
-    }
-
+    private TripAndLocation receivedTripAndLocationHistory;
+    private TextView bottomSheetTripNameTV,bottomSheetTripSourceTV,bottomSheetTripDestinationTV,bottomSheetTripDateTV,bottomSheetTripTimeTV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_history_detail2, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_history_detail, container, false);
+        receivedTripAndLocationHistory = HistoryDetailFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getTripAndLocationHistory();
+        initViews(view);
         mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        origin = new MarkerOptions().position(new LatLng(12.9121, 77.6446)).title("HSR Layout").snippet("origin");
-        destination = new MarkerOptions().position(new LatLng(12.9304, 77.6784)).title("Bellandur").snippet("destination");
+        origin = new MarkerOptions().position(new LatLng(receivedTripAndLocationHistory.getLocationDataList().getStartTripStartPointLat(),
+                receivedTripAndLocationHistory.getLocationDataList().getStartTripStartPointLng())).title(receivedTripAndLocationHistory.getTrip().getTripName())
+                .snippet(receivedTripAndLocationHistory.getLocationDataList().getStartTripAddressName());
+        destination = new MarkerOptions().position(new LatLng(receivedTripAndLocationHistory.getLocationDataList().getStartTripEndPointLat(),
+                receivedTripAndLocationHistory.getLocationDataList().getStartTripEndPointLng())).title(receivedTripAndLocationHistory.getTrip().getTripName())
+                .snippet(receivedTripAndLocationHistory.getLocationDataList().getStartTripEndAddressName());
 
        //  Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
@@ -67,11 +70,6 @@ public class HistoryDetailFragment extends Fragment implements
         DownloadTask downloadTask = new DownloadTask();
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
-
-
-
-
-
 
         View bottomSheet = view.findViewById(R.id.bottomSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -104,6 +102,20 @@ public class HistoryDetailFragment extends Fragment implements
             }
         });
         return view;
+    }
+
+    private void initViews(View view) {
+        bottomSheetTripNameTV = view.findViewById(R.id.bottomSheetTripNameTV) ;
+        bottomSheetTripSourceTV = view.findViewById(R.id.bottomSheetTripSourceTV);
+        bottomSheetTripDestinationTV = view.findViewById(R.id.bottomSheetTripDestinationTV);
+        bottomSheetTripDateTV = view.findViewById(R.id.bottomSheetTripDateTV);
+        bottomSheetTripTimeTV = view.findViewById(R.id.bottomSheetTripTimeTV);
+
+        bottomSheetTripNameTV.setText(receivedTripAndLocationHistory.getTrip().getTripName());
+        bottomSheetTripSourceTV.setText(receivedTripAndLocationHistory.getLocationDataList().getStartTripAddressName());
+        bottomSheetTripDestinationTV.setText(receivedTripAndLocationHistory.getLocationDataList().getStartTripEndAddressName());
+        bottomSheetTripDateTV.setText(DateUtils.simpleDateFormatForYears_Months.format(receivedTripAndLocationHistory.getLocationDataList().getStartDate()));
+        bottomSheetTripTimeTV.setText(DateUtils.simpleDateFormatForHours_Minutes.format(receivedTripAndLocationHistory.getLocationDataList().getStartDate()));
     }
 
     @Override

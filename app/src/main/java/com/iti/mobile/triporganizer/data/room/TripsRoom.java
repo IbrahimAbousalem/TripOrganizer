@@ -105,12 +105,20 @@ public class TripsRoom {
             List<Trip> trips = task.getResult().toObjects(Trip.class);
             if(!trips.isEmpty()){
                 for(Trip tripObj: trips){
-                    addTrip(tripObj);
+                    addTripInRoom(tripObj);
                 }
                 List<TripAndLocation> tripAndLocationList = MapperClass.mapTripList(trips);
                 listLiveData.postValue(tripAndLocationList);
             }
         });
         return listLiveData;
+    }
+    public void addTripInRoom(Trip trip){
+        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+            long tripId = tripDao.addTrip(trip);
+            LocationData locationData = trip.getLocationData();
+            locationData.setTripId(tripId);
+            long locationId = locationDataDao.addLocationData(locationData);
+        });
     }
 }

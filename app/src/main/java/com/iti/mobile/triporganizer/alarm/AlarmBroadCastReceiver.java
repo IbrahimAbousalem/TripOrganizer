@@ -61,8 +61,10 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 //            serviceIntent.putExtra("destinatinLongtiude", destLon);
             //AlarmUtils.cancelAlarm(context, tripName, tripId, desLat, destLon);
 
-            AlarmUtils.startAlarmForSnooze(context, 240000, tripName, tripId, desLat, destLon);
-            tripOrganizerApp.stopAlarmService();
+            AlarmUtils.startAlarmForSnooze(context, 30*1000, tripName, tripId, desLat, destLon);
+            //tripOrganizerApp.stopAlarmService();
+            tripOrganizerApp.stopSound();
+            tripOrganizerApp.getAlarmService().stopForeground(true);
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head

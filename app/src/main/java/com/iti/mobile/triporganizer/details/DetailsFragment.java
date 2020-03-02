@@ -23,6 +23,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -39,7 +41,8 @@ import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
-
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -88,6 +91,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private AutocompleteSupportFragment startPointAutocompleteFragment;
     private AutocompleteSupportFragment endPointAutocompleteFragment;
+    private TripAndLocation recievedTripAndLocation;
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -153,6 +157,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        recievedTripAndLocation = DetailsFragmentArgs.fromBundle(getArguments()).getTripAndLocation();
         return view;
     }
     private void showNotesList(View root) {
@@ -164,7 +169,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     public void setUpViews(View root) {
-        binding.bkImageView.setOnClickListener(this);
         binding.editBtn.setOnClickListener(this);
         binding.viewBtn.setOnClickListener(this);
         binding.saveTripFab.setOnClickListener(this);
@@ -244,9 +248,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bkImageView:
-                goToHomeActivity();
-                break;
             case R.id.editBtn:
                 editTrip(tripTypeChoice, tripActionChoice);
                 break;
