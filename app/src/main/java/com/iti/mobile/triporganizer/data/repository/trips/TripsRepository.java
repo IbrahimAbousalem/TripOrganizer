@@ -15,4 +15,5 @@ public interface TripsRepository {
     LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId);
     LiveData<List<TripAndLocation>> getTripsFromFirebase(String userId);
     LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes);
+    LiveData<List<TripAndLocation>> getHistoryTrips(String userId);
 }

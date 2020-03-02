@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 import static com.iti.mobile.triporganizer.utils.Tags.DATE;
 import static com.iti.mobile.triporganizer.utils.Tags.DATE_COMPARE;
-import static com.iti.mobile.triporganizer.utils.Tags.DATE_COMPARE_CURRENT;
 import static com.iti.mobile.triporganizer.utils.Tags.ENDDATE;
 import static com.iti.mobile.triporganizer.utils.Tags.ENDTIME;
 import static com.iti.mobile.triporganizer.utils.Tags.END_POINT;
@@ -25,7 +24,6 @@ import static com.iti.mobile.triporganizer.utils.Tags.STARTTIME;
 import static com.iti.mobile.triporganizer.utils.Tags.START_POINT;
 import static com.iti.mobile.triporganizer.utils.Tags.TIME;
 import static com.iti.mobile.triporganizer.utils.Tags.TIME_COMPARE;
-import static com.iti.mobile.triporganizer.utils.Tags.TIME_COMPARE_CURRENT;
 import static com.iti.mobile.triporganizer.utils.Tags.TRIP_NAME;
 
 public class DetailsUtils {
@@ -45,10 +43,9 @@ public class DetailsUtils {
         return true;
     }
     private static boolean handleEditTripBinding(Trip trip, boolean isRound, FragmentDetailsBinding detailsBinding, HashMap<String, String> errorMessages,AutocompleteSupportFragment startPointAutocompleteFragment,AutocompleteSupportFragment endPointAutocompleteFragment,HashMap<String,String> dates) {
-        Date currentDate=null;
-        Date currentTime=null;
         SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat=new SimpleDateFormat("HH:mm");
+
         String startDate=dates.get(STARTDATE);
         String endDate=dates.get(ENDDATE);
         String startTime=dates.get(STARTTIME);
@@ -74,16 +71,6 @@ public class DetailsUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        try {
-//            currentDate =dateFormat.parse(dateFormat.format(new Date()));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            currentTime =timeFormat.parse(dateFormat.format(new Date()));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         if (trip.getTripName().isEmpty()) {
             detailsBinding.tripNameEt.setError(errorMessages.get(TRIP_NAME));
             return false;
@@ -107,15 +94,6 @@ public class DetailsUtils {
                     .setError(errorMessages.get(END_POINT));
             return false;
         }
-        /*if(date1.compareTo(currentDate)<0){
-            addTripBinding.date1Tv.setError(errorMessages.get(DATE_COMPARE_CURRENT));
-            return false;
-        }*/
-
-        /*if(time1.compareTo(currentTime)<0){
-            addTripBinding.time1Tv.setError(errorMessages.get(TIME_COMPARE_CURRENT));
-            return false;
-        }*/
         if(isRound){
             try {
                 if(!endDate.isEmpty()){
@@ -154,25 +132,10 @@ public class DetailsUtils {
                 detailsBinding.time2Tv.setError(errorMessages.get(TIME_COMPARE));
                 return false;
             }
-            /*if(date2.compareTo(currentDate)<0){
-                addTripBinding.date2Tv.setError(errorMessages.get(DATE_COMPARE_CURRENT));
-                return false;
-            }*/
-
-            /*if(time2.compareTo(currentTime)<0){
-                addTripBinding.time2Tv.setError(errorMessages.get(TIME_COMPARE_CURRENT));
-                return false;
-            }*/
-
         }
         return true;
     }
     private static boolean handleAddTripBinding(Trip trip, boolean isRound, FragmentAddTripBinding addTripBinding, HashMap<String, String> errorMessages,AutocompleteSupportFragment startPointAutocompleteFragment,AutocompleteSupportFragment endPointAutocompleteFragment,HashMap<String,String> dates) {
-
-        Date currentDate=null;
-        Date currentTime=null;
-        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat timeFormat=new SimpleDateFormat("HH:mm");
         String startDate=dates.get(STARTDATE);
         String endDate=dates.get(ENDDATE);
         String startTime=dates.get(STARTTIME);
@@ -198,16 +161,6 @@ public class DetailsUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        try {
-//            currentDate =dateFormat.parse(dateFormat.format(new Date()));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            currentTime =timeFormat.parse(dateFormat.format(new Date()));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         if (trip.getTripName().isEmpty()) {
             addTripBinding.tripNameEt.setError(errorMessages.get(TRIP_NAME));
             return false;
@@ -231,15 +184,6 @@ public class DetailsUtils {
                     .setError(errorMessages.get(END_POINT));
             return false;
         }
-        /*if(date1.compareTo(currentDate)<0){
-            addTripBinding.date1Tv.setError(errorMessages.get(DATE_COMPARE_CURRENT));
-            return false;
-        }*/
-
-        /*if(time1.compareTo(currentTime)<0){
-            addTripBinding.time1Tv.setError(errorMessages.get(TIME_COMPARE_CURRENT));
-            return false;
-        }*/
         if(isRound){
             try {
                 if(!endDate.isEmpty()){
@@ -278,16 +222,6 @@ public class DetailsUtils {
                 addTripBinding.time2Tv.setError(errorMessages.get(TIME_COMPARE));
                 return false;
             }
-            /*if(date2.compareTo(currentDate)<0){
-                addTripBinding.date2Tv.setError(errorMessages.get(DATE_COMPARE_CURRENT));
-                return false;
-            }*/
-
-            /*if(time2.compareTo(currentTime)<0){
-                addTripBinding.time2Tv.setError(errorMessages.get(TIME_COMPARE_CURRENT));
-                return false;
-            }*/
-
         }
         return true;
     }

@@ -38,7 +38,6 @@ import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
-import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
 
 import java.math.BigInteger;

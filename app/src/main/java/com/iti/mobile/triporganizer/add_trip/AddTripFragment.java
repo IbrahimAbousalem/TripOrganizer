@@ -467,6 +467,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 }
             }
         }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 }

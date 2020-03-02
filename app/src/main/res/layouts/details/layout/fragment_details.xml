@@ -8,16 +8,28 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/bkImageView"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:title="@string/editTrip"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/task_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_bk_white_48dp" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/d_16"/>
+        <Button
+            android:id="@+id/viewBtn"
+            style="@style/viewedit_btn"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_view_gray_24dp"
+            android:text="@string/view"
+            app:layout_constraintEnd_toStartOf="@+id/editBtn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/task_toolbar" />
         <Button
             android:id="@+id/editBtn"
             style="@style/viewedit_btn"
@@ -28,17 +40,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/viewBtn"
             app:layout_constraintTop_toTopOf="@+id/viewBtn" />
-
-        <Button
-            android:id="@+id/viewBtn"
-            style="@style/viewedit_btn"
-            android:layout_marginTop="8dp"
-            android:drawableLeft="@drawable/ic_view_gray_24dp"
-            android:text="@string/view"
-            app:layout_constraintEnd_toStartOf="@+id/editBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bkImageView" />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/deatilsFragmentContainer"
                 android:layout_width="0dp"

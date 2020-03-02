@@ -37,6 +37,7 @@
     <string name="notes">Notes</string>
     <string name="etitle">Enter Trip Name</string>
     <string name="addTrip">Add Trip</string>
+    <string name="editTrip">Edit Trip</string>
     <string name="estart_point">Enter Start Point</string>
     <string name="eend_point">Enter End Point</string>
     <string name="edate">Pick Date</string>

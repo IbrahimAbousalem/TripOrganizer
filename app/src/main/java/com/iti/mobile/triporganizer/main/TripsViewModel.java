@@ -7,6 +7,8 @@ import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.data.firebase.AuthenticationFirebase;
+import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepository;
+import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepositoryImp;
 import com.iti.mobile.triporganizer.data.repository.notes.NoteRepositoryRoomImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryFirebaseImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryRoomImp;
@@ -19,9 +21,9 @@ public class TripsViewModel extends ViewModel {
     private TripRepositoryFirebaseImp tripRepositoryFirebaseImp;
     private TripRepositoryRoomImp tripRepositoryRoomImp;
     private NoteRepositoryRoomImp noteRepositoryRoomImp;
-    private AuthenticationFirebase auth;
+    private AuthenticationRepository auth;
     @Inject
-    public TripsViewModel(AuthenticationFirebase auth, TripRepositoryFirebaseImp tripRepositoryFirebaseImp, TripRepositoryRoomImp tripRepositoryRoomImp, NoteRepositoryRoomImp noteRepositoryRoomImp) {
+    public TripsViewModel(AuthenticationRepositoryImp auth, TripRepositoryFirebaseImp tripRepositoryFirebaseImp, TripRepositoryRoomImp tripRepositoryRoomImp, NoteRepositoryRoomImp noteRepositoryRoomImp) {
         this.tripRepositoryFirebaseImp = tripRepositoryFirebaseImp;
         this.tripRepositoryRoomImp = tripRepositoryRoomImp;
         this.noteRepositoryRoomImp = noteRepositoryRoomImp;

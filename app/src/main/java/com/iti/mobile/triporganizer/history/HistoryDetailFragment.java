@@ -1,11 +1,16 @@
-package com.iti.mobile.triporganizer.drawRoute;
+package com.iti.mobile.triporganizer.history;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,7 +19,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.iti.mobile.triporganizer.R;
+
 
 import org.json.JSONObject;
 
@@ -28,27 +35,75 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-public class DrawRouteActivity extends AppCompatActivity implements
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class HistoryDetailFragment extends Fragment implements
         OnMapReadyCallback {
     SupportMapFragment mapFragment ;
     private GoogleMap mMap;
     MarkerOptions origin, destination;
+
+    BottomSheetBehavior bottomSheetBehavior ;
+    public HistoryDetailFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-          mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-         mapFragment.getMapAsync(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_history_detail2, container, false);
+
+        mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         origin = new MarkerOptions().position(new LatLng(12.9121, 77.6446)).title("HSR Layout").snippet("origin");
         destination = new MarkerOptions().position(new LatLng(12.9304, 77.6784)).title("Bellandur").snippet("destination");
 
-        // Getting URL to the Google Directions API
+       //  Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin.getPosition(), destination.getPosition());
 
         DownloadTask downloadTask = new DownloadTask();
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
+
+
+
+
+
+
+        View bottomSheet = view.findViewById(R.id.bottomSheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                       // btnBottomSheet.setText("Close Sheet");
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                      //  btnBottomSheet.setText("Expand Sheet");
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+        return view;
     }
 
     @Override
@@ -56,7 +111,7 @@ public class DrawRouteActivity extends AppCompatActivity implements
         mMap = googleMap ;
         mMap.addMarker(origin);
         mMap.addMarker(destination);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), 10));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origin.getPosition(), 12));
 
 
     }
@@ -79,7 +134,7 @@ public class DrawRouteActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            ParserTask parserTask = new ParserTask();
+            HistoryDetailFragment.ParserTask parserTask = new HistoryDetailFragment.ParserTask();
             parserTask.execute(result);
         }
 
@@ -87,7 +142,7 @@ public class DrawRouteActivity extends AppCompatActivity implements
 
 
 
-        private String getDirectionsUrl(LatLng origin, LatLng dest) {
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
 
         // Origin of route

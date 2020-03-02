@@ -10,10 +10,14 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
+import com.iti.mobile.triporganizer.appHead.ChatHeadService;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.NotificationsUtils;
@@ -32,6 +36,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
     private  PendingIntent pendingIntent;
     private TripOrganizerApp tripOrganizerApp;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
         tripOrganizerApp = (TripOrganizerApp) context.getApplicationContext();
@@ -43,25 +48,33 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             //starts after 5 seconds
             //stop service
 
-            tripOrganizerApp.stopAlarmService();
-            String tripId, tripName, desLat,destLon;
+
+            String tripId, tripName, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             tripName = intent.getStringExtra("tripName");
             desLat = intent.getStringExtra("destnationLatitude");
             destLon = intent.getStringExtra("destinatinLongtiude");
-            Intent serviceIntent = new Intent(context, AlarmService.class);
-            serviceIntent.putExtra("tripName", tripName);
-            serviceIntent.putExtra("tripId", tripId);
-            serviceIntent.putExtra("destnationLatitude", desLat);
-            serviceIntent.putExtra("destinatinLongtiude", destLon);
-            AlarmUtils.startAlarm(context, 61*1000, tripName, tripId, desLat, destLon);
+//            Intent serviceIntent = new Intent(context, AlarmService.class);
+//            serviceIntent.putExtra("tripName", tripName);
+//            serviceIntent.putExtra("tripId", tripId);
+//            serviceIntent.putExtra("destnationLatitude", desLat);
+//            serviceIntent.putExtra("destinatinLongtiude", destLon);
+            //AlarmUtils.cancelAlarm(context, tripName, tripId, desLat, destLon);
+
+            AlarmUtils.startAlarmForSnooze(context, 240000, tripName, tripId, desLat, destLon);
+            tripOrganizerApp.stopAlarmService();
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
-            if (tripOrganizerApp.getAlarmService()!=null){
+
+
+            if (Settings.canDrawOverlays(context)) {
+                context.startService(new Intent(context, ChatHeadService.class).putExtra("tripId", intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            }
+             if (tripOrganizerApp.getAlarmService()!=null){
                 tripOrganizerApp.stopAlarmService();
             }
-            context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+            //context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
             String tripId, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             desLat = intent.getStringExtra("destnationLatitude");

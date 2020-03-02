@@ -8,27 +8,28 @@ import android.widget.TextView;
 
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HistoryAdapter extends ListAdapter<Trip, HistoryAdapter.HistoryViewHolder> {
+public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.HistoryViewHolder> {
 
     protected HistoryAdapter() {
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<Trip> DIFF_CALLBACK = new DiffUtil.ItemCallback<Trip>() {
+    private static final DiffUtil.ItemCallback<TripAndLocation> DIFF_CALLBACK = new DiffUtil.ItemCallback<TripAndLocation>() {
         @Override
-        public boolean areItemsTheSame(@NonNull Trip oldItem, @NonNull Trip newItem) {
-            return oldItem.getId()!= newItem.getId();
+        public boolean areItemsTheSame(@NonNull TripAndLocation oldItem, @NonNull TripAndLocation newItem) {
+            return oldItem.getTrip().getId()!= newItem.getTrip().getId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Trip oldItem, @NonNull Trip newItem) {
-            return oldItem.equals(newItem);
+        public boolean areContentsTheSame(@NonNull TripAndLocation oldItem, @NonNull TripAndLocation newItem) {
+            return oldItem.getTrip().equals(newItem.getTrip());
         }
     };
 
@@ -41,10 +42,10 @@ public class HistoryAdapter extends ListAdapter<Trip, HistoryAdapter.HistoryView
 
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
-        holder.setTripNameTV(getItem(position).getTripName());
-        holder.setTripDateTV(getItem(position).getLocationData().getStartDate().toString());
-        holder.setTripLocationTV(getItem(position).getLocationData().getStartTripAddressName());
-        holder.setTripStatusTV(getItem(position).getStatus());
+        holder.setTripNameTV(getItem(position).getTrip().getTripName());
+        holder.setTripDateTV(getItem(position).getLocationDataList().getStartDate().toString());
+        holder.setTripLocationTV(getItem(position).getLocationDataList().getStartTripAddressName());
+        holder.setTripStatusTV(getItem(position).getTrip().getStatus());
     }
 
     class HistoryViewHolder extends RecyclerView.ViewHolder {

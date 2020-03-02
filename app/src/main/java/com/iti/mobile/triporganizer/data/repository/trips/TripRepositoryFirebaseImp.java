@@ -51,4 +51,9 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
         return null;
     }
 
+    @Override
+    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId) {
+        return null;
+    }
+
 }
