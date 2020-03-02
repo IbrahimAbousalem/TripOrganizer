@@ -30,8 +30,8 @@ public class TripsViewModel extends ViewModel {
         this.auth = auth;
     }
 
-    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String uId){
-        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String uId, long date){
+        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId, date);
     }
 
     public void addTrip(Trip trip){
@@ -59,8 +59,8 @@ public class TripsViewModel extends ViewModel {
         return auth.getCurrentUserId();
     }
 
-    public LiveData<List<TripAndLocation>> getTripsFromFirebase(String userId){
-        return tripRepositoryRoomImp.getTripsFromFirebase(userId);
+    public void getTripsFromFirebase(String userId){
+         tripRepositoryRoomImp.getTripsFromFirebase(userId);
     }
 
 }

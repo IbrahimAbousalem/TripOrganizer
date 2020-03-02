@@ -40,18 +40,18 @@ public class TripRepositoryRoomImp implements TripsRepository {
     }
 
     @Override
-    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId) {
-        return tripsRoom.getAllUpComingTrips(userId);
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId, long date) {
+        return tripsRoom.getAllUpComingTrips(userId, date);
     }
 
     @Override
-    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId) {
-        return tripsRoom.getAllHistoryTrips(userId);
+    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId, long date) {
+        return tripsRoom.getAllHistoryTrips(userId, date);
     }
 
     @Override
-    public LiveData<List<TripAndLocation>> getTripsFromFirebase(String userId) {
-        return tripsRoom.getTripsForUser(userId);
+    public void getTripsFromFirebase(String userId) {
+         tripsRoom.getTripsForUser(userId);
     }
 
     @Override

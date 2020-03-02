@@ -2,6 +2,7 @@ package com.iti.mobile.triporganizer.dagger.component;
 
 import com.iti.mobile.triporganizer.add_trip.AddTripFragment;
 import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
+import com.iti.mobile.triporganizer.appHead.ChatHeadService;
 import com.iti.mobile.triporganizer.dagger.Scope.ActivityScope;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.dagger.module.controller.ViewModelModule;
@@ -29,4 +30,5 @@ public interface ControllerComponent {
     void inject(AddTripFragment addTrip);
     void inject(TestHomeActivity test);
     void inject(ProfileFragment profileFragment);
+    void inject(ChatHeadService chatHeadService);
 }

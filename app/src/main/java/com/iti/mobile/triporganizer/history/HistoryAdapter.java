@@ -48,8 +48,12 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
         holder.setTripDateTV(DateUtils.simpleDateFormatForYears_MonthsHours_Minutes.format(getItem(position).getLocationDataList().getStartDate()));
         holder.setTripLocationTV(getItem(position).getLocationDataList().getStartTripAddressName());
         holder.setTripStatusTV(getItem(position).getTrip().getStatus());
-        HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(getItem(position));
-        holder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(historyFragmentDirections));
+
+        holder.itemView.setOnClickListener(
+                view -> {
+                    HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(getItem(position));
+                    Navigation.findNavController(view).navigate(historyFragmentDirections);
+                });
     }
 
     class HistoryViewHolder extends RecyclerView.ViewHolder {

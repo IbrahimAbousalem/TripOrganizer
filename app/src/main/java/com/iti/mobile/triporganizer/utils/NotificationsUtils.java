@@ -112,7 +112,7 @@ public class NotificationsUtils {
         startIntent.putExtra("tripId",tripId);
         startIntent.putExtra("destnationLatitude", destnationLatitude);
         startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
-        return PendingIntent.getBroadcast(context, 1, startIntent, 0);
+        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), startIntent, 0);
     }
     private static PendingIntent createEndIntent(Context context, String tripId, String destnationLatitude, String destinatinLongtiude){
         Intent startIntent = new Intent(context, AlarmBroadCastReceiver.class);
@@ -124,7 +124,7 @@ public class NotificationsUtils {
         startIntent.putExtra("tripId",tripId);
         startIntent.putExtra("destnationLatitude", destnationLatitude);
         startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
-        return PendingIntent.getBroadcast(context, 3, startIntent, 0);
+        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), startIntent, 0);
     }
     private static PendingIntent createCancelIntent(Context context){
         Intent cancelIntent = new Intent(context, AlarmBroadCastReceiver.class);

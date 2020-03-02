@@ -31,6 +31,7 @@ import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.utils.RecyclerItemTouchHelper;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,12 +67,11 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripsRecyclerView.setAdapter(tripsAdapter);
         String userId = tripsViewModel.getCurrentUserId();
-        tripsViewModel.getUpComingTripsFromRoom(userId).observe(requireActivity(), tripAndLocationList -> {
+        long date = new Date().getTime();
+        tripsViewModel.getUpComingTripsFromRoom(userId, date).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             if (tripAndLocationList.isEmpty()) {
-                tripsViewModel.getTripsFromFirebase(userId).observe(requireActivity(), tripAndLocationList1 ->{
 
-                    tripsAdapter.submitList(tripAndLocationList);
-                });
+                tripsViewModel.getTripsFromFirebase(userId);
             }else {
                 tripsAdapter.submitList(tripAndLocationList);
                 Log.d("data", "we have trips .. ");

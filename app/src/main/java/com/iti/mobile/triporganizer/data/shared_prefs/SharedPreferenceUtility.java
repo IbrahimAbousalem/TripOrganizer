@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 @ApplicationScope
 public class SharedPreferenceUtility {
+
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor  editor;
 
