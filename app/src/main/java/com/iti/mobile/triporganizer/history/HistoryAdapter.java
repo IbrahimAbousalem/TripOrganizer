@@ -43,8 +43,8 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         holder.setTripNameTV(getItem(position).getTrip().getTripName());
-        holder.setTripDateTV(getItem(position).getTrip().getLocationData().getStartDate().toString());
-        holder.setTripLocationTV(getItem(position).getTrip().getLocationData().getStartTripAddressName());
+        holder.setTripDateTV(getItem(position).getLocationDataList().getStartDate().toString());
+        holder.setTripLocationTV(getItem(position).getLocationDataList().getStartTripAddressName());
         holder.setTripStatusTV(getItem(position).getTrip().getStatus());
     }
 
