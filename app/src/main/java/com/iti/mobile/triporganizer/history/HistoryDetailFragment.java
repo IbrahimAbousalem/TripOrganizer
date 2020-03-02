@@ -35,9 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HistoryDetailFragment extends Fragment implements
         OnMapReadyCallback {
     SupportMapFragment mapFragment ;
@@ -45,15 +42,10 @@ public class HistoryDetailFragment extends Fragment implements
     MarkerOptions origin, destination;
 
     BottomSheetBehavior bottomSheetBehavior ;
-    public HistoryDetailFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history_detail2, container, false);
 
         mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
@@ -67,11 +59,6 @@ public class HistoryDetailFragment extends Fragment implements
         DownloadTask downloadTask = new DownloadTask();
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
-
-
-
-
-
 
         View bottomSheet = view.findViewById(R.id.bottomSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);

@@ -78,6 +78,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_historyFragment_to_historyDetailFragment2"
+            app:destination="@id/historyDetailFragment2" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -113,4 +116,9 @@
         android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/historyDetailFragment2"
+        android:name="com.iti.mobile.triporganizer.history.HistoryDetailFragment"
+        android:label="fragment_history_detail"
+        tools:layout="@layout/fragment_history_detail2" />
 </navigation>
