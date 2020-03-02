@@ -42,6 +42,10 @@ public class TripsRoom {
     }
 
     public LiveData<List<TripAndLocation>> getAllUpComingTrips(String userId){
+        return tripDao.getAllHomeTrips(userId, new Date().getTime());
+    }
+
+    public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId){
         return tripDao.getAllHistoryTrips(userId, new Date().getTime());
     }
 
@@ -57,6 +61,7 @@ public class TripsRoom {
             tripsFirebase.addTrip(trip);
         });
     }
+
     public LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes){
         MutableLiveData<Trip>  tripMutableLiveData = new MutableLiveData<>();
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{

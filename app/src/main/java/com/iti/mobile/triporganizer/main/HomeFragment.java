@@ -67,7 +67,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         tripsRecyclerView.setAdapter(tripsAdapter);
         String userId = tripsViewModel.getCurrentUserId();
         tripsViewModel.getUpComingTripsFromRoom(userId).observe(requireActivity(), tripAndLocationList -> {
-            List<TripAndLocation> tripAndLocations = tripAndLocationList;
             if(tripAndLocationList.isEmpty()){
                 tripsViewModel.getTripsFromFirebase(userId).observe(requireActivity(), tripAndLocationList1 ->{
                     tripsAdapter.submitList(tripAndLocationList);
