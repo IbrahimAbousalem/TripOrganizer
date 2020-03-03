@@ -9,7 +9,11 @@ import android.widget.TextView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.details.NoteAdapter;
+import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.DateUtils;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -17,23 +21,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.HistoryViewHolder> {
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
+    private List<TripAndLocation> tripsList;
 
-    protected HistoryAdapter() {
-        super(DIFF_CALLBACK);
+    public HistoryAdapter(List<TripAndLocation> tripsList) {
+        this.tripsList = tripsList;
     }
-
-    private static final DiffUtil.ItemCallback<TripAndLocation> DIFF_CALLBACK = new DiffUtil.ItemCallback<TripAndLocation>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull TripAndLocation oldItem, @NonNull TripAndLocation newItem) {
-            return oldItem.getTrip().getId()!= newItem.getTrip().getId();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull TripAndLocation oldItem, @NonNull TripAndLocation newItem) {
-            return oldItem.getTrip().equals(newItem.getTrip());
-        }
-    };
 
     @NonNull
     @Override
@@ -44,19 +37,29 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
-        holder.setTripNameTV(getItem(position).getTrip().getTripName());
-        holder.setTripDateTV(DateUtils.simpleDateFormatForYears_MonthsHours_Minutes.format(getItem(position).getLocationDataList().getStartDate()));
-        holder.setTripLocationTV(getItem(position).getLocationDataList().getStartTripAddressName());
-        holder.setTripStatusTV(getItem(position).getTrip().getStatus());
+        holder.setTripNameTV(tripsList.get(position).getTrip().getTripName());
+        holder.setTripDateTV(DateUtils.simpleDateFormatForYears_MonthsHours_Minutes.format(tripsList.get(position).getLocationDataList().getStartDate()));
+        holder.setTripLocationTV(tripsList.get(position).getLocationDataList().getStartTripAddressName());
+        holder.setTripStatusTV(tripsList.get(position).getTrip().getStatus());
 
         holder.itemView.setOnClickListener(
                 view -> {
-                    HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(getItem(position));
+                    HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(tripsList.get(position));
                     Navigation.findNavController(view).navigate(historyFragmentDirections);
                 });
     }
 
-    class HistoryViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemCount() {
+        return tripsList.size();
+    }
+
+    public void setData(List<TripAndLocation> tripsList){
+        this.tripsList = tripsList;
+        notifyDataSetChanged();
+    }
+
+    static class HistoryViewHolder extends RecyclerView.ViewHolder {
         private TextView tripNameTV, tripDateTV, tripLocationTV;
         private Button tripStatusBtn;
 
@@ -82,7 +85,7 @@ public class HistoryAdapter extends ListAdapter<TripAndLocation, HistoryAdapter.
         }
 
         public void setTripStatusTV(String tripStatus) {
-            if(tripStatus.equals("Canceled")){
+            if(tripStatus.equals(Constants.CANCELED)){
                 this.tripStatusBtn.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.orange_rounded_btn));
             }else{
                 this.tripStatusBtn.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.blue_rounded_btn));

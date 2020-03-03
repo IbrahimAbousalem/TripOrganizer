@@ -21,12 +21,14 @@ import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.databinding.FragmentHistoryBinding;
 import com.iti.mobile.triporganizer.databinding.FragmentLoginBinding;
 import com.iti.mobile.triporganizer.main.TripsViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -69,7 +71,7 @@ public class HistoryFragment extends Fragment {
         String userId = historyViewModel.getCurrentUserId();
         long date = new Date().getTime();
         historyViewModel.getAllHistoryTrips(userId,date).observe(getViewLifecycleOwner(), tripAndLocationList -> {
-            adapter.submitList(tripAndLocationList);
+            adapter.setData(tripAndLocationList);
             //get it from firebase.
         });
 
@@ -78,7 +80,7 @@ public class HistoryFragment extends Fragment {
     private void initView() {
         historyRecycleView = binding.historyRecyclerRV;
         historyRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new HistoryAdapter();
+        adapter = new HistoryAdapter(new ArrayList<>());
         historyRecycleView.setAdapter(adapter);
     }
 }
