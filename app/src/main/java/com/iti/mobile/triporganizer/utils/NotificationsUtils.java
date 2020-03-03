@@ -52,7 +52,7 @@ public class NotificationsUtils {
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.snooze),
                         createSnoozeIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
-                        createCancelIntent(context))
+                        createCancelIntent(context, tripId))
 
                 .setVibrate(new long[0]);
 
@@ -83,7 +83,7 @@ public class NotificationsUtils {
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.end),
                         createEndIntent(context, tripId, destnationLatitude, destinatinLongtiude))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
-                        createCancelIntent(context))
+                        createCancelIntent(context, tripId))
 
                 .setVibrate(new long[0]);
 
@@ -126,12 +126,13 @@ public class NotificationsUtils {
         startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
         return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), startIntent, 0);
     }
-    private static PendingIntent createCancelIntent(Context context){
+    private static PendingIntent createCancelIntent(Context context, String tripId){
         Intent cancelIntent = new Intent(context, AlarmBroadCastReceiver.class);
         cancelIntent.setAction(Action_Cancel);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cancelIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         }
-        return PendingIntent.getBroadcast(context, 2, cancelIntent, 0);
+        cancelIntent.putExtra("tripId", tripId);
+        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), cancelIntent, 0);
     }
 }

@@ -311,8 +311,8 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
-        isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2);
-        if(isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2)){
+       // isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2);
+        //if(isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2)){
             locationData.setStartDate(formatedDate1);
             locationData.setRoundDate(formatedDate2);
             locationData.setStartTripStartPointLat(startPonitLat);
@@ -339,72 +339,72 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 }
                 getActivity().onBackPressed();
             });
-        }
+        //}
     }
     //TODO: Go back after adding a trip.
 
 
-    private boolean isValidData(String tripName, String startAddress, String endAddress, String date1,Date formatedDate1, String time1, String date2,Date formatedDate2, String time2) {
-        if(tripName.isEmpty()){
-            binding.tripNameEt.setError(getResources().getString(R.string.plzEnterTripName));
-            return false;
-        }else{
-            binding.tripNameEt.setError(null);
-        }
-        if(startAddress==null){
-            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-                    .setError(getResources().getString(R.string.plzEnterStartPoint));
-            return false;
-        }else{
-            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-                    .setError(null);
-        }
-        if(endAddress==null){
-            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-                    .setError(getResources().getString(R.string.plzEnterEndPoint));
-            return false;
-        }else{
-            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-                    .setError(null);
-        }
-        if(date1.isEmpty()){
-            binding.date1Tv.setError(getResources().getString(R.string.plzPickDate));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
-        if(date2.isEmpty()){
-            binding.date2Tv.setError(getResources().getString(R.string.plzPickDate));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
-        if(time1.isEmpty()){
-            binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
-            return false;
-        }else{
-            binding.time1Tv.setError(null);
-        }
-        if(time2.isEmpty()){
-            binding.time2Tv.setError(getResources().getString(R.string.plzPickTime));
-            return false;
-        }else{
-            binding.time2Tv.setError(null);
-        }
-        if(formatedDate1.compareTo(formatedDate2)> 0){
-            binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
-        if(formatedDate1.getTime()>formatedDate2.getTime()){
-            binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime));
-            return false;
-        }else{
-            binding.date1Tv.setError(null);
-        }
-        return true;
-    }
+//    private boolean isValidData(String tripName, String startAddress, String endAddress, String date1,Date formatedDate1, String time1, String date2,Date formatedDate2, String time2) {
+//        if(tripName.isEmpty()){
+//            binding.tripNameEt.setError(getResources().getString(R.string.plzEnterTripName));
+//            return false;
+//        }else{
+//            binding.tripNameEt.setError(null);
+//        }
+//        if(startAddress==null){
+//            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+//                    .setError(getResources().getString(R.string.plzEnterStartPoint));
+//            return false;
+//        }else{
+//            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+//                    .setError(null);
+//        }
+//        if(endAddress==null){
+//            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+//                    .setError(getResources().getString(R.string.plzEnterEndPoint));
+//            return false;
+//        }else{
+//            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
+//                    .setError(null);
+//        }
+//        if(date1.isEmpty()){
+//            binding.date1Tv.setError(getResources().getString(R.string.plzPickDate));
+//            return false;
+//        }else{
+//            binding.date1Tv.setError(null);
+//        }
+//        if(date2.isEmpty()){
+//            binding.date2Tv.setError(getResources().getString(R.string.plzPickDate));
+//            return false;
+//        }else{
+//            binding.date1Tv.setError(null);
+//        }
+//        if(time1.isEmpty()){
+//            binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
+//            return false;
+//        }else{
+//            binding.time1Tv.setError(null);
+//        }
+//        if(time2.isEmpty()){
+//            binding.time2Tv.setError(getResources().getString(R.string.plzPickTime));
+//            return false;
+//        }else{
+//            binding.time2Tv.setError(null);
+//        }
+//        if(formatedDate1.compareTo(formatedDate2)> 0){
+//            binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
+//            return false;
+//        }else{
+//            binding.date1Tv.setError(null);
+//        }
+//        if(formatedDate1.getTime()>formatedDate2.getTime()){
+//            binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime));
+//            return false;
+//        }else{
+//            binding.date1Tv.setError(null);
+//        }
+//        return true;
+//    }
 
     private void showTime(int time) {
         final Calendar c = Calendar.getInstance();

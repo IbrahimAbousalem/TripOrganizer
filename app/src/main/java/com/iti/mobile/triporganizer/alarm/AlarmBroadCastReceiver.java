@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -18,10 +19,15 @@ import androidx.annotation.RequiresApi;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
 import com.iti.mobile.triporganizer.appHead.ChatHeadService;
+import com.iti.mobile.triporganizer.dagger.module.controller.BroadCastReceiverModule;
+import com.iti.mobile.triporganizer.dagger.module.controller.ChatHeadServiceControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.room.dao.TripDao;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.NotificationsUtils;
+
+import javax.inject.Inject;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -38,11 +44,16 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
     private  AlarmManager alarmManager;
     private  PendingIntent pendingIntent;
     private TripOrganizerApp tripOrganizerApp;
+    @Inject
+    TripDao tripDao;
+    @Inject
+    SharedPreferences sharedPref;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
         tripOrganizerApp = (TripOrganizerApp) context.getApplicationContext();
+        tripOrganizerApp.getComponent().newBroadCastReceiverComponent(new BroadCastReceiverModule(this)).inject(this);
 
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 
@@ -50,19 +61,11 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Snooze)){
             //starts after 5 seconds
             //stop service
-
-
             String tripId, tripName, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             tripName = intent.getStringExtra("tripName");
             desLat = intent.getStringExtra("destnationLatitude");
             destLon = intent.getStringExtra("destinatinLongtiude");
-//            Intent serviceIntent = new Intent(context, AlarmService.class);
-//            serviceIntent.putExtra("tripName", tripName);
-//            serviceIntent.putExtra("tripId", tripId);
-//            serviceIntent.putExtra("destnationLatitude", desLat);
-//            serviceIntent.putExtra("destinatinLongtiude", destLon);
-            //AlarmUtils.cancelAlarm(context, tripName, tripId, desLat, destLon);
 
             AlarmUtils.startAlarmForSnooze(context, 30*1000, tripName, tripId, desLat, destLon);
             //tripOrganizerApp.stopAlarmService();
@@ -95,14 +98,16 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Cancel)){
             tripOrganizerApp.stopAlarmService();
-
+            String tripId;
+            tripId = intent.getStringExtra("tripId");
+            tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.CANCELED);
         } else if (intent.getAction() != null && intent.getAction().equals(Action_End)){
 
             String tripId, desLat, destLon;
             tripId = intent.getStringExtra("tripId");
             desLat = intent.getStringExtra("destnationLatitude");
             destLon = intent.getStringExtra("destinatinLongtiude");
-            //tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
+            tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
             //TODO do databasse changes
         }
         else {
