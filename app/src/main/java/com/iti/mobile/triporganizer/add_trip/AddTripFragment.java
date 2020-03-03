@@ -332,7 +332,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             trip.setUserId(userId);
             trip.setStatus(Constants.UPCOMING);
             trip.setLocationData(locationData);
-            addTripViewModel.addTripAndNotes(trip, notesList).observe(requireActivity(), newTrip -> {
+            addTripViewModel.addTripAndNotes(trip, notesList).observe(getViewLifecycleOwner(), newTrip -> {
                 AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getStartDate().getTime(),newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLat()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLng()));
                 if (newTrip.getLocationData().isRound()) {
                     AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getRoundDate().getTime(), newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLat()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLng()));
