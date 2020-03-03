@@ -21,4 +21,23 @@ public abstract class MapperClass {
         return tripAndLocation;
     }
 
+    public static Trip mapTripAndLocationObject(TripAndLocation tripAndLocation){
+        Trip trip = new Trip();
+        trip.setLocationData(tripAndLocation.getLocationDataList());
+        trip.setId(tripAndLocation.getTrip().getId());
+        trip.setStatus(tripAndLocation.getTrip().getStatus());
+        trip.setUserId(tripAndLocation.getTrip().getUserId());
+        trip.setTripName(tripAndLocation.getTrip().getTripName());
+        return trip;
+    }
+
+    public static List<Trip> mapTripAndLocationList(List<TripAndLocation> tripAndLocationList){
+        List<Trip> tripList = new ArrayList<>();
+        for(TripAndLocation tripAndLocationObject : tripAndLocationList){
+            Trip mapTrip = mapTripAndLocationObject(tripAndLocationObject);
+            tripList.add(mapTrip);
+        }
+        return tripList;
+    }
+
 }

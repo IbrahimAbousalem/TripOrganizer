@@ -32,7 +32,7 @@ public class NotesRepositoryFirebaseImp implements NotesRepository{
     }
 
     @Override
-    public LiveData<List<Note>> getNotesForTrip(int tripId, String userId) {
+    public LiveData<List<Note>> getNotesForTrip(long tripId, String userId) {
        return notesFirebase.getNotesForTrip(tripId, userId);
     }
 }

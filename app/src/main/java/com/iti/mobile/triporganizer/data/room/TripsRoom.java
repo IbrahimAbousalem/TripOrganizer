@@ -62,6 +62,33 @@ public class TripsRoom {
         });
     }
 
+    public LiveData<String> updateTripAndNotes(TripAndLocation tripAndLocation, List<Note> notes){
+        MutableLiveData<String>  tripMutableLiveData = new MutableLiveData<>();
+        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+            Trip trip = MapperClass.mapTripAndLocationObject(tripAndLocation);
+            int tripUpdated = tripDao.updateTrip(trip);
+            if(tripUpdated > 0){
+                int locationUpdated = locationDataDao.updateLocationData(tripAndLocation.getLocationDataList());
+                if(locationUpdated > 0){
+                    tripMutableLiveData.postValue("Updated Successfully!");
+                    if(notes!=null && !notes.isEmpty()){
+                        for(Note note : notes) {
+                            note.setTripId(tripAndLocation.getTrip().getId());
+                            long id = noteDao.addNote(note);
+                            note.setId(id);
+                            notesFirebase.addNote(note, trip.getUserId());
+                        }
+                    }
+                }else{
+                    tripMutableLiveData.postValue("Updated Failed!");
+                }
+            }else{
+                tripMutableLiveData.postValue("Updated Failed!");
+            }
+        });
+        return tripMutableLiveData;
+    }
+
     public LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes){
         MutableLiveData<Trip>  tripMutableLiveData = new MutableLiveData<>();
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
@@ -74,7 +101,7 @@ public class TripsRoom {
             trip.setLocationData(locationData);
             tripMutableLiveData.postValue(trip);
             tripsFirebase.addTrip(trip);
-            if(notes!=null || !notes.isEmpty()){
+            if(notes!=null && !notes.isEmpty()){
                 for(Note note : notes) {
                     note.setTripId(tripId);
                     long id = noteDao.addNote(note);

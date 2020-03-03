@@ -19,7 +19,7 @@ public class NotesRoom {
         this.noteDao = noteDao;
         this.notesFirebase = notesFirebase;
     }
-    public LiveData<List<Note>> getAllNotes(int tripId){
+    public LiveData<List<Note>> getAllNotes(long tripId){
         return noteDao.getAllNote(tripId);
     }
 

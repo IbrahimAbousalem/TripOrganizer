@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepositoryImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryRoomImp;
 
 import java.util.List;
@@ -13,10 +14,12 @@ import javax.inject.Inject;
 
 public class AddTripViewModel extends ViewModel {
     private TripRepositoryRoomImp repo;
+    private AuthenticationRepositoryImp auth;
 
     @Inject
-    public AddTripViewModel(TripRepositoryRoomImp repo) {
+    public AddTripViewModel(TripRepositoryRoomImp repo, AuthenticationRepositoryImp auth) {
         this.repo = repo;
+        this.auth = auth;
     }
 
     public void addTrip(Trip trip){
@@ -34,4 +37,7 @@ public class AddTripViewModel extends ViewModel {
         return repo.addTripAndNotes(trip, notes);
     }
 
+    public String getUserId(){
+        return auth.getCurrentUserId();
+    }
 }

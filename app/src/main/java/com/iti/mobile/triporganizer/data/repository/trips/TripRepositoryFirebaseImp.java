@@ -56,4 +56,9 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
         return null;
     }
 
+    @Override
+    public LiveData<String> updateTripAndNotes(TripAndLocation trip, List<Note> notes) {
+        return null;
+    }
+
 }

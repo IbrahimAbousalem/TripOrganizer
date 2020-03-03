@@ -1,5 +1,9 @@
 package com.iti.mobile.triporganizer.main;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,18 +11,27 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.appHead.ChatHeadService;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.DateUtils;
+import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.iti.mobile.triporganizer.alarm.AlarmService.foregroundId;
 
 public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.ViewHolder> {
     public static final int TYPE_HEADER = 0;
@@ -75,6 +88,9 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             upcomingTripViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
             HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
             upcomingTripViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
+            upcomingTripViewHolder.startBtn.setOnClickListener((view)->{
+
+            });
         }else if (holder instanceof  TripsViewHolder){
             TripAndLocation trip = getItem(position);
             TripsViewHolder tripsViewHolder = (TripsViewHolder) holder;
@@ -118,7 +134,27 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             tripLocTv = itemView.findViewById(R.id.tripLocTv);
             startBtn = itemView.findViewById(R.id.startBtn);
             viewBtn = itemView.findViewById(R.id.viewBtn);
+            startBtn.setOnClickListener((view)->{
+                AlarmUtils.cancelAlarm(itemView.getContext().getApplicationContext(), getItem(getAdapterPosition()).getTrip().getTripName(),String.valueOf(getItem(getAdapterPosition()).getTrip().getId()), String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLat()), String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLng()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(itemView.getContext())) {
+                        itemView.getContext().startService(new Intent(itemView.getContext(), ChatHeadService.class).putExtra("tripId", String.valueOf(getItem(getAdapterPosition()).getTrip().getId())).setFlags(FLAG_ACTIVITY_NEW_TASK));
+                    }
+                }else{
+                    itemView.getContext().startService(new Intent(itemView.getContext(), ChatHeadService.class).putExtra("tripId", String.valueOf(getItem(getAdapterPosition()).getTrip().getId())).setFlags(FLAG_ACTIVITY_NEW_TASK));
+                }
+                if (((TripOrganizerApp)(itemView.getContext().getApplicationContext())).getAlarmService()!=null){
+                    ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).stopAlarmService();
+                }
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+ getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLat() +","+ getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLng());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri).setFlags(FLAG_ACTIVITY_NEW_TASK);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                itemView.getContext().startActivity(mapIntent);
+                ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).stopSound();
+                ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).getAlarmService().stopForeground(true);
+                ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).getAlarmService().startForeground(foregroundId, NotificationsUtils.makeStatusNotificationForStartedTrip("started trip", getApplicationContext(),"started trip", String.valueOf(getItem(getAdapterPosition()).getTrip().getId()),String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLat()), String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLng())));
 
+            });
         }
 
 

@@ -10,5 +10,5 @@ public interface NotesRepository {
     void addNote(Note note, String userId);
     void deleteNote(Note note, String userId);
     void  updateNote(Note note, String userId);
-    LiveData<List<Note>> getNotesForTrip(int tripId, String userId);
+    LiveData<List<Note>> getNotesForTrip(long tripId, String userId);
 }

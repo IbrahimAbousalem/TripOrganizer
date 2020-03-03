@@ -49,7 +49,7 @@ public class NotesFirebase {
     }
 
     //Need to look for the id..
-    public LiveData<List<Note>> getNotesForTrip(int tripId, String userId) {
+    public LiveData<List<Note>> getNotesForTrip(long tripId, String userId) {
         MutableLiveData<List<Note>> listLiveData = new MutableLiveData<>();
         db.collection(NOTES_COLLECTION).document(userId).collection(String.valueOf(tripId)).get().addOnCompleteListener(task -> {
             List<Note> notes = task.getResult().toObjects(Note.class);

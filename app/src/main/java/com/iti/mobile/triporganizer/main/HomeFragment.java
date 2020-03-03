@@ -25,9 +25,6 @@ import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
-import com.iti.mobile.triporganizer.data.entities.LocationData;
-import com.iti.mobile.triporganizer.data.entities.Note;
-import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.utils.RecyclerItemTouchHelper;
 

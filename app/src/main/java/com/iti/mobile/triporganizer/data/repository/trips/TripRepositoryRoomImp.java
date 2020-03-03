@@ -59,4 +59,9 @@ public class TripRepositoryRoomImp implements TripsRepository {
         return tripsRoom.addTripAndNotes(trip, notes);
     }
 
+    @Override
+    public LiveData<String> updateTripAndNotes(TripAndLocation trip, List<Note> notes) {
+        return tripsRoom.updateTripAndNotes(trip, notes);
+    }
+
 }
