@@ -2,6 +2,7 @@ package com.iti.mobile.triporganizer.appHead;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
@@ -12,42 +13,52 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti.mobile.triporganizer.R;
+import com.iti.mobile.triporganizer.app.TripOrganizerApp;
+import com.iti.mobile.triporganizer.dagger.module.controller.ChatHeadServiceControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.room.dao.NoteDao;
+import com.iti.mobile.triporganizer.data.room.dao.TripDao;
+import com.iti.mobile.triporganizer.data.shared_prefs.SharedPreferenceUtility;
 import com.iti.mobile.triporganizer.details.NoteAdapter;
+import com.iti.mobile.triporganizer.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class ChatHeadService extends Service implements LifecycleOwner {
+import static com.iti.mobile.triporganizer.utils.Constants.NO_DATA;
+import static com.iti.mobile.triporganizer.utils.Constants.USER_ID;
+
+public class ChatHeadService extends Service   {
     private WindowManager mWindowManager;
     private View mFloatingView;
+    RecyclerView recyclerView;
+    @Inject
+    SharedPreferences sharedPref;
     @Inject
     NoteDao noteDao;
+    @Inject
+    TripDao tripDao;
     String tripId;
-    Intent intent;
-
     public ChatHeadService() {
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        this.intent = intent ;
         tripId = intent.getStringExtra("tripId");
-        return super.onStartCommand(intent,flags,startId);
+        ((TripOrganizerApp) getApplication()).getComponent().newServiceControllerComponent(new ChatHeadServiceControllerModule(this)).inject(this);
+        List<Note> noteList = noteDao.getAllNoteNotLive(Integer.parseInt(tripId));
+        if (noteList != null && noteList.size() > 0) {
+            NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), noteList);
+            recyclerView.setAdapter(noteAdapter);
+        }
+        return START_STICKY;
     }
     @Override
     public IBinder onBind(Intent intent) {
@@ -106,6 +117,7 @@ public class ChatHeadService extends Service implements LifecycleOwner {
             @Override
             public void onClick(View view) {
                 //close the service and remove the from from the window
+                tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
                 stopSelf();
             }
         });
@@ -113,38 +125,10 @@ public class ChatHeadService extends Service implements LifecycleOwner {
         //Set the view while floating view is expanded.
         //Set the play button.
 
-       RecyclerView recyclerView     = mFloatingView.findViewById(R.id.RV);
+       recyclerView     = mFloatingView.findViewById(R.id.RV);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        List<Note> notes = new ArrayList<>();
-//        Note note1 = new Note();
-//        note1.setMessage("ssssssss");
-//        Note note2 = new Note();
-//        note2.setMessage("ssssssss");
-//        Note note3 = new Note();
-//        note3.setMessage("ssssssss");
-//        Note note4 = new Note();
-//        note4.setMessage("ssssssss");
-//        Note note5 = new Note();
-//        note5.setMessage("ssssssss");
-//        notes.add(note1);
-//        notes.add(note2);
-//        notes.add(note3);
-//        notes.add(note4);
-//        notes.add(note5);
-
-
-        noteDao.getAllNote(Integer.parseInt(tripId)).observe(this, notes -> {
-            NoteAdapter noteAdapter = new NoteAdapter(ChatHeadService.this,notes);
-            recyclerView.setAdapter(noteAdapter);
-        });
-
-
-
-
-
-
-        Button endTripBT = mFloatingView.findViewById(R.id.endTripBT);
+        //Button endTripBT = mFloatingView.findViewById(R.id.endTripBT);
 
         //Set the close button
         ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.close_button);
@@ -155,9 +139,6 @@ public class ChatHeadService extends Service implements LifecycleOwner {
                 expandedView.setVisibility(View.GONE);
             }
         });
-
-
-
 
         //Drag and move floating view using user's touch action.
         mFloatingView.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
@@ -229,9 +210,4 @@ public class ChatHeadService extends Service implements LifecycleOwner {
         if (mFloatingView != null) mWindowManager.removeView(mFloatingView);
     }
 
-    @NonNull
-    @Override
-    public Lifecycle getLifecycle() {
-        return null;
-    }
 }

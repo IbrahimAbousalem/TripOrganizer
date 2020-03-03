@@ -62,19 +62,19 @@
 
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/headImageView"
                 android:visibility="visible"
                 android:id="@+id/RV"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="End Trip"
-                android:textSize="14sp"
-                android:id="@+id/endTripBT"
-                />
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="End Trip"-->
+<!--                android:textSize="14sp"-->
+<!--                android:id="@+id/endTripBT"-->
+<!--                />-->
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

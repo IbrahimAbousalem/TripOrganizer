@@ -6,9 +6,8 @@ import com.iti.mobile.triporganizer.dagger.module.application.ApplicationModule;
 import com.iti.mobile.triporganizer.dagger.module.application.FirebaseModule;
 import com.iti.mobile.triporganizer.dagger.module.application.RoomModule;
 import com.iti.mobile.triporganizer.dagger.module.application.ViewModelFactoryModule;
+import com.iti.mobile.triporganizer.dagger.module.controller.ChatHeadServiceControllerModule;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
-import com.iti.mobile.triporganizer.data.room.TripOrganizerDatabase;
-import com.iti.mobile.triporganizer.data.room.dao.UserDao;
 
 import dagger.Component;
 
@@ -16,5 +15,6 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class, FirebaseModule.class, ViewModelFactoryModule.class, RoomModule.class})
 public interface ApplicationComponent {
     ControllerComponent newControllerComponent(ControllerModule module);
+    ServiceComponent newServiceControllerComponent(ChatHeadServiceControllerModule module);
     void inject(TripOrganizerApp application);
 }

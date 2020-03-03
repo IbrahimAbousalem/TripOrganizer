@@ -20,11 +20,14 @@ import com.iti.mobile.triporganizer.appHead.ChatHeadActivity;
 import com.iti.mobile.triporganizer.appHead.ChatHeadService;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
+import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.iti.mobile.triporganizer.alarm.AlarmService.foregroundId;
+import static com.iti.mobile.triporganizer.utils.Constants.NO_DATA;
+import static com.iti.mobile.triporganizer.utils.Constants.USER_ID;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_Cancel;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_End;
 import static com.iti.mobile.triporganizer.utils.NotificationsUtils.Action_Snooze;
@@ -69,18 +72,19 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
 
+            String tripId, desLat, destLon;
+            tripId = intent.getStringExtra("tripId");
+            desLat = intent.getStringExtra("destnationLatitude");
+            destLon = intent.getStringExtra("destinatinLongtiude");
 
             if (Settings.canDrawOverlays(context)) {
-                context.startService(new Intent(context, ChatHeadService.class).putExtra("tripId", intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
+                context.startService(new Intent(context, ChatHeadService.class).putExtra("tripId", tripId));
             }
              if (tripOrganizerApp.getAlarmService()!=null){
                 tripOrganizerApp.stopAlarmService();
             }
             //context.startActivity(new Intent(context, ChatHeadActivity.class).putExtra("tripId",intent.getStringExtra("tripId")).setFlags(FLAG_ACTIVITY_NEW_TASK));
-            String tripId, desLat, destLon;
-            tripId = intent.getStringExtra("tripId");
-            desLat = intent.getStringExtra("destnationLatitude");
-            destLon = intent.getStringExtra("destinatinLongtiude");
+
             Uri gmmIntentUri = Uri.parse("google.navigation:q="+desLat+","+destLon);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri).setFlags(FLAG_ACTIVITY_NEW_TASK);
             mapIntent.setPackage("com.google.android.apps.maps");
@@ -98,6 +102,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             tripId = intent.getStringExtra("tripId");
             desLat = intent.getStringExtra("destnationLatitude");
             destLon = intent.getStringExtra("destinatinLongtiude");
+            //tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
             //TODO do databasse changes
         }
         else {

@@ -27,6 +27,7 @@ import com.iti.mobile.triporganizer.main.TripsViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,7 +67,8 @@ public class HistoryFragment extends Fragment {
         historyViewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HistoryViewModel.class);
         controller = Navigation.findNavController(view);
         String userId = historyViewModel.getCurrentUserId();
-        historyViewModel.getAllHistoryTrips(userId).observe(getActivity(), tripAndLocationList -> {
+        long date = new Date().getTime();
+        historyViewModel.getAllHistoryTrips(userId,date).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             adapter.submitList(tripAndLocationList);
             //get it from firebase.
         });
