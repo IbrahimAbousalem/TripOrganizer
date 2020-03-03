@@ -34,8 +34,8 @@ public class DetailsViewModel extends ViewModel {
         repo.deleteTrip(trip);
     }
 
-    public void updateTripAndNotes(TripAndLocation trip, List<Note> notes){
-        repo.updateTripAndNotes(trip, notes);
+    public LiveData<String> updateTripAndNotes(TripAndLocation trip, List<Note> notes){
+         return repo.updateTripAndNotes(trip, notes);
     }
 
     public LiveData<List<Note>> getAllNotes(long tripId){

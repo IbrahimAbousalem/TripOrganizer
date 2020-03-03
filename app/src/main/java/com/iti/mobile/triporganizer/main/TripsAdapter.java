@@ -86,27 +86,35 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             upcomingTripViewHolder.setTripDateTv(DateUtils.simpleDateFormatForYears_Months.format(trip.getLocationDataList().getStartDate()));
             upcomingTripViewHolder.setTripTimeTv(DateUtils.simpleDateFormatForHours_Minutes.format(trip.getLocationDataList().getStartDate()));
             upcomingTripViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
-            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
-            upcomingTripViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
-            upcomingTripViewHolder.startBtn.setOnClickListener((view)->{
 
-            });
+            upcomingTripViewHolder.itemView.setOnClickListener(
+                    view -> {
+                        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
+                        Navigation.findNavController(view).navigate(action);
+                    });
+
         }else if (holder instanceof  TripsViewHolder){
             TripAndLocation trip = getItem(position);
             TripsViewHolder tripsViewHolder = (TripsViewHolder) holder;
             tripsViewHolder.setTripNameTv(trip.getTrip().getTripName());
             tripsViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
             tripsViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
-            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
-            tripsViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
+            tripsViewHolder.itemView.setOnClickListener(
+                    view -> {
+                        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
+                        Navigation.findNavController(view).navigate(action);
+                    });
         }else if (holder instanceof  UpcomingTripsTextViewHolder){
             TripAndLocation trip = getItem(position);
             UpcomingTripsTextViewHolder upcomingTripsTextViewHolder = (UpcomingTripsTextViewHolder) holder;
             upcomingTripsTextViewHolder.setTripNameTv(trip.getTrip().getTripName());
             upcomingTripsTextViewHolder.setTripDateTv(trip.getLocationDataList().getStartDate().toString());
             upcomingTripsTextViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
-            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
-            upcomingTripsTextViewHolder.itemView.setOnClickListener(Navigation.createNavigateOnClickListener(action));
+            upcomingTripsTextViewHolder.itemView.setOnClickListener(
+                    view -> {
+                        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(trip);
+                        Navigation.findNavController(view).navigate(action);
+                    });
         }
     }
 
@@ -150,9 +158,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri).setFlags(FLAG_ACTIVITY_NEW_TASK);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 itemView.getContext().startActivity(mapIntent);
-                ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).stopSound();
-                ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).getAlarmService().stopForeground(true);
-                ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).getAlarmService().startForeground(foregroundId, NotificationsUtils.makeStatusNotificationForStartedTrip("started trip", getApplicationContext(),"started trip", String.valueOf(getItem(getAdapterPosition()).getTrip().getId()),String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLat()), String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLng())));
+
 
             });
         }
