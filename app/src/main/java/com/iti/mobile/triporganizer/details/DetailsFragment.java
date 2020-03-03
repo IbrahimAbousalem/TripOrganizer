@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -36,6 +37,7 @@ import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
+import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.DateUtils;
 
@@ -486,7 +488,15 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         receivedTripAndLocation.getLocationDataList().setStartTripEndAddressName(endAddress);
         receivedTripAndLocation.getTrip().setTripName(tripName);
         receivedTripAndLocation.getLocationDataList().setRound(isRound);
-        detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList);
+        detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList).observe(getViewLifecycleOwner(), s -> {
+            if(s.equals("Updated Successfully!")){
+                AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(),receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng()));
+                if (receivedTripAndLocation.getLocationDataList().isRound()) {
+                    AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(), receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLng()));
+                }
+            }
+        });
+
     }
 
     private void addNote() {

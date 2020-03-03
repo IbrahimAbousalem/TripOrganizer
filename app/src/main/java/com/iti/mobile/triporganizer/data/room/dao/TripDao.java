@@ -31,7 +31,7 @@ public interface TripDao {
     void updateStatus(long tripId, String userId, String status);
 
     @Transaction
-    @Query("SELECT trips.*, locationData.* FROM trips, locationData WHERE trips.userId =:userId AND trips.status = '"+ Constants.UPCOMING +"' AND locationData.tripId = trips.id AND ((locationData.startDate > :millisecond AND locationData.isRound = 0) OR (locationData.startDate< :millisecond AND locationData.isRound = 1 AND locationData.roundDate > :millisecond))")
+    @Query("SELECT trips.*, locationData.* FROM trips, locationData WHERE trips.userId =:userId AND trips.status = '"+ Constants.UPCOMING +"' AND locationData.tripId = trips.id AND ((locationData.startDate > :millisecond AND locationData.isRound = 0) OR (locationData.startDate> :millisecond AND locationData.isRound = 1 AND locationData.roundDate > :millisecond) OR (locationData.startDate < :millisecond AND locationData.isRound = 1 AND locationData.roundDate > :millisecond))")
     LiveData<List<TripAndLocation>> getAllHomeTrips(String userId, long millisecond);
 
     @Transaction

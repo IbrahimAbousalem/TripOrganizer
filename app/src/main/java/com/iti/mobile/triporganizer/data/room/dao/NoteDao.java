@@ -28,5 +28,5 @@ public interface NoteDao {
     LiveData<List<Note>> getAllNote(long tripId);
 
     @Query("SELECT * FROM notes WHERE tripId = :tripId")
-    List<Note> getAllNoteNotLive(int tripId);
+    List<Note> getAllNoteNotLive(long tripId);
 }
