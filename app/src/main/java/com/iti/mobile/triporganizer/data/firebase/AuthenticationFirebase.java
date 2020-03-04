@@ -92,7 +92,7 @@ public class AuthenticationFirebase {
         });
         return currentUserLiveData;
     }
-    
+
     public LiveData<String> signInWithFacebookFunc(AccessToken accessToken){
         MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
         Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
