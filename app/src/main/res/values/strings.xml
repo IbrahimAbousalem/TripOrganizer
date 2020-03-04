@@ -60,7 +60,7 @@
     <string name="no">No</string>
     <string name="delete">Delete</string>
 
-    <string name="snooze">Snooze</string>
+    <string name="snooze">Snooze(30 min)</string>
     <string name="myTrips">My Trips</string>
     <string name="history">History</string>
 
