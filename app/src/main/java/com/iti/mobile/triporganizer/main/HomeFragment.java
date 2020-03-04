@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         long date = new Date().getTime();
         tripsViewModel.getUpComingTripsFromRoom(userId, date).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             if (tripAndLocationList.isEmpty()) {
-
+                //TODO Register alarms again....
                 tripsViewModel.getTripsFromFirebase(userId);
             }else {
                 tripsAdapter.submitList(tripAndLocationList);
