@@ -49,6 +49,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -113,11 +114,9 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.navigate(R.id.action_addTripFragment_to_homeFragment);
-            }
+        binding.taskToolbar.setNavigationOnClickListener((View.OnClickListener) v -> {
+            //controller.navigate(R.id.action_addTripFragment_to_homeFragment)
+            Objects.requireNonNull(getActivity()).onBackPressed();
         });
         binding.addTripFab.setOnClickListener(this);
         binding.date1Tv.setOnClickListener(this);
@@ -343,7 +342,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 if (newTrip.getLocationData().isRound()) {
                     AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getRoundDate().getTime(), newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLat()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLng()));
                 }
-                getActivity().onBackPressed();
+                Objects.requireNonNull(getActivity()).onBackPressed();
             });
         //}
     }

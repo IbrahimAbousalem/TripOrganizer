@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void goToSignIn() {
-        controller.navigate(R.id.action_profileFragment3_to_loginFragment);
+        controller.navigate(R.id.action_profileFragment_to_loginFragment);
     }
 
     private void setUserDate(User user) {
@@ -248,7 +248,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                controller.navigate(R.id.action_profileFragment3_to_homeFragment);
+                getActivity().onBackPressed();
             }
         });
         binding.editImgView.setOnClickListener(this);

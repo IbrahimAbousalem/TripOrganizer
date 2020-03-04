@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -52,33 +51,25 @@ public class MainActivity extends AppCompatActivity {
                 navHostFragment.getNavController());
         navController = navHostFragment.getNavController();
         addButton = activityMainBinding.addButton;
-        navHostFragment.getNavController().addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                //TODO bottom navigation is circular fix it
-                if (destination.getId() == R.id.homeFragment || destination.getId() == R.id.historyFragment || destination.getId() == R.id.profileFragment3){
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                    addButton.setVisibility(View.VISIBLE);
-                    if (destination.getId() == R.id.homeFragment) {
-                        addButton.setOnClickListener((view) -> {
-                            navController.navigate(R.id.action_homeFragment_to_addTripFragment);
-                        });
-                    }else if (destination.getId() == R.id.historyFragment){addButton.setOnClickListener((view) -> {
+        navHostFragment.getNavController().addOnDestinationChangedListener((controller, destination, arguments) -> {
+            //TODO bottom navigation is circular fix it
+            if (destination.getId() == R.id.homeFragment || destination.getId() == R.id.historyFragment || destination.getId() == R.id.profileFragment){
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.VISIBLE);
+                if (destination.getId() == R.id.homeFragment) {
+                    addButton.setOnClickListener((view) -> {
+                        navController.navigate(R.id.action_homeFragment_to_addTripFragment);
+                    });
+                }else if (destination.getId() == R.id.historyFragment){
+                    addButton.setOnClickListener((view) -> {
                         navController.navigate(R.id.action_historyFragment_to_addTripFragment);
-                    });}else {
-                        addButton.setOnClickListener((view)->{
-                            navController.navigate(R.id.action_profileFragment3_to_addTripFragment2);
-                        });
-
-                    }
-                }else {
-                    bottomNavigationView.setVisibility(View.GONE);
-                    addButton.setVisibility(View.GONE);
+                    });
                 }
+            }else {
+                bottomNavigationView.setVisibility(View.GONE);
+                addButton.setVisibility(View.GONE);
             }
         });
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
