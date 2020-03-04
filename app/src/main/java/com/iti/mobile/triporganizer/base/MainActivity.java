@@ -56,16 +56,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 //TODO bottom navigation is circular fix it
-                if (destination.getId() == R.id.homeFragment || destination.getId() == R.id.historyFragment){
+                if (destination.getId() == R.id.homeFragment || destination.getId() == R.id.historyFragment || destination.getId() == R.id.profileFragment3){
                     bottomNavigationView.setVisibility(View.VISIBLE);
                     addButton.setVisibility(View.VISIBLE);
                     if (destination.getId() == R.id.homeFragment) {
                         addButton.setOnClickListener((view) -> {
                             navController.navigate(R.id.action_homeFragment_to_addTripFragment);
                         });
-                    }else {addButton.setOnClickListener((view) -> {
+                    }else if (destination.getId() == R.id.historyFragment){addButton.setOnClickListener((view) -> {
                         navController.navigate(R.id.action_historyFragment_to_addTripFragment);
-                    });}
+                    });}else {
+                        addButton.setOnClickListener((view)->{
+                            navController.navigate(R.id.action_profileFragment3_to_addTripFragment2);
+                        });
+
+                    }
                 }else {
                     bottomNavigationView.setVisibility(View.GONE);
                     addButton.setVisibility(View.GONE);

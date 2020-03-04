@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:textColor="#090909"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -114,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/googleImageView"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

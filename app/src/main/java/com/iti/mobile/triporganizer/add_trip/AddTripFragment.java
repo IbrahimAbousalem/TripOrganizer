@@ -67,7 +67,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     private AutocompleteSupportFragment endPointAutocompleteFragment;
     private PlacesClient placesClient;
 
-    NavController controller;
+    private NavController controller;
     @Inject
     ViewModelProviderFactory providerFactory;
     AddTripViewModel addTripViewModel;
@@ -113,6 +113,12 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
+        binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.navigate(R.id.action_addTripFragment_to_homeFragment);
+            }
+        });
         binding.addTripFab.setOnClickListener(this);
         binding.date1Tv.setOnClickListener(this);
         binding.date2Tv.setOnClickListener(this);
@@ -332,7 +338,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             trip.setUserId(userId);
             trip.setStatus(Constants.UPCOMING);
             trip.setLocationData(locationData);
-            addTripViewModel.addTripAndNotes(trip, notesList).observe(requireActivity(), newTrip -> {
+            addTripViewModel.addTripAndNotes(trip, notesList).observe(getViewLifecycleOwner(), newTrip -> {
                 AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getStartDate().getTime(),newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLat()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLng()));
                 if (newTrip.getLocationData().isRound()) {
                     AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getRoundDate().getTime(), newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLat()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLng()));

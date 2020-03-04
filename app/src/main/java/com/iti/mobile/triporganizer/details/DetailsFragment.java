@@ -280,6 +280,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 ///////////////////////////////////////////////////////////////////////////
 
     public void setUpViews() {
+        binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.navigate(R.id.action_detailsFragment_to_homeFragment);
+            }
+        });
         binding.editBtn.setOnClickListener(this);
         binding.viewBtn.setOnClickListener(this);
         binding.saveTripFab.setOnClickListener(this);

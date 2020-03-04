@@ -13,6 +13,8 @@ import com.iti.mobile.triporganizer.data.repository.auth.AuthenticationRepositor
 import com.iti.mobile.triporganizer.data.repository.notes.NoteRepositoryRoomImp;
 import com.iti.mobile.triporganizer.data.repository.notes.NotesRepository;
 import com.iti.mobile.triporganizer.data.repository.notes.NotesRepositoryFirebaseImp;
+import com.iti.mobile.triporganizer.data.repository.profile.ProfileRepository;
+import com.iti.mobile.triporganizer.data.repository.profile.ProfileRepositoryImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryFirebaseImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripRepositoryRoomImp;
 import com.iti.mobile.triporganizer.data.repository.trips.TripsRepository;
@@ -78,6 +80,12 @@ public class RoomModule {
     @Provides
     AuthenticationRepository provideAuthentication(AuthenticationFirebase firebase){
         return new AuthenticationRepositoryImp(firebase);
+    }
+
+    @ApplicationScope
+    @Provides
+    ProfileRepository profileRepository(AuthenticationFirebase firebase){
+        return new ProfileRepositoryImp(firebase);
     }
 
     @ApplicationScope

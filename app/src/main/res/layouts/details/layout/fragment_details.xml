@@ -15,7 +15,7 @@
             app:navigationIcon="?attr/homeAsUpIndicator"
             android:theme="?attr/actionBarTheme"
             android:minHeight="?attr/actionBarSize"
-            android:id="@+id/task_toolbar"
+            android:id="@+id/taskToolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
             app:layout_constraintEnd_toStartOf="@+id/editBtn"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/taskToolbar" />
         <Button
             android:id="@+id/editBtn"
             style="@style/viewedit_btn"
