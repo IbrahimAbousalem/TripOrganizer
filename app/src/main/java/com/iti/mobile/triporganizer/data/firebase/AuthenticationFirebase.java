@@ -77,6 +77,11 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=null;
                 for (UserInfo userInfo:user.getProviderData()){
+                    Log.i(TAG,"/////////GOOGLE///////////////////////////////////////");
+                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
+                    Log.i(TAG,"name////////////////////////////// "+user.getPhotoUrl().toString());
+                    Log.i(TAG,"name////////////////////////////// "+user.getEmail());
+                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
                     currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
                 saveToDatabase(currentUser);
@@ -138,7 +143,8 @@ public class AuthenticationFirebase {
                     currentUser.postValue(new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId()));
                 }
             }else{
-
+                //currentUser.postValue(new User(firebaseUser.getDisplayName(),firebaseUser.getPhotoUrl().toString(),
+                  //      firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
             }
             //TODO : i Commented the user image.
             currentUser.postValue(new User(firebaseUser.getDisplayName(),"",firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
@@ -148,12 +154,18 @@ public class AuthenticationFirebase {
         return currentUser;
     }
 
-    public void signOutFunc(){
+    public LiveData<String> signOutFunc(){
+        MutableLiveData<String> providerId=new MutableLiveData<>();
         firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null){
             firebaseAuth.signOut();
+            for(UserInfo userInfo:firebaseUser.getProviderData()){
+                Log.i(TAG,".......................providerId: "+userInfo.getProviderId());
+                providerId.postValue(userInfo.getProviderId());
+            }
         }
         sharedPref.clearPref();
+        return providerId;
     }
 
     public MutableLiveData<String> register(User user, String password) {

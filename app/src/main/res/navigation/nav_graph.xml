@@ -83,6 +83,12 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             />
+        <action
+            android:id="@+id/action_profileFragment3_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileFragment3_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
@@ -131,7 +137,11 @@
         android:id="@+id/addTripFragment"
         android:name="com.iti.mobile.triporganizer.add_trip.AddTripFragment"
         android:label="fragment_add_trip"
-        tools:layout="@layout/fragment_add_trip" />
+        tools:layout="@layout/fragment_add_trip" >
+        <action
+            android:id="@+id/action_addTripFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.iti.mobile.triporganizer.details.DetailsFragment"
@@ -140,6 +150,9 @@
         <argument
             android:name="tripAndLocation"
             app:argType="com.iti.mobile.triporganizer.data.entities.TripAndLocation" />
+        <action
+            android:id="@+id/action_detailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
         <fragment
         android:id="@+id/historyDetailFragment"

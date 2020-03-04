@@ -1,60 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/d_32"
     tools:context=".profile.ProfileFragment">
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/taskToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="@string/profile">
+        <ImageView
+            android:id="@+id/editImgView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_edit_gray_24dp"
+            android:layout_gravity="right"
+            android:layout_margin="@dimen/d_10"
+            />
+    </androidx.appcompat.widget.Toolbar>
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/profileFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
         android:layout_marginStart="@dimen/d_16"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="@dimen/d_16"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_card_no_clr"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:context=".profile.ProfileFragment">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/task_toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="@string/profile" >
-            <ImageView
-                android:id="@+id/editImgView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_edit_gray_24dp"
-                android:layout_gravity="right"
-                android:layout_margin="@dimen/d_10"
-                />
-        </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintTop_toBottomOf="@+id/taskToolbar">
 
         <ImageView
             android:id="@+id/profileImageView"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginTop="40dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.467"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_toolbar"
             app:srcCompat="@drawable/ic_user"
             tools:src="@tools:sample/avatars" />
 
@@ -85,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/d_32"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/d_16"
             android:layout_marginEnd="@dimen/d_32"
             android:layout_marginBottom="64dp"
             android:drawableLeft="@drawable/ic_email"
@@ -100,7 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/d_32"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/d_16"
             android:layout_marginEnd="@dimen/d_32"
             android:layout_marginBottom="@dimen/d_16"
             android:drawableLeft="@drawable/ic_email"
@@ -115,6 +111,7 @@
             android:id="@+id/userNameEt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d_16"
             android:layout_marginStart="@dimen/d_32"
             android:layout_marginEnd="@dimen/d_32"
             android:layout_marginBottom="@dimen/d_32"
@@ -131,6 +128,7 @@
             android:id="@+id/userNameViewTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d_16"
             android:layout_marginStart="@dimen/d_32"
             android:layout_marginEnd="@dimen/d_32"
             android:layout_marginBottom="@dimen/d_16"
@@ -143,22 +141,48 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.431"
             app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userEmailViewTv" />
+            app:layout_constraintTop_toBottomOf="@+id/userEmailViewTv" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d_16"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="@dimen/d_16"
+            android:hint="@string/pass"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.431"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userNameEt"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/ic_lock_24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="textPassword"
+                android:textColor="#090909"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
         <Button
             android:id="@+id/logoutBtn"
-            android:textColor="@android:color/white"
+            android:textColor="@color/darktxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="86dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="86dp"
             android:layout_marginBottom="32dp"
-            android:background="@drawable/rounded_btn_clr_orange"
+            android:background="@drawable/rounded_btn_no_clr"
             android:text="@string/logout"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userNameViewTv"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
@@ -169,17 +193,14 @@
             android:layout_marginTop="64dp"
             android:layout_marginEnd="86dp"
             android:layout_marginBottom="32dp"
-            android:background="@drawable/rounded_btn_clr_orange"
+            android:background="@drawable/rounded_btn_no_clr"
             android:text="@string/save"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@android:color/white"
+            android:textColor="@color/darktxt"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userNameEt" />
-
-
-
+             />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

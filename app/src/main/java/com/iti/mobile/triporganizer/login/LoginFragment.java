@@ -53,9 +53,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private static final int RC_SIGN_IN = 9001;
 
     private NavController controller;
+
     @Inject
     ViewModelProviderFactory providerFactory;
     LoginViewModel loginViewModel;
+
     private FragmentLoginBinding binding;
 
     private GoogleConfiguration googleConfiguration;

@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".add_trip.AddTripFragment">
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/taskToolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:title="@string/addTrip"
         app:navigationIcon="?attr/homeAsUpIndicator"
         android:theme="?attr/actionBarTheme"
         android:minHeight="?attr/actionBarSize"
-        android:id="@+id/task_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/task_toolbar">
+    app:layout_constraintTop_toBottomOf="@+id/taskToolbar">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/profileFragmentContainer"
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_card_no_clr"
-            app:layout_constraintTop_toBottomOf="@+id/task_toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/taskToolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
            >

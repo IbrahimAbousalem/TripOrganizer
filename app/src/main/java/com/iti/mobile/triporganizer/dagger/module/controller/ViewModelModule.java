@@ -6,6 +6,7 @@ import com.iti.mobile.triporganizer.details.DetailsViewModel;
 import com.iti.mobile.triporganizer.history.HistoryViewModel;
 import com.iti.mobile.triporganizer.login.LoginViewModel;
 import com.iti.mobile.triporganizer.main.TripsViewModel;
+import com.iti.mobile.triporganizer.profile.ProfileViewModel;
 import com.iti.mobile.triporganizer.register.RegisterViewModel;
 
 import androidx.lifecycle.ViewModel;
@@ -45,4 +46,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AddTripViewModel.class)
     public abstract ViewModel bindAddTripViewModel(AddTripViewModel addTripModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileViewModel.class)
+    public abstract ViewModel bindProfileViewModel(ProfileViewModel profileViewModel);
 }

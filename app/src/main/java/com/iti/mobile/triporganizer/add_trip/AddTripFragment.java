@@ -67,7 +67,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     private AutocompleteSupportFragment endPointAutocompleteFragment;
     private PlacesClient placesClient;
 
-    NavController controller;
+    private NavController controller;
     @Inject
     ViewModelProviderFactory providerFactory;
     AddTripViewModel addTripViewModel;
@@ -113,6 +113,12 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
+        binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.navigate(R.id.action_addTripFragment_to_homeFragment);
+            }
+        });
         binding.addTripFab.setOnClickListener(this);
         binding.date1Tv.setOnClickListener(this);
         binding.date2Tv.setOnClickListener(this);
