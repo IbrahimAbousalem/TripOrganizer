@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +34,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     public static final String TAG = "HomeFragment";
     private RecyclerView tripsRecyclerView;
+    private LinearLayout noTripsLayout;
     private NavController controller;
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -62,14 +67,18 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         controller = Navigation.findNavController(view);
         tripsAdapter = new TripsAdapter();
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        tripsRecyclerView.setAdapter(tripsAdapter);
         String userId = tripsViewModel.getCurrentUserId();
         tripsViewModel.getUpComingTripsFromRoom(userId).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             if (tripAndLocationList.isEmpty()) {
                 //TODO Register alarms again....
                 tripsViewModel.getTripsFromFirebase(userId);
+                noTripsLayout.setVisibility(VISIBLE);
+                tripsRecyclerView.setVisibility(INVISIBLE);
             }else {
+                tripsRecyclerView.setAdapter(tripsAdapter);
                 tripsAdapter.submitList(tripAndLocationList);
+                noTripsLayout.setVisibility(INVISIBLE);
+                tripsRecyclerView.setVisibility(VISIBLE);
                 Log.d("data", "we have trips .. ");
             }
         });
@@ -78,6 +87,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     private void initViews(View view) {
         tripsRecyclerView = view.findViewById(R.id.tripsRecyclerView);
+        noTripsLayout=view.findViewById(R.id.no_trips_layout);
         tripsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         tripsRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);

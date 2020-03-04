@@ -85,6 +85,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addnoteimg">addNoteImg</string>
-
+    <string name="notrips">There are currently no Up Coming Trips !
+        \n Tap the button below to get started! </string>
 
 </resources>
