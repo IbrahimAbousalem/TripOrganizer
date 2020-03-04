@@ -77,11 +77,6 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=null;
                 for (UserInfo userInfo:user.getProviderData()){
-                    Log.i(TAG,"/////////GOOGLE///////////////////////////////////////");
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    Log.i(TAG,"name////////////////////////////// "+user.getPhotoUrl().toString());
-                    Log.i(TAG,"name////////////////////////////// "+user.getEmail());
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
                     currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
                 saveToDatabase(currentUser);
@@ -205,6 +200,11 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=null;
                 for (UserInfo userInfo:user.getProviderData()){
+                    Log.i(TAG,"/////////GOOGLE///////////////////////////////////////");
+                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
+                    Log.i(TAG,"name////////////////////////////// "+user.getPhotoUrl().toString());
+                    Log.i(TAG,"name////////////////////////////// "+user.getEmail());
+                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
                     currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
                 User finalCurrentUser = currentUser;

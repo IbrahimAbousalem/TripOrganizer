@@ -44,8 +44,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         holder.itemView.setOnClickListener(
                 view -> {
-                    HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(tripsList.get(position));
-                    Navigation.findNavController(view).navigate(historyFragmentDirections);
+//                    HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(tripsList.get(position));
+//                    Navigation.findNavController(view).navigate(historyFragmentDirections);
                 });
     }
 

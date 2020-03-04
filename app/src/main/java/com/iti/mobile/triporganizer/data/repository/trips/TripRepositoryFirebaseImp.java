@@ -37,7 +37,7 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
 
     //think more about this..
     @Override
-    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId, long date) {
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId) {
         return null;
     }
 
@@ -52,7 +52,7 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
     }
 
     @Override
-    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId, long date) {
+    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId) {
         return null;
     }
 

@@ -69,10 +69,9 @@ public class HistoryFragment extends Fragment {
         historyViewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HistoryViewModel.class);
         controller = Navigation.findNavController(view);
         String userId = historyViewModel.getCurrentUserId();
-        long date = new Date().getTime();
-        historyViewModel.getAllHistoryTrips(userId,date).observe(getViewLifecycleOwner(), tripAndLocationList -> {
+        historyViewModel.getAllHistoryTrips(userId).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             adapter.setData(tripAndLocationList);
-            //get it from firebase.
+            //TODO: get it from firebase.
         });
 
     }

@@ -41,12 +41,12 @@ public class TripsRoom {
         this.db = db;
     }
 
-    public LiveData<List<TripAndLocation>> getAllUpComingTrips(String userId, long date){
-        return tripDao.getAllHomeTrips(userId, date);
+    public LiveData<List<TripAndLocation>> getAllUpComingTrips(String userId){
+        return tripDao.getAllHomeTrips(userId);
     }
 
-    public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId, long date){
-        return tripDao.getAllHistoryTrips(userId, date);
+    public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId){
+        return tripDao.getAllHistoryTrips(userId);
     }
 
     public void addTrip(Trip trip){
