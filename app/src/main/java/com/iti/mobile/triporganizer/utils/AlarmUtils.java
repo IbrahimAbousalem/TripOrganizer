@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.text.format.DateUtils;
 
 import androidx.annotation.NonNull;
 
@@ -61,10 +62,11 @@ public class AlarmUtils {
     public static void startAlarmForSnooze(@NonNull Context context, long triggerAtMillis, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
+            long nextUpdateTimeMillis = System.currentTimeMillis() + 30 * DateUtils.MINUTE_IN_MILLIS;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextUpdateTimeMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
             }else {
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+                alarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdateTimeMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
             }
         }
     }
