@@ -73,6 +73,7 @@
     <string name="plzPickValidStartTime">Start Time has to occurs before End Time</string>
     <string name="plzPickValidStartDate_current">Start Date has to occurs After Current Date</string>
     <string name="plzPickValidStartTime_current">Start Time has to occurs After Current Time</string>
+    <string name="plzPickDateFirst">You have to pick a date first</string>
 
     <string name="logout">Log Out</string>
     <string name="save">Save</string>

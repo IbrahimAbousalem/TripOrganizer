@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
@@ -224,8 +225,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         binding.time1TitleTv.setVisibility(GONE);
         binding.time1ViewTv.setVisibility(GONE);
         binding.saveTripFab.setVisibility(VISIBLE);
-        binding.roundBtn.setEnabled(true);
-        binding.singleBtn.setEnabled(true);
+        binding.roundBtn.setEnabled(false);
+        binding.singleBtn.setEnabled(false);
         if(round){
             showRoundTrip();
             binding.date2Tv.setVisibility(VISIBLE);
@@ -284,7 +285,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //controller.navigate(R.id.action_detailsFragment_to_homeFragment);
                 Objects.requireNonNull(getActivity()).onBackPressed();
             }
         });
@@ -325,13 +325,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 showDatePicker(DATE1);
                 break;
             case R.id.time1Tv:
-                showTime(TIME1);
+                checkDate1();
                 break;
             case R.id.date2Tv:
                 showDatePicker(DATE2);
                 break;
             case R.id.time2Tv:
-                showTime(TIME2);
+                checkDate2();
                 break;
             case R.id.singleBtn:
                 showSingleView();
@@ -347,6 +347,25 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 updateTrip();
                 break;
         }
+    }
+
+    private void checkDate1() {
+        if(binding.date1Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickDateFirst));
+        }else{
+            showTime(TIME1);
+        }
+    }
+    private void checkDate2() {
+        if(binding.date2Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickDateFirst));
+        }else{
+            showTime(TIME2);
+        }
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(getContext(),msg,Toast.LENGTH_SHORT).show();
     }
 
     private void showRoundView() {
@@ -370,24 +389,36 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private void showTime(int time) {
         binding.time1Tv.setError(null);
         binding.time2Tv.setError(null);
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
+        Calendar selectedDateTime = Calendar.getInstance();
+        mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
+        mMinute = selectedDateTime.get(Calendar.MINUTE);
+        Calendar currentDateTime=Calendar.getInstance();
         // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 (view, hourOfDay, minute) -> {
-                    switch(time){
-                        case 3:
-                            hour1 = hourOfDay;
-                            minute1 = minute;
-                            binding.time1Tv.setText(hourOfDay + ":" + minute);
-                            break;
-                        case 4:
-                            hour2=hourOfDay;
-                            minute2=minute;
-                            binding.time2Tv.setText(hourOfDay + ":" + minute);
-                            break;
-                    }
+            if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
+                switch(time){
+                    case 3:
+                        hour1 = hourOfDay;
+                        minute1 = minute;
+                        binding.time1Tv.setText(hourOfDay + ":" + minute);
+                        break;
+                    case 4:
+                        hour2=hourOfDay;
+                        minute2=minute;
+                        binding.time2Tv.setText(hourOfDay + ":" + minute);
+                        break;
+                }
+            }else{
+                switch(time){
+                    case 3:
+                        binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime_current));
+                        break;
+                    case 4:
+                        binding.time2Tv.setError(getResources().getString(R.string.plzPickValidStartTime_current));
+                        break;
+                }
+            }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
@@ -407,23 +438,21 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                     year1=year;
                     month1=month+1;
                     day1=dayOfMonth;
-                    binding.date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                    binding.date1Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                     break;
                 case 2:
                     year2=year;
                     month2=month+1;
                     day2=dayOfMonth;
-                    binding.date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                    binding.date2Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                     break;
             }
         }, mYear, mMonth, mDay);
-
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
     private void handleStartPointPlacesSelected(AutocompleteSupportFragment startPointAutocompleteFragment) {
-        ((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-                .setError(null);
         startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,
                 Place.Field.LAT_LNG,Place.Field.ADDRESS));
         startPointAutocompleteFragment.setHint(getString(R.string.estart_point));
@@ -448,8 +477,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleEndPointPlacesSelected(AutocompleteSupportFragment endPointAutocompleteFragment) {
-        ((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-                .setError(null);
         endPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
         endPointAutocompleteFragment.setHint(getString(R.string.eend_point));
         endPointAutocompleteFragment.setCountry("EG");
@@ -472,21 +499,79 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
+    private boolean isValidData(boolean isRound){
+        if(binding.tripNameEt.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzEnterTripName));
+            return false;
+        }
+        if(binding.date1Tv.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickDate));
+            return false;
+        }
+        if(binding.time1Tv.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickTime));
+            return false;
+        }
+        if (((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
+            showToast(getResources().getString(R.string.plzEnterStartPoint));
+            return false;
+        }
+        if (((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
+            showToast(getResources().getString(R.string.plzEnterEndPoint));
+            return false;
+        }
+        if(isRound){
+            if (binding.time2Tv.getText().toString().trim().isEmpty()) {
+                showToast(getResources().getString(R.string.plzPickTime));
+                return false;
+            }
+            if (binding.date2Tv.getText().toString().trim().isEmpty()) {
+                showToast(getResources().getString(R.string.plzPickDate));
+                return false;
+            }
+            /*if (receivedTripAndLocation.getLocationDataList().getStartDate().compareTo(receivedTripAndLocation.getLocationDataList().getRoundDate()) > 0) {
+                binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
+                return false;
+            }
+            if (receivedTripAndLocation.getLocationDataList().getStartDate().getTime() > receivedTripAndLocation.getLocationDataList().getRoundDate().getTime()) {
+                binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
+                return false;
+            }*/
+        }
+        return true;
+    }
     private void updateTrip() {
         String tripName=binding.tripNameEt.getText().toString();
         String date1=binding.date1Tv.getText().toString();
         String time1=binding.time1Tv.getText().toString();
         String date2=binding.date2Tv.getText().toString();
         String time2=binding.time2Tv.getText().toString();
+
         try {
-            SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            date1 = date1 + " " + time1;
-            Date formatedDate=format.parse(date1);
-            Log.d(TAG, formatedDate.toString());
-            receivedTripAndLocation.getLocationDataList().setStartDate(formatedDate);
-            Log.d(TAG,"saved formatted"+date1);
+            if(!date1.isEmpty()){
+                SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                date1 = date1 + " " + time1;
+                Date formatedDate=format.parse(date1);
+                Log.d(TAG, formatedDate.toString());
+                receivedTripAndLocation.getLocationDataList().setStartDate(formatedDate);
+                Log.d(TAG,"saved formatted"+date1);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if (isRound) {
+            try {
+                if (!date2.isEmpty()) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    date2 = date2 + " " + time2;
+                    Date formatedDate= format.parse(date2);
+                    Log.d(TAG, formatedDate.toString());
+                    receivedTripAndLocation.getLocationDataList().setRoundDate(formatedDate);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         receivedTripAndLocation.getLocationDataList().setStartTripStartPointLat(startPonitLat);
         receivedTripAndLocation.getLocationDataList().setStartTripStartPointLng(startPonitLng);
@@ -496,15 +581,18 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         receivedTripAndLocation.getLocationDataList().setStartTripEndAddressName(endAddress);
         receivedTripAndLocation.getTrip().setTripName(tripName);
         receivedTripAndLocation.getLocationDataList().setRound(isRound);
-        detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList).observe(getViewLifecycleOwner(), s -> {
-            if(s.equals("Updated Successfully!")){
-                AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(),receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng()));
-                if (receivedTripAndLocation.getLocationDataList().isRound()) {
-                    AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(), receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLng()));
-                }
-            }
-        });
 
+        isValidData(isRound);
+        if(isValidData(isRound)){
+            detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList).observe(getViewLifecycleOwner(), s -> {
+                if(s.equals("Updated Successfully!")){
+                    AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(),receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng()));
+                    if (receivedTripAndLocation.getLocationDataList().isRound()) {
+                        AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(), receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLng()));
+                    }
+                }
+            });
+        }
     }
 
     private void addNote() {
@@ -534,7 +622,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
         builder.show();
     }
-
     private void deleteNote(int position) {
         notesList.remove(position);
         noteAdapter.notifyItemRemoved(position);
