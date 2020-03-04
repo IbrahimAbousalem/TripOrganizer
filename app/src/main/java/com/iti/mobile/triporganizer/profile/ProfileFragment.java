@@ -56,7 +56,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ProfileViewModel profileViewModel;
 
     private boolean isEditable=false;
-    private String providerId="";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -76,15 +75,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         controller = Navigation.findNavController(view);
         ((TripOrganizerApp) getActivity().getApplication()).getComponent().newControllerComponent(new ControllerModule(getActivity())).inject(this);
         profileViewModel = new ViewModelProvider(this, providerFactory).get(ProfileViewModel.class);
-
-        profileViewModel.getCurrentUserVm().observe(getViewLifecycleOwner(),user -> {
+        String userId=profileViewModel.getCurrentUserVm();
+        profileViewModel.getUserFromRoom(userId).observe(getViewLifecycleOwner(),user -> {
             if(user!=null){
-                setUserDate(user);
+                setUserData(user);
             }else{
                 goToSignIn();
             }
-
         });
+
         setUpViews();
         Log.i("test","ONVIEWCreated IsEditable................"+isEditable);
         if(isEditable){
@@ -98,13 +97,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         controller.navigate(R.id.action_profileFragment_to_loginFragment);
     }
 
-    private void setUserDate(User user) {
-        Log.i(TAG,"........................username : "+user.getUserName());
-        Log.i(TAG,"........................useremail : "+user.getEmail());
-        Log.i(TAG,"........................user id  : "+user.getId());
-        Log.i(TAG,"........................provider id : "+user.getProvider_id());
-        Log.i(TAG,"........................profile picture: "+user.getProfilePicUrl());
-        providerId=user.getProvider_id();
+    private void setUserData(User user) {
         binding.userNameTv.setText(user.getUserName());
         binding.userEmailEt.setText(user.getEmail());
         binding.userEmailViewTv.setText(user.getEmail());
@@ -112,31 +105,40 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.userNameViewTv.setText(user.getUserName());
         if(!user.getProfilePicUrl().isEmpty()){
             Picasso.get().load(user.getProfilePicUrl()).into(binding.profileImageView);
+        }else{
+            binding.profileImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
         }
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.editImgView:
-                isEditable =! isEditable;
-                checkStatus(isEditable);
-                break;
-            case R.id.saveBtn:
-                saveProfile();
-                break;
-            case R.id.logoutBtn:
+//            case R.id.editImgView:
+//                isEditable =! isEditable;
+//                checkStatus(isEditable);
+//                break;
+//            case R.id.logoutBtn:
+//                logout();
+//                break;
+//            case R.id.saveBtn:
+//                saveProfile();
+//                break;
+            case R.id.logoutImgView:
                 logout();
                 break;
+
         }
     }
 
     private void logout() {
         profileViewModel.signOutVM().observe(this,provider_id->{
+            Log.i(TAG,"...........................(OBSERVE PROVIDER CURRENT ID) "+provider_id);
             switch (provider_id){
                 case "google.com":
                     signOutGoogle();
                     break;
+                case "password":
+                    goToSignIn();
             }
         });
     }
@@ -205,11 +207,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
     
     private void editProfile() {
-        binding.editImgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit_orange_24dp));
-        showProfileEditText();
-        hideProfileTextViews();
-        binding.logoutBtn.setVisibility(GONE);
-        binding.saveBtn.setVisibility(VISIBLE);
+//        binding.editImgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit_orange_24dp));
+//        showProfileEditText();
+//        hideProfileTextViews();
+//        binding.logoutBtn.setVisibility(GONE);
+//        binding.saveBtn.setVisibility(VISIBLE);
     }
 
     private void hideProfileTextViews() {
@@ -225,11 +227,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void viewProfile(){
-        binding.editImgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit_gray_24dp));
-        showProfileTextView();
-        hideProfileEditText();
-        binding.logoutBtn.setVisibility(VISIBLE);
-        binding.saveBtn.setVisibility(GONE);
+//        binding.editImgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit_gray_24dp));
+//        showProfileTextView();
+//        hideProfileEditText();
+//        binding.logoutBtn.setVisibility(VISIBLE);
+//        binding.saveBtn.setVisibility(GONE);
     }
 
     private void hideProfileEditText() {
@@ -251,8 +253,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 getActivity().onBackPressed();
             }
         });
-        binding.editImgView.setOnClickListener(this);
-        binding.saveBtn.setOnClickListener(this);
-        binding.logoutBtn.setOnClickListener(this);
+        binding.logoutImgView.setOnClickListener(this);
+//        binding.editImgView.setOnClickListener(this);
+//        binding.saveBtn.setOnClickListener(this);
+//        binding.logoutBtn.setOnClickListener(this);
     }
 }

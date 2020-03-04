@@ -22,8 +22,13 @@ public class ProfileRepositoryImp implements ProfileRepository{
 
 
     @Override
-    public LiveData<User> getCurrentUser() {
-        return authenticationFirebase.getCurrentUser();
+    public String getCurrentUserId() {
+        return authenticationFirebase.getCurrentUserId();
+    }
+
+    @Override
+    public LiveData<User> getUserFromRoom(String userId){
+        return authenticationFirebase.getUserFromRoom(userId);
     }
 
     @Override

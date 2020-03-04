@@ -55,15 +55,19 @@ public class MainActivity extends AppCompatActivity {
             //TODO bottom navigation is circular fix it
             if (destination.getId() == R.id.homeFragment || destination.getId() == R.id.historyFragment || destination.getId() == R.id.profileFragment){
                 bottomNavigationView.setVisibility(View.VISIBLE);
-                addButton.setVisibility(View.VISIBLE);
+
                 if (destination.getId() == R.id.homeFragment) {
+                    addButton.setVisibility(View.VISIBLE);
                     addButton.setOnClickListener((view) -> {
                         navController.navigate(R.id.action_homeFragment_to_addTripFragment);
                     });
                 }else if (destination.getId() == R.id.historyFragment){
+                    addButton.setVisibility(View.VISIBLE);
                     addButton.setOnClickListener((view) -> {
                         navController.navigate(R.id.action_historyFragment_to_addTripFragment);
                     });
+                }else{
+                    addButton.setVisibility(View.GONE);
                 }
             }else {
                 bottomNavigationView.setVisibility(View.GONE);
