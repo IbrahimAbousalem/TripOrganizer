@@ -48,6 +48,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -283,7 +284,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         binding.taskToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                controller.navigate(R.id.action_detailsFragment_to_homeFragment);
+                //controller.navigate(R.id.action_detailsFragment_to_homeFragment);
+                Objects.requireNonNull(getActivity()).onBackPressed();
             }
         });
         binding.editBtn.setOnClickListener(this);

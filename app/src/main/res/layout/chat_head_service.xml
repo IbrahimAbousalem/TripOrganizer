@@ -32,7 +32,7 @@
                 android:id="@+id/close_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:src="@drawable/ic_close"
                 tools:ignore="ContentDescription"/>
         </RelativeLayout>
@@ -40,41 +40,36 @@
         <!--View while view is expanded-->
         <LinearLayout
             android:id="@+id/expanded_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:background="#F8BBD0"
             android:visibility="gone"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="8dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginStart="60dp">
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/close_button"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_close"/>
-
-
             </RelativeLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/headImageView"
-                android:visibility="visible"
-                android:id="@+id/RV"/>
+            <LinearLayout
+                android:id="@+id/data"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                />
 
-<!--            <Button-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="End Trip"-->
-<!--                android:textSize="14sp"-->
-<!--                android:id="@+id/endTripBT"-->
-<!--                />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

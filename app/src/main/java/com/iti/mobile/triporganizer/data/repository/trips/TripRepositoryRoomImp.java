@@ -40,13 +40,13 @@ public class TripRepositoryRoomImp implements TripsRepository {
     }
 
     @Override
-    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId, long date) {
-        return tripsRoom.getAllUpComingTrips(userId, date);
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId) {
+        return tripsRoom.getAllUpComingTrips(userId);
     }
 
     @Override
-    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId, long date) {
-        return tripsRoom.getAllHistoryTrips(userId, date);
+    public LiveData<List<TripAndLocation>> getHistoryTrips(String userId) {
+        return tripsRoom.getAllHistoryTrips(userId);
     }
 
     @Override

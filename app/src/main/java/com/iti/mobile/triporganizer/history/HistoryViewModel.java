@@ -25,8 +25,8 @@ public class HistoryViewModel extends ViewModel {
         this.auth = auth;
     }
 
-    public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId, long date){
-        return tripRepositoryRoomImp.getHistoryTrips(userId, date);
+    public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId){
+        return tripRepositoryRoomImp.getHistoryTrips(userId);
     }
 
     public String getCurrentUserId(){

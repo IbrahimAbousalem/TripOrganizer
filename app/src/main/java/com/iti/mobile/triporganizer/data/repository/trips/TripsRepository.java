@@ -12,9 +12,9 @@ public interface TripsRepository {
     boolean addTrip(Trip trip);
     boolean deleteTrip(Trip trip);
     boolean  updateTrip(Trip trip);
-    LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId, long date);
+    LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String userId);
     void getTripsFromFirebase(String userId);
     LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes);
     LiveData<String> updateTripAndNotes(TripAndLocation trip, List<Note> notes);
-    LiveData<List<TripAndLocation>> getHistoryTrips(String userId, long date);
+    LiveData<List<TripAndLocation>> getHistoryTrips(String userId);
 }

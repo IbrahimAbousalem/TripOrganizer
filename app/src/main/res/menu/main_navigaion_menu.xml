@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_start_gray_24dp"
         android:title="@string/history" />
     <item
-        android:id="@+id/profileFragment3"
+        android:id="@+id/profileFragment"
         android:icon="@drawable/ic_user_24dp"
         android:orderInCategory="3"
         app:showAsAction="always"

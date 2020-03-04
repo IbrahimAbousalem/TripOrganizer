@@ -31,7 +31,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import kotlin.Unit;
-
+// Not used anyMore....
 public class ChatHeadActivity extends AppCompatActivity {
   ImageView it ;
   Button   btnShowReadHead;

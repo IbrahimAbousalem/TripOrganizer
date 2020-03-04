@@ -30,8 +30,8 @@ public class TripsViewModel extends ViewModel {
         this.auth = auth;
     }
 
-    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String uId, long date){
-        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId, date);
+    public LiveData<List<TripAndLocation>> getUpComingTripsFromRoom(String uId){
+        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
     }
 
     public void addTrip(Trip trip){
