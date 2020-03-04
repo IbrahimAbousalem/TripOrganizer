@@ -16,10 +16,12 @@ public class ProfileViewModel extends ViewModel {
         this.profileRepositoryImp =  profileRepository;
     }
 
-    public LiveData<User> getCurrentUserVm(){
-        return profileRepositoryImp.getCurrentUser();
+    public String getCurrentUserVm(){
+        return profileRepositoryImp.getCurrentUserId();
     }
+    public LiveData<User> getUserFromRoom(String userId){return profileRepositoryImp.getUserFromRoom(userId); }
     public LiveData<Boolean> changeEmail(String email) {return profileRepositoryImp.changeEmail(email);}
     public LiveData<Boolean> changePassword(String password) {return profileRepositoryImp.changePassword(password);}
     public LiveData<String> signOutVM(){ return profileRepositoryImp.signoutFunc(); }
+
 }

@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iti.mobile.triporganizer.dagger.Scope.ApplicationScope;
 import com.iti.mobile.triporganizer.data.entities.User;
@@ -54,10 +55,8 @@ public class AuthenticationFirebase {
             if(task.isSuccessful()){
                 Log.i(TAG, "signInWithEmail:success");
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                //TODO: I removed User Photo
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
                 sharedPref.saveUserId(currentUser.getId());
-                userDao.insertUser(currentUser);
                 currentUserLiveData.postValue(currentUser.getId());
             }else{
                 Log.i(TAG, "signInWithEmail:failure"+task.getException().getMessage());
@@ -66,40 +65,6 @@ public class AuthenticationFirebase {
         });
         return currentUserLiveData;
     }
-
-    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
-        AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
-        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                Log.i(TAG, "signInWithGoogle:success");
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                User currentUser=null;
-                for (UserInfo userInfo:user.getProviderData()){
-                    Log.i(TAG,"/////////GOOGLE///////////////////////////////////////");
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    Log.i(TAG,"name////////////////////////////// "+user.getPhotoUrl().toString());
-                    Log.i(TAG,"name////////////////////////////// "+user.getEmail());
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
-                }
-                saveToDatabase(currentUser);
-                User finalCurrentUser = currentUser;
-                sharedPref.saveUserId(currentUser.getId());
-                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
-                    userDao.insertUser(finalCurrentUser);
-                });
-                currentUserLiveData.postValue(currentUser.getId());
-
-            }else{
-                Log.i(TAG, "signInWithGoogle:failure", task.getException());
-                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
-            }
-        });
-        return currentUserLiveData;
-    }
-
     public LiveData<String> signInWithFacebookFunc(AccessToken accessToken){
         MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
         Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
@@ -135,19 +100,28 @@ public class AuthenticationFirebase {
 
     public LiveData<User> getCurrentUser(){
         MutableLiveData<User> currentUser= new MutableLiveData<>();
+        String photoUrl="";
         firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null){
             String providerId=firebaseUser.getProviderId();
-            if(providerId.equals("facebook.com")||providerId.equals("google.com")){
+            if(providerId.equals("google.com")){
                 for(UserInfo userInfo:firebaseUser.getProviderData()){
-                    currentUser.postValue(new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId()));
+                    Log.i(TAG,"/////////CURRENT USER FIREBASE ///////////////////////////////////////");
+                    Log.i(TAG,"name,,,,,,,,,,,,,,,,,,,,,,,,,,, "+userInfo.getDisplayName());
+                    Log.i(TAG,"uri,,,,,,,,,,,,,,,,,,,,,,,,,,,,"+userInfo.getPhotoUrl().toString());
+                    Log.i(TAG,"email,,,,,,,,,,,,,,,,,,,,,,,,,,,,"+userInfo.getEmail());
+                    Log.i(TAG,"provider id,,,,,,,,,,,,,,,,,,,,,,,,,,"+userInfo.getProviderId());
+                    if(userInfo.getPhotoUrl()!=null){
+                        photoUrl=userInfo.getPhotoUrl().toString();
+                    }
+                    currentUser.postValue(new User(userInfo.getDisplayName(),photoUrl,userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId()));
                 }
             }else{
-                //currentUser.postValue(new User(firebaseUser.getDisplayName(),firebaseUser.getPhotoUrl().toString(),
-                  //      firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
+                if(firebaseUser.getPhotoUrl()!=null){
+                    photoUrl=firebaseUser.getPhotoUrl().toString();
+                }
+                currentUser.postValue(new User(firebaseUser.getDisplayName(),photoUrl, firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
             }
-            //TODO : i Commented the user image.
-            currentUser.postValue(new User(firebaseUser.getDisplayName(),"",firebaseUser.getEmail(),firebaseUser.getUid(),firebaseUser.getProviderId()));
         }else{
             currentUser.postValue(null);
         }
@@ -158,9 +132,10 @@ public class AuthenticationFirebase {
         MutableLiveData<String> providerId=new MutableLiveData<>();
         firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null){
+            Log.i(TAG,".......................in (sign out method) : "+firebaseUser.getProviderId());
             firebaseAuth.signOut();
             for(UserInfo userInfo:firebaseUser.getProviderData()){
-                Log.i(TAG,".......................providerId: "+userInfo.getProviderId());
+                Log.i(TAG,".......................in (sign out method) : "+userInfo.getProviderId());
                 providerId.postValue(userInfo.getProviderId());
             }
         }
@@ -222,5 +197,20 @@ public class AuthenticationFirebase {
         return authenticatedUserMutableLiveData;
     }
 
-
+    public LiveData<User> getUserFromRoom(String userId){
+        MutableLiveData<User> userLiveData = new MutableLiveData<>();
+        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+            User user=userDao.getUserById(userId);
+            if(user == null){
+                db.collection(USERS_COLLECTION).document(userId).get().addOnCompleteListener(user2 -> {
+                    User user3 = user2.getResult().toObject(User.class);
+                    userDao.insertUser(user3);
+                    userLiveData.postValue(user3);
+                });
+            }else{
+                userLiveData.postValue(user);
+            }
+        });
+        return userLiveData;
+    }
 }

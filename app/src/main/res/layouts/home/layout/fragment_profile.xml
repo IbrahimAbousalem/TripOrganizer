@@ -19,14 +19,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:title="@string/profile">
-        <ImageView
+        <!--<ImageView
+            android:visibility="gone"
             android:id="@+id/editImgView"
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:srcCompat="@drawable/ic_edit_gray_24dp"
             android:layout_gravity="right"
             android:layout_margin="@dimen/d_10"
+            />-->
+        <ImageView
+            android:id="@+id/logoutImgView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_logout_24dp"
+            android:layout_gravity="right"
+            android:layout_margin="@dimen/d_10"
             />
+
     </androidx.appcompat.widget.Toolbar>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileFragmentContainer"
@@ -42,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskToolbar">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImageView"
             android:layout_width="110dp"
             android:layout_height="110dp"
@@ -68,6 +78,7 @@
 
         <ImageView
             android:id="@+id/changeProfileImageView"
+            android:visibility="gone"
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:layout_constraintBottom_toBottomOf="@+id/profileImageView"
@@ -78,11 +89,12 @@
 
         <EditText
             android:id="@+id/userEmailEt"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/d_32"
+            android:layout_marginStart="@dimen/d_16"
             android:layout_marginTop="@dimen/d_16"
-            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="64dp"
             android:drawableLeft="@drawable/ic_email"
             android:drawablePadding="@dimen/d_10"
@@ -95,9 +107,9 @@
             android:id="@+id/userEmailViewTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/d_32"
+            android:layout_marginStart="@dimen/d_16"
             android:layout_marginTop="@dimen/d_16"
-            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="@dimen/d_16"
             android:drawableLeft="@drawable/ic_email"
             android:drawablePadding="@dimen/d_10"
@@ -109,11 +121,12 @@
             app:layout_constraintTop_toBottomOf="@+id/userNameTv" />
         <EditText
             android:id="@+id/userNameEt"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d_16"
-            android:layout_marginStart="@dimen/d_32"
-            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginStart="@dimen/d_16"
+            android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="@dimen/d_32"
             android:drawableLeft="@drawable/ic_person_outline_24dp"
             android:drawablePadding="@dimen/d_10"
@@ -129,8 +142,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d_16"
-            android:layout_marginStart="@dimen/d_32"
-            android:layout_marginEnd="@dimen/d_32"
+            android:layout_marginStart="@dimen/d_16"
+            android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="@dimen/d_16"
             android:drawableLeft="@drawable/ic_person_outline_24dp"
             android:drawablePadding="@dimen/d_10"
@@ -145,11 +158,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordTextInputLayout"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d_16"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginStart="@dimen/d_16"
+            android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="@dimen/d_16"
             android:hint="@string/pass"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -161,6 +175,7 @@
             app:startIconDrawable="@drawable/ic_lock_24dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:visibility="gone"
                 android:id="@+id/passwordEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -170,6 +185,7 @@
                 android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
         <Button
+            android:visibility="gone"
             android:id="@+id/logoutBtn"
             android:textColor="@color/darktxt"
             android:layout_width="0dp"
@@ -186,6 +202,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
+            android:visibility="gone"
             android:id="@+id/saveBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
