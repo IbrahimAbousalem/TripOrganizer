@@ -73,6 +73,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/forgetPasswordTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -89,7 +90,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:text="@string/signin"
         android:textSize="18sp"
@@ -111,6 +112,7 @@
 
     <ImageView
         android:id="@+id/facebookImageView"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -121,12 +123,11 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar"
         app:srcCompat="@drawable/ic_fb" />
 
-    <ImageView
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/googleImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/facebookImageView"
@@ -140,8 +141,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="6dp"
         android:text="@string/donthave"
-        app:layout_constraintStart_toStartOf="@+id/facebookImageView"
-        app:layout_constraintTop_toBottomOf="@+id/facebookImageView" />
+        app:layout_constraintStart_toStartOf="@+id/googleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/googleImageView" />
 
     <TextView
         android:id="@+id/signUpTv"

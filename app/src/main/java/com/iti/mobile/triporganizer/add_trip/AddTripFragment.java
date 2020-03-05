@@ -445,13 +445,13 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                         year1 = year;
                         month1 = month + 1;
                         day1 = dayOfMonth;
-                        binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        binding.date1Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                         break;
                     case 2:
                         year2 = year;
                         month2 = month + 1;
                         day2 = dayOfMonth;
-                        binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        binding.date2Tv.setText(year + "-" + (month + 1) + "-" +dayOfMonth);
                         break;
                 }
             }
