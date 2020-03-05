@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         addButton = activityMainBinding.addButton;
         navHostFragment.getNavController().addOnDestinationChangedListener((controller, destination, arguments) -> {
-            //TODO bottom navigation is circular fix it
             if (destination.getId() == R.id.homeFragment || destination.getId() == R.id.historyFragment || destination.getId() == R.id.profileFragment){
                 bottomNavigationView.setVisibility(View.VISIBLE);
 

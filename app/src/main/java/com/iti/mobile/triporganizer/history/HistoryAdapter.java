@@ -5,11 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.details.NoteAdapter;
+import com.iti.mobile.triporganizer.utils.Connection;
 import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.DateUtils;
 
@@ -44,8 +46,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         holder.itemView.setOnClickListener(
                 view -> {
-                    HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(tripsList.get(position));
-                    Navigation.findNavController(view).navigate(historyFragmentDirections);
+                    if(Connection.getInstance(holder.itemView.getContext()).isNetworkConnected()) {
+                        HistoryFragmentDirections.ActionHistoryFragmentToHistoryDetailFragment historyFragmentDirections = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(tripsList.get(position));
+                        Navigation.findNavController(view).navigate(historyFragmentDirections);
+                    }else{
+                        Toast.makeText(holder.itemView.getContext(), "No internet Connection", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 
