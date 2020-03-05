@@ -6,7 +6,7 @@
 # Team Members :
 1. Ibrahim Hamdy
      - Room Database
-     - Dagger 
+     - Dagger2
      - Navigation Component
 2. Abdel Malek Roshdy
      - Firestore 
@@ -14,8 +14,9 @@
      - Homepage Ui 
 3. Aml Sakr 
      - Chat head
-     - directions api 
-     - register with firebase 
+     - Directions api 
+     - Register with firebase 
+     - History adapter
 4. Eman Kamal
      - XD design 
      - Google places autocomplete 
