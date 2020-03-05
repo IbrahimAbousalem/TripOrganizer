@@ -387,8 +387,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showTime(int time) {
-        binding.time1Tv.setError(null);
-        binding.time2Tv.setError(null);
         Calendar selectedDateTime = Calendar.getInstance();
         mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
         mMinute = selectedDateTime.get(Calendar.MINUTE);
@@ -412,10 +410,10 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }else{
                 switch(time){
                     case 3:
-                        binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime_current));
+                        showToast(getResources().getString(R.string.plzPickValidStartTime));
                         break;
                     case 4:
-                        binding.time2Tv.setError(getResources().getString(R.string.plzPickValidStartTime_current));
+                        showToast(getResources().getString(R.string.plzPickValidStartTime));
                         break;
                 }
             }
@@ -424,8 +422,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showDatePicker(int date) {
-        binding.date1Tv.setError(null);
-        binding.date2Tv.setError(null);
         final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
@@ -505,11 +501,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             return false;
         }
         if(binding.date1Tv.getText().toString().trim().isEmpty()){
-            showToast(getResources().getString(R.string.plzPickDate));
+            showToast(getResources().getString(R.string.plzPickStartDate));
             return false;
         }
         if(binding.time1Tv.getText().toString().trim().isEmpty()){
-            showToast(getResources().getString(R.string.plzPickTime));
+            showToast(getResources().getString(R.string.plzPickStartTime));
             return false;
         }
         if (((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
@@ -522,11 +518,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         }
         if(isRound){
             if (binding.time2Tv.getText().toString().trim().isEmpty()) {
-                showToast(getResources().getString(R.string.plzPickTime));
+                showToast(getResources().getString(R.string.plzPickEndTime));
                 return false;
             }
             if (binding.date2Tv.getText().toString().trim().isEmpty()) {
-                showToast(getResources().getString(R.string.plzPickDate));
+                showToast(getResources().getString(R.string.plzPickEndDate));
                 return false;
             }
             /*if (receivedTripAndLocation.getLocationDataList().getStartDate().compareTo(receivedTripAndLocation.getLocationDataList().getRoundDate()) > 0) {
@@ -549,7 +545,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm");
                 date1 = date1 + " " + time1;
                 Date formatedDate=format.parse(date1);
                 Log.d(TAG, formatedDate.toString());
@@ -563,7 +559,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
                     date2 = date2 + " " + time2;
                     Date formatedDate= format.parse(date2);
                     Log.d(TAG, formatedDate.toString());

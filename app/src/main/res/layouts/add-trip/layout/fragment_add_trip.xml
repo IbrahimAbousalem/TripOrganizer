@@ -17,13 +17,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/d_16"/>
+        />
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/taskToolbar">
+    app:layout_constraintTop_toBottomOf="@+id/taskToolbar"
+    android:layout_marginTop="@dimen/d_16"
+    android:layout_marginBottom="@dimen/d_32">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/profileFragmentContainer"
             android:layout_width="match_parent"
@@ -42,13 +44,14 @@
             <EditText
                 android:id="@+id/tripNameEt"
                 style="@style/tripdetails_edittext"
-                android:layout_marginTop="@dimen/d_8"
+                android:layout_marginTop="@dimen/d_32"
                 android:ems="10"
                 android:hint="@string/etitle"
                 android:padding="@dimen/d_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></EditText>
+                app:layout_constraintTop_toTopOf="parent"
+                ></EditText>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/startPointConstraintlayout"

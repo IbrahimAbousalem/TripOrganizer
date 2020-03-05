@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -191,13 +192,13 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 showDatePicker(DATE1);
                 break;
             case R.id.time1Tv:
-                showTime(TIME1);
+                checkDate1();
                 break;
             case R.id.date2Tv:
                 showDatePicker(DATE2);
                 break;
             case R.id.time2Tv:
-                showTime(TIME2);
+                checkDate2();
                 break;
             case R.id.addTripFab:
                 addTrip();
@@ -291,15 +292,14 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         String time1 = binding.time1Tv.getText().toString();
         String date2 = binding.date2Tv.getText().toString();
         String time2 = binding.time2Tv.getText().toString();
-        Date formatedDate1=null;
-        Date formatedDate2=null;
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm");
                 date1 = date1 + " " + time1;
-                formatedDate1 = format.parse(date1);
-                Log.d(TAG, formatedDate1.toString());
-                Log.d(TAG, "saved formatted" + date1);
+                Date formatedDate=format.parse(date1);
+                Log.d(TAG, formatedDate.toString());
+                locationData.setStartDate(formatedDate);
+                Log.d(TAG,"saved formatted"+date1);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -307,19 +307,16 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
                     date2 = date2 + " " + time2;
-                    formatedDate2 = format.parse(date2);
-                    Log.d(TAG, formatedDate2.toString());
+                    Date formatedDate= format.parse(date2);
+                    Log.d(TAG, formatedDate.toString());
+                    locationData.setRoundDate(formatedDate);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-       // isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2);
-        //if(isValidData(tripName,startAddress,endAddress,date1,formatedDate1,time1,date2,formatedDate2,time2)){
-            locationData.setStartDate(formatedDate1);
-            locationData.setRoundDate(formatedDate2);
             locationData.setStartTripStartPointLat(startPonitLat);
             locationData.setStartTripStartPointLng(startPonitLng);
             locationData.setStartTripEndPointLat(endPonitLat);
@@ -337,100 +334,96 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             trip.setUserId(userId);
             trip.setStatus(Constants.UPCOMING);
             trip.setLocationData(locationData);
-            addTripViewModel.addTripAndNotes(trip, notesList).observe(getViewLifecycleOwner(), newTrip -> {
-                AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getStartDate().getTime(),newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLat()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLng()));
-                if (newTrip.getLocationData().isRound()) {
-                    AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getRoundDate().getTime(), newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLat()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLng()));
-                }
-                Objects.requireNonNull(getActivity()).onBackPressed();
-            });
-        //}
+
+            isValidData(isRound);
+            if(isValidData(isRound)){
+                addTripViewModel.addTripAndNotes(trip, notesList).observe(getViewLifecycleOwner(), newTrip -> {
+                    AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getStartDate().getTime(),newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLat()), String.valueOf(newTrip.getLocationData().getStartTripEndPointLng()));
+                    if (newTrip.getLocationData().isRound()) {
+                        AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getRoundDate().getTime(), newTrip.getTripName(), String.valueOf(newTrip.getId()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLat()), String.valueOf(newTrip.getLocationData().getRoundTripEndPointLng()));
+                    }
+                    Objects.requireNonNull(getActivity()).onBackPressed();
+                });
+            }
     }
+    private boolean isValidData(boolean isRound){
+        if(binding.tripNameEt.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzEnterTripName));
+            return false;
+        }
+        if(binding.date1Tv.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartDate));
+            return false;
+        }
+        if(binding.time1Tv.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartTime));
+            return false;
+        }
+        if (((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
+            showToast(getResources().getString(R.string.plzEnterStartPoint));
+            return false;
+        }
+        if (((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
+            showToast(getResources().getString(R.string.plzEnterEndPoint));
+            return false;
+        }
+        if(isRound){
+            if (binding.time2Tv.getText().toString().trim().isEmpty()) {
+                showToast(getResources().getString(R.string.plzPickEndTime));
+                return false;
+            }
+            if (binding.date2Tv.getText().toString().trim().isEmpty()) {
+                showToast(getResources().getString(R.string.plzPickEndDate));
+                return false;
+            }
+            /*if (receivedTripAndLocation.getLocationDataList().getStartDate().compareTo(receivedTripAndLocation.getLocationDataList().getRoundDate()) > 0) {
+                binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
+                return false;
+            }
+            if (receivedTripAndLocation.getLocationDataList().getStartDate().getTime() > receivedTripAndLocation.getLocationDataList().getRoundDate().getTime()) {
+                binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
+                return false;
+            }*/
+        }
+        return true;
+    }
+    private void showToast(String msg) {
+        Toast.makeText(getContext(),msg,Toast.LENGTH_SHORT).show();
+    }
+
     //TODO: Go back after adding a trip.
-
-
-//    private boolean isValidData(String tripName, String startAddress, String endAddress, String date1,Date formatedDate1, String time1, String date2,Date formatedDate2, String time2) {
-//        if(tripName.isEmpty()){
-//            binding.tripNameEt.setError(getResources().getString(R.string.plzEnterTripName));
-//            return false;
-//        }else{
-//            binding.tripNameEt.setError(null);
-//        }
-//        if(startAddress==null){
-//            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-//                    .setError(getResources().getString(R.string.plzEnterStartPoint));
-//            return false;
-//        }else{
-//            ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-//                    .setError(null);
-//        }
-//        if(endAddress==null){
-//            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-//                    .setError(getResources().getString(R.string.plzEnterEndPoint));
-//            return false;
-//        }else{
-//            ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
-//                    .setError(null);
-//        }
-//        if(date1.isEmpty()){
-//            binding.date1Tv.setError(getResources().getString(R.string.plzPickDate));
-//            return false;
-//        }else{
-//            binding.date1Tv.setError(null);
-//        }
-//        if(date2.isEmpty()){
-//            binding.date2Tv.setError(getResources().getString(R.string.plzPickDate));
-//            return false;
-//        }else{
-//            binding.date1Tv.setError(null);
-//        }
-//        if(time1.isEmpty()){
-//            binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
-//            return false;
-//        }else{
-//            binding.time1Tv.setError(null);
-//        }
-//        if(time2.isEmpty()){
-//            binding.time2Tv.setError(getResources().getString(R.string.plzPickTime));
-//            return false;
-//        }else{
-//            binding.time2Tv.setError(null);
-//        }
-//        if(formatedDate1.compareTo(formatedDate2)> 0){
-//            binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
-//            return false;
-//        }else{
-//            binding.date1Tv.setError(null);
-//        }
-//        if(formatedDate1.getTime()>formatedDate2.getTime()){
-//            binding.time1Tv.setError(getResources().getString(R.string.plzPickValidStartTime));
-//            return false;
-//        }else{
-//            binding.date1Tv.setError(null);
-//        }
-//        return true;
-//    }
-
     private void showTime(int time) {
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
+        Calendar selectedDateTime = Calendar.getInstance();
+        mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
+        mMinute = selectedDateTime.get(Calendar.MINUTE);
+        Calendar currentDateTime=Calendar.getInstance();
         // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        switch (time) {
-                            case 3:
-                                hour1 = hourOfDay;
-                                minute1 = minute;
-                                binding.time1Tv.setText(hourOfDay + ":" + minute);
-                                break;
-                            case 4:
-                                hour2 = hourOfDay;
-                                minute2 = minute;
-                                binding.time2Tv.setText(hourOfDay + ":" + minute);
-                                break;
+                        if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
+                            switch(time){
+                                case 3:
+                                    hour1 = hourOfDay;
+                                    minute1 = minute;
+                                    binding.time1Tv.setText(hourOfDay + ":" + minute);
+                                    break;
+                                case 4:
+                                    hour2=hourOfDay;
+                                    minute2=minute;
+                                    binding.time2Tv.setText(hourOfDay + ":" + minute);
+                                    break;
+                            }
+                        }else{
+                            switch(time){
+                                case 3:
+                                    showToast(getResources().getString(R.string.plzPickValidStartTime_current));
+                                    break;
+                                case 4:
+                                    showToast(getResources().getString(R.string.plzPickValidStartTime_current));
+                                    break;
+                            }
                         }
                     }
                 }, mHour, mMinute, false);
@@ -452,18 +445,32 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                         year1 = year;
                         month1 = month + 1;
                         day1 = dayOfMonth;
-                        binding.date1Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                         break;
                     case 2:
                         year2 = year;
                         month2 = month + 1;
                         day2 = dayOfMonth;
-                        binding.date2Tv.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                         break;
                 }
             }
         }, mYear, mMonth, mDay);
-
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
+    }
+    private void checkDate1() {
+        if(binding.date1Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickDateFirst));
+        }else{
+            showTime(TIME1);
+        }
+    }
+    private void checkDate2() {
+        if(binding.date2Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickDateFirst));
+        }else{
+            showTime(TIME2);
+        }
     }
 }
