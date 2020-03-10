@@ -1,8 +1,13 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".details.DetailsFragment"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,11 +24,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/d_16"/>
+            />
         <Button
             android:id="@+id/viewBtn"
             style="@style/viewedit_btn"
-            android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_view_gray_24dp"
             android:text="@string/view"
             app:layout_constraintEnd_toStartOf="@+id/editBtn"
@@ -33,29 +37,30 @@
         <Button
             android:id="@+id/editBtn"
             style="@style/viewedit_btn"
-            android:drawableLeft="@drawable/ic_edit_gray_24dp"
+            android:drawableStart="@drawable/ic_edit_gray_24dp"
             android:drawablePadding="@dimen/d_5"
             android:text="@string/edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/viewBtn"
             app:layout_constraintTop_toTopOf="@+id/viewBtn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/deatilsFragmentContainer"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/d_16"
             android:background="@drawable/rounded_card_no_clr"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/d_16"
+            android:layout_marginTop="@dimen/d_8"
+            android:layout_marginEnd="@dimen/d_16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewBtn">
             <TextView
                 android:id="@+id/tripTitleTv"
                 style="@style/titles_details"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/d_16"
                 android:text="@string/title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -67,6 +72,7 @@
                 android:ems="10"
                 android:hint="@string/etitle"
                 android:padding="@dimen/d_15"
+                android:layout_marginTop="@dimen/d_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -346,6 +352,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
                 app:layout_constraintVertical_bias="0.042" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 </ScrollView>
