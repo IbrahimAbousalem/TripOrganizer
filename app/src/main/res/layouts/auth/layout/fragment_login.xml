@@ -90,9 +90,10 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginTop="32dp"
         android:text="@string/signin"
+        android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/forgetPasswordTv"
         app:layout_constraintStart_toStartOf="@+id/passwordTextInputLayout"
@@ -107,6 +108,7 @@
         android:text="@string/connect"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/signInBtn"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/signInBtn"
         app:layout_constraintTop_toBottomOf="@+id/signInBtn" />
 
@@ -127,7 +129,7 @@
         android:id="@+id/googleImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/d_8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/facebookImageView"
@@ -138,10 +140,10 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="6dp"
         android:text="@string/donthave"
-        app:layout_constraintStart_toStartOf="@+id/googleImageView"
+        app:layout_constraintStart_toStartOf="@+id/signInBtn"
         app:layout_constraintTop_toBottomOf="@+id/googleImageView" />
 
     <TextView

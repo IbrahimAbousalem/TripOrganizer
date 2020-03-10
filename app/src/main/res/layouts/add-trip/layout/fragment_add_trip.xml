@@ -20,7 +20,7 @@
         android:minHeight="?attr/actionBarSize"
         />
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/profileFragmentContainer"
+            android:id="@+id/addTripFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_16"
@@ -40,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                ></EditText>
+                android:textSize="@dimen/fontsize"></EditText>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/startPointConstraintlayout"
@@ -91,6 +91,7 @@
                 style="@style/trip_type_btn"
                 android:layout_marginTop="@dimen/d_8"
                 android:text="@string/single"
+                android:textSize="@dimen/fontsize"
                 app:layout_constraintEnd_toStartOf="@+id/roundBtn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +102,7 @@
                 style="@style/trip_type_btn"
                 android:layout_marginTop="@dimen/d_8"
                 android:text="@string/round"
+                android:textSize="@dimen/fontsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/singleBtn"
@@ -109,6 +111,7 @@
             <TextView
                 android:id="@+id/date1Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_date_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
@@ -121,6 +124,7 @@
             <TextView
                 android:id="@+id/time1Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_time_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
@@ -133,6 +137,7 @@
             <TextView
                 android:id="@+id/date2Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_date_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
@@ -145,6 +150,7 @@
 
             <TextView
                 android:id="@+id/time2Tv"
+                android:textSize="@dimen/fontsize"
                 style="@style/tripdetails_edittext"
                 android:drawableLeft="@drawable/ic_time_gray_24dp"
                 android:drawablePadding="@dimen/d_15"

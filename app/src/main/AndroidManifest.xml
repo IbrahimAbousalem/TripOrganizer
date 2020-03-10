@@ -63,7 +63,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.TestHomeActivity" />
         <activity android:name=".base.MainActivity" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

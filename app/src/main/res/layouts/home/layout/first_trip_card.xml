@@ -14,7 +14,6 @@
         android:textStyle="bold"
         android:textSize="19sp"
         android:textColor="@color/text_black"
-        android:layout_marginStart="19sp"
         android:layout_marginTop="19dp"
         android:layout_marginBottom="5dp"
         android:id="@+id/upcomig_textView"
@@ -25,7 +24,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="@dimen/d_15"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,7 +99,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
                 android:drawableLeft="@drawable/ic_start_gray_24dp"
-                android:drawablePadding="@dimen/d_10"
+                android:drawablePadding="@dimen/d_5"
                 android:text="@string/start"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline" />

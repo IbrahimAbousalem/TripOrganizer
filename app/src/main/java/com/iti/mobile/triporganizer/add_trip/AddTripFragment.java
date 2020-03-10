@@ -135,8 +135,10 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         placesClient = Places.createClient(getContext());
         startPointAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.startAutoCompleteFragment);
+        ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
         endPointAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.endAutoCompleteFragment);
+        ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
         handleStartPointPlacesSelected(startPointAutocompleteFragment);
         handleEndPointPlacesSelected(endPointAutocompleteFragment);
     }
@@ -352,10 +354,10 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             }
     }
     private boolean isValidData(boolean isRound){
-        /*if(binding.tripNameEt.getText().toString().trim().isEmpty()){
+        if(binding.tripNameEt.getText().toString().trim().isEmpty()){
             showToast(getResources().getString(R.string.plzEnterTripName));
             return false;
-        }*/
+        }
         if(binding.date1Tv.getText().toString().trim().isEmpty()){
             showToast(getResources().getString(R.string.plzPickStartDate));
             return false;
@@ -364,14 +366,14 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             showToast(getResources().getString(R.string.plzPickStartTime));
             return false;
         }
-        /*if (((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
+        if (((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
             showToast(getResources().getString(R.string.plzEnterStartPoint));
             return false;
         }
         if (((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
             showToast(getResources().getString(R.string.plzEnterEndPoint));
             return false;
-        }*/
+        }
         if(isRound){
             if (binding.time2Tv.getText().toString().trim().isEmpty()) {
                 showToast(getResources().getString(R.string.plzPickEndTime));

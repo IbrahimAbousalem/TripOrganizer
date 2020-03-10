@@ -57,12 +57,12 @@
             android:focusable="true"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/d_16"
-            app:srcCompat="@drawable/ic_plus"
+            app:srcCompat="@drawable/ic_add_black_24dp"
             android:layout_marginBottom="34dp"
             app:layout_constraintBottom_toBottomOf="@+id/parent"
             app:layout_constraintEnd_toEndOf="@+id/parent"
             android:layout_marginTop="@dimen/d_50"
-             />
+            android:backgroundTint="@color/white"/>
 
     </FrameLayout>
 
