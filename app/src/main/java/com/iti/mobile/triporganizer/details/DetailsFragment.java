@@ -49,6 +49,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -434,13 +435,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                     year1=year;
                     month1=month+1;
                     day1=dayOfMonth;
-                    binding.date1Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    binding.date1Tv.setText(year + "/" + (month + 1) + "/" + dayOfMonth);
                     break;
                 case 2:
                     year2=year;
                     month2=month+1;
                     day2=dayOfMonth;
-                    binding.date2Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    binding.date2Tv.setText(year + "/" + (month + 1) + "/" + dayOfMonth);
                     break;
             }
         }, mYear, mMonth, mDay);
@@ -545,12 +546,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm");
+                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm",new Locale("ar_EG"));
                 date1 = date1 + " " + time1;
                 Date formatedDate=format.parse(date1);
                 Log.d(TAG, formatedDate.toString());
                 receivedTripAndLocation.getLocationDataList().setStartDate(formatedDate);
-                Log.d(TAG,"saved formatted"+date1);
+                Log.d(TAG,"saved formatted///////////////"+formatedDate);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -559,11 +560,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm",new Locale("ar_EG"));
                     date2 = date2 + " " + time2;
                     Date formatedDate= format.parse(date2);
-                    Log.d(TAG, formatedDate.toString());
                     receivedTripAndLocation.getLocationDataList().setRoundDate(formatedDate);
+                    Log.d(TAG,"saved formatted///////////////"+formatedDate);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
