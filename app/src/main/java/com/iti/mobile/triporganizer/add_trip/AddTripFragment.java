@@ -277,16 +277,16 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     }
 
     private void focusSingleButton() {
-        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.roundBtn.setTextColor(getResources().getColor(R.color.darktxt));
     }
 
     private void focusRoundButton() {
-        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.roundBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.darktxt));
     }
 

@@ -92,4 +92,9 @@
     <string name="notrips">There are currently no Up Coming Trips !
         \n Tap the button below to get started! </string>
 
+
+    <string name="cdelete">Are You sure to delete this trip ?!</string>
+    <string name="removed">Removed from trips</string>
+
+
 </resources>
