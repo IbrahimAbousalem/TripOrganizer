@@ -40,6 +40,7 @@ public class AuthenticationFirebase {
     private FirebaseFirestore db;
     private UserDao userDao;
     private SharedPreferenceUtility sharedPref;
+    private String picUrl="";
 
     @Inject
     public AuthenticationFirebase(UserDao userDao, FirebaseAuth auth, FirebaseFirestore db, SharedPreferenceUtility sharedPref) {
@@ -219,13 +220,12 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=null;
                 for (UserInfo userInfo:user.getProviderData()){
-                    Log.i(TAG,"/////////GOOGLE///////////////////////////////////////");
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    Log.i(TAG,"name////////////////////////////// "+user.getPhotoUrl().toString());
-                    Log.i(TAG,"name////////////////////////////// "+user.getEmail());
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+                    if(!userInfo.getPhotoUrl().toString().isEmpty()){
+                        picUrl=userInfo.getPhotoUrl().toString();
+                    }
+                    currentUser=new User(userInfo.getDisplayName(),picUrl,userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
+
                 User finalCurrentUser = currentUser;
                 TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                     userDao.insertUser(finalCurrentUser);

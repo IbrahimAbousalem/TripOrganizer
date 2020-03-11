@@ -1,5 +1,7 @@
 package com.iti.mobile.triporganizer.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -123,16 +125,15 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             TripAndLocation mdeletedItem = tripAndLocationList.get(viewHolder.getAdapterPosition());
             deletedItem.setLocationDataList(mdeletedItem.getLocationDataList());
             deletedItem.setTrip(mdeletedItem.getTrip());
-            final int deletedIndex = viewHolder.getAdapterPosition();
 
-            // remove the item from recycler view
-            tripsViewModel.deleteTrip(mdeletedItem.getTrip());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+            AlertDialog dialog = confirmDialog(deletedIndex,mdeletedItem);
+            dialog.show();
 //            tripAndLocationList.remove(deletedIndex);
   //          tripsAdapter.notifyItemRemoved(deletedIndex);
 
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(view, deletedItem.getTrip().getTripName() + " removed from trips!", Snackbar.LENGTH_LONG);
+
+
         /*
         snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
@@ -145,8 +146,34 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 }
             });
          */
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
 
+
+    }
+    private AlertDialog confirmDialog(int index,TripAndLocation item)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                // set message, title, and icon
+                .setTitle(getResources().getString(R.string.delete))
+                .setMessage(getResources().getString(R.string.cdelete))
+                .setIcon(R.drawable.ic_delete)
+                .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        tripsViewModel.deleteTrip(item.getTrip());
+                        Snackbar snackbar = Snackbar.make(view, item.getTrip().getTripName() + getResources().getString(R.string.removed), Snackbar.LENGTH_LONG);
+                        snackbar.setActionTextColor(Color.YELLOW);
+                        snackbar.show();
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        tripsAdapter.notifyItemChanged(index);
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        return dialog;
     }
 }

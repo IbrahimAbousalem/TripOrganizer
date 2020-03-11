@@ -10,7 +10,6 @@ import com.iti.mobile.triporganizer.details.DetailsFragment;
 import com.iti.mobile.triporganizer.history.HistoryFragment;
 import com.iti.mobile.triporganizer.login.LoginFragment;
 import com.iti.mobile.triporganizer.base.MainActivity;
-import com.iti.mobile.triporganizer.login.TestHomeActivity;
 import com.iti.mobile.triporganizer.main.HomeFragment;
 import com.iti.mobile.triporganizer.profile.ProfileFragment;
 import com.iti.mobile.triporganizer.register.RegisterFragment;
@@ -28,7 +27,6 @@ public interface ControllerComponent {
     void inject(HomeFragment home);
     void inject(DetailsFragment details);
     void inject(AddTripFragment addTrip);
-    void inject(TestHomeActivity test);
     void inject(ProfileFragment profileFragment);
     void inject(ChatHeadService chatHeadService);
 }
