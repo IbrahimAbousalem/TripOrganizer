@@ -57,8 +57,7 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
                 sharedPref.saveUserId(currentUser.getId());
-                getUserFromFirebase(currentUser.getId());
-                currentUserLiveData.postValue(currentUser.getId());
+                getUserFromFirebase(user.getUid(), currentUserLiveData);
             }else{
                 Log.i(TAG, "signInWithEmail:failure"+task.getException().getMessage());
                 currentUserLiveData.postValue("Error:" +task.getException().getMessage());
@@ -67,11 +66,12 @@ public class AuthenticationFirebase {
         return currentUserLiveData;
     }
 
-    private void getUserFromFirebase(String userId){
+    private  void getUserFromFirebase(String userId, MutableLiveData<String> currentUserLiveData){
         db.collection(USERS_COLLECTION).document(userId).get().addOnCompleteListener(user2 -> {
             User user3 = user2.getResult().toObject(User.class);
             TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                 userDao.insertUser(user3);
+                currentUserLiveData.postValue(user3.getId());
             });
         });
     }

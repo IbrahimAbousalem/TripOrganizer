@@ -126,17 +126,18 @@ public class TripsRoom {
             tripsFirebase.deleteTrip(trip);
         });
     }
-    public void getTripsForUser(String userId) {
+    public LiveData<List<Trip>> getTripsForUser(String userId) {
+        MutableLiveData<List<Trip>>tripsData = new MutableLiveData<>();
         db.collection(TRIPS_COLLECTION).document(userId).collection("UserTrips").get().addOnCompleteListener(task -> {
             List<Trip> trips = task.getResult().toObjects(Trip.class);
             if(!trips.isEmpty()){
                 for(Trip tripObj: trips){
                     addTripInRoom(tripObj);
                 }
-
+                tripsData.postValue(trips);
             }
         });
-
+        return tripsData;
     }
     public void addTripInRoom(Trip trip){
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{

@@ -50,8 +50,8 @@ public class TripRepositoryRoomImp implements TripsRepository {
     }
 
     @Override
-    public void getTripsFromFirebase(String userId) {
-         tripsRoom.getTripsForUser(userId);
+    public LiveData<List<Trip>> getTripsFromFirebase(String userId) {
+         return tripsRoom.getTripsForUser(userId);
     }
 
     @Override

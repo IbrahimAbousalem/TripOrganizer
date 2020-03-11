@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,6 +28,7 @@ import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.utils.RecyclerItemTouchHelper;
 
@@ -71,7 +74,12 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         tripsViewModel.getUpComingTripsFromRoom(userId).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             if (tripAndLocationList.isEmpty()) {
                 //TODO Register alarms again....
-                tripsViewModel.getTripsFromFirebase(userId);
+                tripsViewModel.getTripsFromFirebase(userId).observe(getViewLifecycleOwner(), trips -> {
+                     Log.d("data", "You got Data!");
+                    Toast.makeText(getContext(), trips.get(0).getStatus(), Toast.LENGTH_SHORT).show();
+                    tripsViewModel.getTripsFromFirebase(userId).removeObservers(getViewLifecycleOwner());
+                });
+//                tripsViewModel.getTripsFromFirebase(use);
                 noTripsLayout.setVisibility(VISIBLE);
                 tripsRecyclerView.setVisibility(INVISIBLE);
             }else {

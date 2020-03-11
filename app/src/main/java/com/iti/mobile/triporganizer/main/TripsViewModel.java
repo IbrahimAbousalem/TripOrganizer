@@ -59,8 +59,8 @@ public class TripsViewModel extends ViewModel {
         return auth.getCurrentUserId();
     }
 
-    public void getTripsFromFirebase(String userId){
-         tripRepositoryRoomImp.getTripsFromFirebase(userId);
+    public LiveData<List<Trip>> getTripsFromFirebase(String userId){
+         return tripRepositoryRoomImp.getTripsFromFirebase(userId);
     }
 
 }
