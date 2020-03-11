@@ -3,6 +3,7 @@ package com.iti.mobile.triporganizer.main;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcel;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.appHead.ChatHeadService;
+import com.iti.mobile.triporganizer.data.entities.LocationData;
+import com.iti.mobile.triporganizer.data.entities.MapperClass;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
+import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.DateUtils;
 import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
@@ -146,10 +150,24 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
                 AlarmUtils.cancelAlarm(itemView.getContext().getApplicationContext(), getItem(getAdapterPosition()).getTrip());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (Settings.canDrawOverlays(itemView.getContext())) {
-                        itemView.getContext().startService(new Intent(itemView.getContext(), ChatHeadService.class).putExtra("tripId", String.valueOf(getItem(getAdapterPosition()).getTrip().getId())).setFlags(FLAG_ACTIVITY_NEW_TASK));
+                        Intent chatHeadIntent = new Intent(itemView.getContext(), ChatHeadService.class);
+                        Parcel parcel = Parcel.obtain();
+                        Trip tripData= MapperClass.mapTripAndLocationObject(getItem(getAdapterPosition()));
+                        tripData.writeToParcel(parcel, 0);
+                        parcel.setDataPosition(0);
+                        chatHeadIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
+                        chatHeadIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                        itemView.getContext().startService(chatHeadIntent);
                     }
                 }else{
-                    itemView.getContext().startService(new Intent(itemView.getContext(), ChatHeadService.class).putExtra("tripId", String.valueOf(getItem(getAdapterPosition()).getTrip().getId())).setFlags(FLAG_ACTIVITY_NEW_TASK));
+                    Intent chatHeadIntent = new Intent(itemView.getContext(), ChatHeadService.class);
+                    Parcel parcel = Parcel.obtain();
+                    Trip tripData= MapperClass.mapTripAndLocationObject(getItem(getAdapterPosition()));
+                    tripData.writeToParcel(parcel, 0);
+                    parcel.setDataPosition(0);
+                    chatHeadIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
+                    chatHeadIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                    itemView.getContext().startService(chatHeadIntent);
                 }
                 if (((TripOrganizerApp)(itemView.getContext().getApplicationContext())).getAlarmService()!=null){
                     ((TripOrganizerApp)(itemView.getContext().getApplicationContext())).stopAlarmService();

@@ -124,6 +124,13 @@ public class TripsRoom {
             tripsFirebase.updateTrip(trip);
         });
     }
+
+    public void updateTripStatus(long tripId, String userId, String status){
+        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+            tripDao.updateStatus(tripId, userId, status);
+            tripsFirebase.updateTripStatus(tripId, userId, status);
+        });
+    }
     public void deleteTrip(Trip trip){
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
             int deleted = tripDao.deleteTrip(trip);

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,7 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.dagger.module.controller.ChatHeadServiceControllerModule;
+import com.iti.mobile.triporganizer.data.entities.LocationData;
 import com.iti.mobile.triporganizer.data.entities.Note;
+import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.room.TripsRoom;
 import com.iti.mobile.triporganizer.data.room.dao.NoteDao;
 import com.iti.mobile.triporganizer.data.room.dao.TripDao;
 import com.iti.mobile.triporganizer.data.shared_prefs.SharedPreferenceUtility;
@@ -43,17 +47,22 @@ public class ChatHeadService extends Service   {
     @Inject
     NoteDao noteDao;
     @Inject
-    TripDao tripDao;
-    String tripId;
+    TripsRoom tripRoom;
+    Trip trip;
     public ChatHeadService() {
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        tripId = intent.getStringExtra("tripId");
         ((TripOrganizerApp) getApplication()).getComponent().newServiceControllerComponent(new ChatHeadServiceControllerModule(this)).inject(this);
-        List<Note> noteList = noteDao.getAllNoteNotLive(Integer.parseInt(tripId));
+        byte[] byteArrayExtra = intent.getByteArrayExtra(Constants.TRIP_INTENT);
+        Parcel parcel = Parcel.obtain();
+        if (byteArrayExtra != null) {
+            parcel.unmarshall(byteArrayExtra, 0, byteArrayExtra.length);
+        }
+        parcel.setDataPosition(0);
+        trip = Trip.CREATOR.createFromParcel(parcel);
+        List<Note> noteList = noteDao.getAllNoteNotLive(trip.getId());
         if (noteList != null && noteList.size() > 0) {
             NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), noteList);
             recyclerView.setAdapter(noteAdapter);
@@ -112,32 +121,23 @@ public class ChatHeadService extends Service   {
         final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
 
         //Set the close button
-        ImageView closeButtonCollapsed = (ImageView) mFloatingView.findViewById(R.id.close_btn);
-        closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //close the service and remove the from from the window
-                tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
-                stopSelf();
-            }
+        ImageView closeButtonCollapsed = mFloatingView.findViewById(R.id.close_btn);
+        closeButtonCollapsed.setOnClickListener(view -> {
+            trip.setStatus(Constants.FINISHED);
+            tripRoom.updateTripStatus(trip.getId(), trip.getUserId(), trip.getStatus());
+            stopSelf();
         });
 
-        //Set the view while floating view is expanded.
-        //Set the play button.
-
-       recyclerView     = mFloatingView.findViewById(R.id.RV);
+        recyclerView = mFloatingView.findViewById(R.id.RV);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //Button endTripBT = mFloatingView.findViewById(R.id.endTripBT);
 
         //Set the close button
-        ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                collapsedView.setVisibility(View.VISIBLE);
-                expandedView.setVisibility(View.GONE);
-            }
+        ImageView closeButton = mFloatingView.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(view -> {
+            collapsedView.setVisibility(View.VISIBLE);
+            expandedView.setVisibility(View.GONE);
         });
 
         //Drag and move floating view using user's touch action.

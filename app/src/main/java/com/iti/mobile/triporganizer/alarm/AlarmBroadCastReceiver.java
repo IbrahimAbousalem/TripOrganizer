@@ -23,6 +23,7 @@ import com.iti.mobile.triporganizer.appHead.ChatHeadService;
 import com.iti.mobile.triporganizer.dagger.module.controller.BroadCastReceiverModule;
 import com.iti.mobile.triporganizer.dagger.module.controller.ChatHeadServiceControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Trip;
+import com.iti.mobile.triporganizer.data.room.TripsRoom;
 import com.iti.mobile.triporganizer.data.room.dao.TripDao;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.Constants;
@@ -47,7 +48,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
     private  PendingIntent pendingIntent;
     private TripOrganizerApp tripOrganizerApp;
     @Inject
-    TripDao tripDao;
+    TripsRoom tripsRoom;
     @Inject
     SharedPreferences sharedPref;
     private Trip trip;
@@ -60,10 +61,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 
-           // add all the alarms after rebooting so that the alarms survives the reboot process
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Snooze)){
-            //starts after 5 seconds
-            //stop service
             if (intent.hasExtra(Constants.TRIP_INTENT)) {
                 parcelTripObject(intent);
             }
@@ -81,7 +79,12 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             }
 
             if (Settings.canDrawOverlays(context)) {
-                context.startService(new Intent(context, ChatHeadService.class).putExtra("tripId", trip.getId()));
+                Intent chatHeadIntent = new Intent(context, ChatHeadService.class);
+                Parcel parcel = Parcel.obtain();
+                trip.writeToParcel(parcel, 0);
+                parcel.setDataPosition(0);
+                chatHeadIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
+                context.startService(chatHeadIntent);
             }
              if (tripOrganizerApp.getAlarmService()!=null){
                 tripOrganizerApp.stopAlarmService();
@@ -98,20 +101,17 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Cancel)){
             tripOrganizerApp.stopAlarmService();
-            String tripId;
-            tripId = intent.getStringExtra("tripId");
-            tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.CANCELED);
-        } else if (intent.getAction() != null && intent.getAction().equals(Action_End)){
             if (intent.hasExtra(Constants.TRIP_INTENT)) {
                 parcelTripObject(intent);
             }
-            tripDao.updateStatus(trip.getId(), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
+            tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.CANCELED);
+        } else if (intent.getAction() != null && intent.getAction().equals(Action_End)){
 
-//            String tripId, desLat, destLon;
-//            tripId = intent.getStringExtra("tripId");
-//            desLat = intent.getStringExtra("destnationLatitude");
-//            destLon = intent.getStringExtra("destinatinLongtiude");
-//            tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
+            if (intent.hasExtra(Constants.TRIP_INTENT)) {
+                parcelTripObject(intent);
+            }
+            tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.FINISHED);
+
             tripOrganizerApp.getAlarmService().stopForeground(true);
             if (tripOrganizerApp.getAlarmService()!=null){
                 tripOrganizerApp.stopAlarmService();
@@ -124,7 +124,6 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
                 parcelTripObject(intent);
             }
             Intent serviceIntent = new Intent(context, AlarmService.class);
-            long tripId = trip.getId();
             Parcel parcel = Parcel.obtain();
             trip.writeToParcel(parcel, 0);
             parcel.setDataPosition(0);
