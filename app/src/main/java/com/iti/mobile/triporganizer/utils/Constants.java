@@ -7,4 +7,5 @@ public interface Constants {
     String UPCOMING = "UpComing";
     String CANCELED = "Canceled";
     String FINISHED = "Finished";
+    String TRIP_INTENT = "intent";
 }

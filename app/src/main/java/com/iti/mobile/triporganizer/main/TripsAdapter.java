@@ -143,7 +143,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             startBtn = itemView.findViewById(R.id.startBtn);
             viewBtn = itemView.findViewById(R.id.viewBtn);
             startBtn.setOnClickListener((view)->{
-                AlarmUtils.cancelAlarm(itemView.getContext().getApplicationContext(), getItem(getAdapterPosition()).getTrip().getTripName(),String.valueOf(getItem(getAdapterPosition()).getTrip().getId()), String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLat()), String.valueOf(getItem(getAdapterPosition()).getLocationDataList().getStartTripEndPointLng()));
+                AlarmUtils.cancelAlarm(itemView.getContext().getApplicationContext(), getItem(getAdapterPosition()).getTrip());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (Settings.canDrawOverlays(itemView.getContext())) {
                         itemView.getContext().startService(new Intent(itemView.getContext(), ChatHeadService.class).putExtra("tripId", String.valueOf(getItem(getAdapterPosition()).getTrip().getId())).setFlags(FLAG_ACTIVITY_NEW_TASK));
