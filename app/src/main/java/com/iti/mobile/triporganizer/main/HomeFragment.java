@@ -32,6 +32,7 @@ import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
 import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.utils.LiveDataUtils;
 import com.iti.mobile.triporganizer.utils.RecyclerItemTouchHelper;
 
 import java.util.Date;
@@ -73,15 +74,18 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         tripsAdapter = new TripsAdapter();
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         String userId = tripsViewModel.getCurrentUserId();
+        LiveDataUtils.observeOnce(tripsViewModel.getAllTrips(userId), tripAndLocations -> {
+            if(tripAndLocations.isEmpty()){
+                LiveDataUtils.observeOnce(tripsViewModel.getTripsFromFirebase(userId), trips -> {
+                    Log.d("allTrips", "We Got All Data From Firebase!");
+                    //register Alarms..
+                });
+            }else{
+                Log.d("allTrips", "We Got All Data From Room!");
+            }
+        });
         tripsViewModel.getUpComingTripsFromRoom(userId).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             if (tripAndLocationList.isEmpty()) {
-                //TODO Register alarms again....
-                tripsViewModel.getTripsFromFirebase(userId).observe(getViewLifecycleOwner(), trips -> {
-                     Log.d("data", "You got Data!");
-                    Toast.makeText(getContext(), trips.get(0).getStatus(), Toast.LENGTH_SHORT).show();
-                    tripsViewModel.getTripsFromFirebase(userId).removeObservers(getViewLifecycleOwner());
-                });
-//                tripsViewModel.getTripsFromFirebase(use);
                 noTripsLayout.setVisibility(VISIBLE);
                 tripsRecyclerView.setVisibility(INVISIBLE);
             }else {
@@ -89,7 +93,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 tripsAdapter.submitList(tripAndLocationList);
                 noTripsLayout.setVisibility(INVISIBLE);
                 tripsRecyclerView.setVisibility(VISIBLE);
-                Log.d("data", "we have trips .. ");
+                Log.d("upComing", "we have trips .. ");
             }
         });
 

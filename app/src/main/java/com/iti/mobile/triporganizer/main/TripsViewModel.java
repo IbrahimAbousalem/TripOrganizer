@@ -34,6 +34,14 @@ public class TripsViewModel extends ViewModel {
         return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
     }
 
+    public LiveData<List<TripAndLocation>> getAllTripsFromRoom(String uId){
+        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
+    }
+
+    public LiveData<List<TripAndLocation>> getAllTrips(String uId){
+        return tripRepositoryRoomImp.getAllTripsFromRoom(uId);
+    }
+
     public void addTrip(Trip trip){
         tripRepositoryRoomImp.addTrip(trip);
     }

@@ -45,6 +45,10 @@ public class TripsRoom {
         return tripDao.getAllHomeTrips(userId);
     }
 
+    public LiveData<List<TripAndLocation>> getAllTrips(String userId){
+        return tripDao.getAllTripsForUser(userId);
+    }
+
     public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId){
         return tripDao.getAllHistoryTrips(userId);
     }

@@ -17,4 +17,5 @@ public interface TripsRepository {
     LiveData<Trip> addTripAndNotes(Trip trip, List<Note> notes);
     LiveData<String> updateTripAndNotes(TripAndLocation trip, List<Note> notes);
     LiveData<List<TripAndLocation>> getHistoryTrips(String userId);
+    LiveData<List<TripAndLocation>> getAllTripsFromRoom(String userId);
 }

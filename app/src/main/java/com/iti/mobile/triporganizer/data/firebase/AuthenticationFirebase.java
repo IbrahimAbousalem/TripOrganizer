@@ -77,33 +77,33 @@ public class AuthenticationFirebase {
         });
     }
 
-    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
-        AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
-        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                Log.i(TAG, "signInWithGoogle:success");
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                User currentUser=null;
-                for (UserInfo userInfo:user.getProviderData()){
-                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
-                }
-                saveToDatabase(currentUser);
-                User finalCurrentUser = currentUser;
-                sharedPref.saveUserId(currentUser.getId());
-                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
-                    userDao.insertUser(finalCurrentUser);
-                });
-                currentUserLiveData.postValue(currentUser.getId());
-
-            }else{
-                Log.i(TAG, "signInWithGoogle:failure", task.getException());
-                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
-            }
-        });
-        return currentUserLiveData;
-    }
+//    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
+//        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+//        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
+//        AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
+//        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
+//            if(task.isSuccessful()){
+//                Log.i(TAG, "signInWithGoogle:success");
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                User currentUser=null;
+//                for (UserInfo userInfo:user.getProviderData()){
+//                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+//                }
+//                saveToDatabase(currentUser);
+//                User finalCurrentUser = currentUser;
+//                sharedPref.saveUserId(currentUser.getId());
+//                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+//                    userDao.insertUser(finalCurrentUser);
+//                });
+//                currentUserLiveData.postValue(currentUser.getId());
+//
+//            }else{
+//                Log.i(TAG, "signInWithGoogle:failure", task.getException());
+//                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
+//            }
+//        });
+//        return currentUserLiveData;
+//    }
 
     public LiveData<String> signInWithFacebookFunc(AccessToken accessToken){
         MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();

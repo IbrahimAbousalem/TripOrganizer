@@ -61,4 +61,8 @@ public class TripRepositoryFirebaseImp implements TripsRepository {
         return null;
     }
 
+    @Override
+    public LiveData<List<TripAndLocation>> getAllTripsFromRoom(String userId) {
+        return null;
+    }
 }
