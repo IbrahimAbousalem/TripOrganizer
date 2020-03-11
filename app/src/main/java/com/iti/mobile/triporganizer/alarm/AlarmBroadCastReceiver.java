@@ -102,12 +102,21 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             tripId = intent.getStringExtra("tripId");
             tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.CANCELED);
         } else if (intent.getAction() != null && intent.getAction().equals(Action_End)){
-
             if (intent.hasExtra(Constants.TRIP_INTENT)) {
                 parcelTripObject(intent);
             }
             tripDao.updateStatus(trip.getId(), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
-            //TODO do databasse changes
+
+//            String tripId, desLat, destLon;
+//            tripId = intent.getStringExtra("tripId");
+//            desLat = intent.getStringExtra("destnationLatitude");
+//            destLon = intent.getStringExtra("destinatinLongtiude");
+//            tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
+            tripOrganizerApp.getAlarmService().stopForeground(true);
+            if (tripOrganizerApp.getAlarmService()!=null){
+                tripOrganizerApp.stopAlarmService();
+            }
+            //TODO handle roundTrip logic
         }
         else {
             //bind service

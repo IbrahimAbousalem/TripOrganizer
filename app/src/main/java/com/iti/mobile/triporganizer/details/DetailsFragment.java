@@ -4,13 +4,11 @@ package com.iti.mobile.triporganizer.details;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -40,7 +38,6 @@ import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
-import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.DateUtils;
 
 import java.text.ParseException;
@@ -50,6 +47,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -151,19 +149,19 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void focusEditButton() {
-        binding.editBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.editBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.editBtn.setTextColor(getResources().getColor(R.color.whiteclr));
         binding.editBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_white_24dp, 0, 0, 0);
-        binding.viewBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.viewBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.viewBtn.setTextColor(getResources().getColor(R.color.darktxt));
         binding.viewBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_gray_24dp, 0, 0, 0);
     }
 
     private void focusViewButton() {
-        binding.viewBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.viewBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.viewBtn.setTextColor(getResources().getColor(R.color.whiteclr));
         binding.viewBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_white_24dp, 0, 0, 0);
-        binding.editBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.editBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.editBtn.setTextColor(getResources().getColor(R.color.darktxt));
         binding.editBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_gray_24dp, 0, 0, 0);
     }
@@ -264,18 +262,18 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private void showSingleTrip() {
         isRound =false;
-        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.roundBtn.setTextColor(getResources().getColor(R.color.darktxt));
         showSingleData();
     }
 
     private void showRoundTrip() {
         isRound = true;
-        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.roundBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.darktxt));
         showRoundData();
     }
@@ -435,13 +433,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                     year1=year;
                     month1=month+1;
                     day1=dayOfMonth;
-                    binding.date1Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                     break;
                 case 2:
                     year2=year;
                     month2=month+1;
                     day2=dayOfMonth;
-                    binding.date2Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                     break;
             }
         }, mYear, mMonth, mDay);
@@ -546,12 +544,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm");
+                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm",new Locale("ar_EG"));
                 date1 = date1 + " " + time1;
                 Date formatedDate=format.parse(date1);
                 Log.d(TAG, formatedDate.toString());
                 receivedTripAndLocation.getLocationDataList().setStartDate(formatedDate);
-                Log.d(TAG,"saved formatted"+date1);
+                Log.d(TAG,"saved formatted///////////////"+formatedDate);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -560,11 +558,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm",new Locale("ar_EG"));
                     date2 = date2 + " " + time2;
                     Date formatedDate= format.parse(date2);
-                    Log.d(TAG, formatedDate.toString());
                     receivedTripAndLocation.getLocationDataList().setRoundDate(formatedDate);
+                    Log.d(TAG,"saved formatted///////////////"+formatedDate);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

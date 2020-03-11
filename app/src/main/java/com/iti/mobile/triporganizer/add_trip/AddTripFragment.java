@@ -42,7 +42,9 @@ import com.iti.mobile.triporganizer.databinding.FragmentAddTripBinding;
 import com.iti.mobile.triporganizer.details.NoteAdapter;
 import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.Constants;
+import com.iti.mobile.triporganizer.utils.DateUtils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -133,8 +135,10 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         placesClient = Places.createClient(getContext());
         startPointAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.startAutoCompleteFragment);
+        ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
         endPointAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.endAutoCompleteFragment);
+        ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
         handleStartPointPlacesSelected(startPointAutocompleteFragment);
         handleEndPointPlacesSelected(endPointAutocompleteFragment);
     }
@@ -273,16 +277,16 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     }
 
     private void focusSingleButton() {
-        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.roundBtn.setTextColor(getResources().getColor(R.color.darktxt));
     }
 
     private void focusRoundButton() {
-        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_clr_orange));
+        binding.roundBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_clr));
         binding.roundBtn.setTextColor(getResources().getColor(R.color.whiteclr));
-        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.rounded_btn_no_clr));
+        binding.singleBtn.setBackground(getResources().getDrawable(R.drawable.trip_btn_rounded_no_clr));
         binding.singleBtn.setTextColor(getResources().getColor(R.color.darktxt));
     }
 
@@ -292,14 +296,16 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         String time1 = binding.time1Tv.getText().toString();
         String date2 = binding.date2Tv.getText().toString();
         String time2 = binding.time2Tv.getText().toString();
+        Date dateFormat1=null;
+        Date dateFormat2=null;
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm");
+                SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy HH:mm");
                 date1 = date1 + " " + time1;
-                Date formatedDate=format.parse(date1);
-                Log.d(TAG, formatedDate.toString());
-                locationData.setStartDate(formatedDate);
-                Log.d(TAG,"saved formatted"+date1);
+                Log.d(TAG,"un formatted 1................."+date1);
+                dateFormat1=format.parse(date1);
+                locationData.setStartDate(dateFormat1);
+                Log.d(TAG,"saved formatted 1................."+dateFormat1);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -307,11 +313,12 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                     date2 = date2 + " " + time2;
-                    Date formatedDate= format.parse(date2);
-                    Log.d(TAG, formatedDate.toString());
-                    locationData.setRoundDate(formatedDate);
+                    dateFormat2= format.parse(date2);
+                    Log.d(TAG,"un formatted 2................."+date2);
+                    locationData.setRoundDate(dateFormat2);
+                    Log.d(TAG, "saved formatted 2................"+dateFormat2);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -445,13 +452,13 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                         year1 = year;
                         month1 = month + 1;
                         day1 = dayOfMonth;
-                        binding.date1Tv.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                        binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                         break;
                     case 2:
                         year2 = year;
                         month2 = month + 1;
                         day2 = dayOfMonth;
-                        binding.date2Tv.setText(year + "-" + (month + 1) + "-" +dayOfMonth);
+                        binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" +year);
                         break;
                 }
             }

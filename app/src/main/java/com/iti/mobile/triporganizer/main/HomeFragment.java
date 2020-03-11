@@ -1,5 +1,7 @@
 package com.iti.mobile.triporganizer.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,7 +30,9 @@ import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
+import com.iti.mobile.triporganizer.utils.LiveDataUtils;
 import com.iti.mobile.triporganizer.utils.RecyclerItemTouchHelper;
 
 import java.util.Date;
@@ -68,10 +74,18 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         tripsAdapter = new TripsAdapter();
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         String userId = tripsViewModel.getCurrentUserId();
+        LiveDataUtils.observeOnce(tripsViewModel.getAllTrips(userId), tripAndLocations -> {
+            if(tripAndLocations.isEmpty()){
+                LiveDataUtils.observeOnce(tripsViewModel.getTripsFromFirebase(userId), trips -> {
+                    Log.d("allTrips", "We Got All Data From Firebase!");
+                    //register Alarms..
+                });
+            }else{
+                Log.d("allTrips", "We Got All Data From Room!");
+            }
+        });
         tripsViewModel.getUpComingTripsFromRoom(userId).observe(getViewLifecycleOwner(), tripAndLocationList -> {
             if (tripAndLocationList.isEmpty()) {
-                //TODO Register alarms again....
-                tripsViewModel.getTripsFromFirebase(userId);
                 noTripsLayout.setVisibility(VISIBLE);
                 tripsRecyclerView.setVisibility(INVISIBLE);
             }else {
@@ -79,7 +93,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 tripsAdapter.submitList(tripAndLocationList);
                 noTripsLayout.setVisibility(INVISIBLE);
                 tripsRecyclerView.setVisibility(VISIBLE);
-                Log.d("data", "we have trips .. ");
+                Log.d("upComing", "we have trips .. ");
             }
         });
 
@@ -115,16 +129,15 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             TripAndLocation mdeletedItem = tripAndLocationList.get(viewHolder.getAdapterPosition());
             deletedItem.setLocationDataList(mdeletedItem.getLocationDataList());
             deletedItem.setTrip(mdeletedItem.getTrip());
-            final int deletedIndex = viewHolder.getAdapterPosition();
 
-            // remove the item from recycler view
-            tripsViewModel.deleteTrip(mdeletedItem.getTrip());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+            AlertDialog dialog = confirmDialog(deletedIndex,mdeletedItem);
+            dialog.show();
 //            tripAndLocationList.remove(deletedIndex);
   //          tripsAdapter.notifyItemRemoved(deletedIndex);
 
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(view, deletedItem.getTrip().getTripName() + " removed from trips!", Snackbar.LENGTH_LONG);
+
+
         /*
         snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
@@ -137,8 +150,34 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 }
             });
          */
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
 
+
+    }
+    private AlertDialog confirmDialog(int index,TripAndLocation item)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                // set message, title, and icon
+                .setTitle(getResources().getString(R.string.delete))
+                .setMessage(getResources().getString(R.string.cdelete))
+                .setIcon(R.drawable.ic_delete)
+                .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        tripsViewModel.deleteTrip(item.getTrip());
+                        Snackbar snackbar = Snackbar.make(view, item.getTrip().getTripName() + getResources().getString(R.string.removed), Snackbar.LENGTH_LONG);
+                        snackbar.setActionTextColor(Color.YELLOW);
+                        snackbar.show();
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        tripsAdapter.notifyItemChanged(index);
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        return dialog;
     }
 }

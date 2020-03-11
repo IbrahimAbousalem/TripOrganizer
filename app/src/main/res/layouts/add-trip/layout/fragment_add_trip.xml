@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".add_trip.AddTripFragment">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/taskToolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/addTrip"
         app:navigationIcon="?attr/homeAsUpIndicator"
         android:theme="?attr/actionBarTheme"
         android:minHeight="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         />
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/taskToolbar"
-    android:layout_marginTop="@dimen/d_16"
-    android:layout_marginBottom="@dimen/d_32">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/profileFragmentContainer"
+            android:id="@+id/addTripFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:layout_marginStart="@dimen/d_16"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/d_16"
             android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_card_no_clr"
-            app:layout_constraintTop_toBottomOf="@+id/taskToolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
            >
 
             <EditText
@@ -51,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                ></EditText>
+                android:textSize="@dimen/fontsize"></EditText>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/startPointConstraintlayout"
@@ -102,6 +91,7 @@
                 style="@style/trip_type_btn"
                 android:layout_marginTop="@dimen/d_8"
                 android:text="@string/single"
+                android:textSize="@dimen/fontsize"
                 app:layout_constraintEnd_toStartOf="@+id/roundBtn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +102,7 @@
                 style="@style/trip_type_btn"
                 android:layout_marginTop="@dimen/d_8"
                 android:text="@string/round"
+                android:textSize="@dimen/fontsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/singleBtn"
@@ -120,6 +111,7 @@
             <TextView
                 android:id="@+id/date1Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_date_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
@@ -132,6 +124,7 @@
             <TextView
                 android:id="@+id/time1Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_time_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
@@ -144,6 +137,7 @@
             <TextView
                 android:id="@+id/date2Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_date_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
@@ -156,6 +150,7 @@
 
             <TextView
                 android:id="@+id/time2Tv"
+                android:textSize="@dimen/fontsize"
                 style="@style/tripdetails_edittext"
                 android:drawableLeft="@drawable/ic_time_gray_24dp"
                 android:drawablePadding="@dimen/d_15"
@@ -213,5 +208,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
                 app:layout_constraintVertical_bias="0.042" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>

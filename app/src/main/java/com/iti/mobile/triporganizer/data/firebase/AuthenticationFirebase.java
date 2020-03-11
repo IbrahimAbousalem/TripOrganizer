@@ -40,6 +40,7 @@ public class AuthenticationFirebase {
     private FirebaseFirestore db;
     private UserDao userDao;
     private SharedPreferenceUtility sharedPref;
+    private String picUrl="";
 
     @Inject
     public AuthenticationFirebase(UserDao userDao, FirebaseAuth auth, FirebaseFirestore db, SharedPreferenceUtility sharedPref) {
@@ -57,8 +58,7 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=new User(user.getDisplayName(),"",user.getEmail(),user.getUid(),user.getProviderId());
                 sharedPref.saveUserId(currentUser.getId());
-                getUserFromFirebase(currentUser.getId());
-                currentUserLiveData.postValue(currentUser.getId());
+                getUserFromFirebase(user.getUid(), currentUserLiveData);
             }else{
                 Log.i(TAG, "signInWithEmail:failure"+task.getException().getMessage());
                 currentUserLiveData.postValue("Error:" +task.getException().getMessage());
@@ -67,42 +67,43 @@ public class AuthenticationFirebase {
         return currentUserLiveData;
     }
 
-    private void getUserFromFirebase(String userId){
+    private  void getUserFromFirebase(String userId, MutableLiveData<String> currentUserLiveData){
         db.collection(USERS_COLLECTION).document(userId).get().addOnCompleteListener(user2 -> {
             User user3 = user2.getResult().toObject(User.class);
             TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                 userDao.insertUser(user3);
+                currentUserLiveData.postValue(user3.getId());
             });
         });
     }
 
-    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
-        AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
-        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                Log.i(TAG, "signInWithGoogle:success");
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                User currentUser=null;
-                for (UserInfo userInfo:user.getProviderData()){
-                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
-                }
-                saveToDatabase(currentUser);
-                User finalCurrentUser = currentUser;
-                sharedPref.saveUserId(currentUser.getId());
-                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
-                    userDao.insertUser(finalCurrentUser);
-                });
-                currentUserLiveData.postValue(currentUser.getId());
-
-            }else{
-                Log.i(TAG, "signInWithGoogle:failure", task.getException());
-                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
-            }
-        });
-        return currentUserLiveData;
-    }
+//    public LiveData<String> signInWithGoogleFunc(GoogleSignInAccount account){
+//        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+//        MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
+//        AuthCredential authCredential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
+//        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
+//            if(task.isSuccessful()){
+//                Log.i(TAG, "signInWithGoogle:success");
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                User currentUser=null;
+//                for (UserInfo userInfo:user.getProviderData()){
+//                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+//                }
+//                saveToDatabase(currentUser);
+//                User finalCurrentUser = currentUser;
+//                sharedPref.saveUserId(currentUser.getId());
+//                TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+//                    userDao.insertUser(finalCurrentUser);
+//                });
+//                currentUserLiveData.postValue(currentUser.getId());
+//
+//            }else{
+//                Log.i(TAG, "signInWithGoogle:failure", task.getException());
+//                currentUserLiveData.postValue("Error:" +task.getException().getMessage());
+//            }
+//        });
+//        return currentUserLiveData;
+//    }
 
     public LiveData<String> signInWithFacebookFunc(AccessToken accessToken){
         MutableLiveData<String> currentUserLiveData=new MutableLiveData<>();
@@ -219,13 +220,12 @@ public class AuthenticationFirebase {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 User currentUser=null;
                 for (UserInfo userInfo:user.getProviderData()){
-                    Log.i(TAG,"/////////GOOGLE///////////////////////////////////////");
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    Log.i(TAG,"name////////////////////////////// "+user.getPhotoUrl().toString());
-                    Log.i(TAG,"name////////////////////////////// "+user.getEmail());
-                    Log.i(TAG,"name////////////////////////////// "+user.getDisplayName());
-                    currentUser=new User(userInfo.getDisplayName(),userInfo.getPhotoUrl().toString(),userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
+                    if(!userInfo.getPhotoUrl().toString().isEmpty()){
+                        picUrl=userInfo.getPhotoUrl().toString();
+                    }
+                    currentUser=new User(userInfo.getDisplayName(),picUrl,userInfo.getEmail(),userInfo.getUid(),userInfo.getProviderId());
                 }
+
                 User finalCurrentUser = currentUser;
                 TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
                     userDao.insertUser(finalCurrentUser);

@@ -34,6 +34,14 @@ public class TripsViewModel extends ViewModel {
         return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
     }
 
+    public LiveData<List<TripAndLocation>> getAllTripsFromRoom(String uId){
+        return tripRepositoryRoomImp.getUpComingTripsFromRoom(uId);
+    }
+
+    public LiveData<List<TripAndLocation>> getAllTrips(String uId){
+        return tripRepositoryRoomImp.getAllTripsFromRoom(uId);
+    }
+
     public void addTrip(Trip trip){
         tripRepositoryRoomImp.addTrip(trip);
     }
@@ -59,8 +67,8 @@ public class TripsViewModel extends ViewModel {
         return auth.getCurrentUserId();
     }
 
-    public void getTripsFromFirebase(String userId){
-         tripRepositoryRoomImp.getTripsFromFirebase(userId);
+    public LiveData<List<Trip>> getTripsFromFirebase(String userId){
+         return tripRepositoryRoomImp.getTripsFromFirebase(userId);
     }
 
 }
