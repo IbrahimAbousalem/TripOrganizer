@@ -108,6 +108,10 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             desLat = intent.getStringExtra("destnationLatitude");
             destLon = intent.getStringExtra("destinatinLongtiude");
             tripDao.updateStatus(Integer.parseInt(tripId), sharedPref.getString(USER_ID,NO_DATA), Constants.FINISHED);
+            tripOrganizerApp.getAlarmService().stopForeground(true);
+            if (tripOrganizerApp.getAlarmService()!=null){
+                tripOrganizerApp.stopAlarmService();
+            }
             //TODO do databasse changes
         }
         else {

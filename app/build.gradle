@@ -32,6 +32,7 @@ android {
     }
     sourceSets {
         main {
+            java.srcDirs += 'build/generated/data_binding_base_class_source_out/debug/out'
             res {
                 srcDirs 'src/main/res', 'src/main/res/layouts/auth', 'src/main/res/layouts/home', 'src/main/res/layouts/add-trip', 'src/main/res/layouts/details', 'src/main/res/layouts/history', 'src/main/res/layouts/dialog'
             }
