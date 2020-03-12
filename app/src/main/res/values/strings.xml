@@ -70,14 +70,16 @@
     <string name="plzPickDate">You have to pick a date</string>
     <string name="plzPickStartDate">You have to pick  start date</string>
     <string name="plzPickEndDate">You have to pick end date</string>
-    <string name="plzPickValidStartDate">Start Date has to occurs before End Date</string>
+    <string name="plzPickValidEndDate">End Date has to occurs After Start Date</string>
     <string name="plzPickTime">You have to pick a time</string>
     <string name="plzPickStartTime">You have to pick start time</string>
     <string name="plzPickEndTime">You have to pick end time</string>
-    <string name="plzPickValidStartTime">Start Time has to occurs before End Time</string>
+    <string name="plzPickValidEndTime">End Time has to occurs after Start Time</string>
     <string name="plzPickValidStartDate_current">Start Date has to occurs After Current Date</string>
     <string name="plzPickValidStartTime_current">Start Time has to occurs After Current Time</string>
     <string name="plzPickDateFirst">You have to pick a date first</string>
+    <string name="plzPickStartTimeFirst">You have to pick a start time first</string>
+    <string name="plzPickStartDateFirst">You have to pick a start date first</string>
 
     <string name="logout">Log Out</string>
     <string name="save">Save</string>
