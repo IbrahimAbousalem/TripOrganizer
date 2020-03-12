@@ -20,7 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 .withTargetActivity(MainActivity.class)
                 .withSplashTimeOut(4000)
                 .withBackgroundResource(android.R.color.white)
-                .withLogo(R.drawable.ic_logo_splash);
+                .withLogo(R.drawable.ic_logo_splash_screen);
 
         View view=easySplashScreenView.create();
         setContentView(view);

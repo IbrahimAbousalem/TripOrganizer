@@ -135,10 +135,10 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         placesClient = Places.createClient(getContext());
         startPointAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.startAutoCompleteFragment);
-        ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
         endPointAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.endAutoCompleteFragment);
         ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
+        ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
         handleStartPointPlacesSelected(startPointAutocompleteFragment);
         handleEndPointPlacesSelected(endPointAutocompleteFragment);
     }
@@ -400,29 +400,32 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
 
     //TODO: Go back after adding a trip.
     private void showTime(int time) {
-        Calendar selectedDateTime = Calendar.getInstance();
-        mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
-        mMinute = selectedDateTime.get(Calendar.MINUTE);
-        Calendar currentDateTime=Calendar.getInstance();
-        // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Calendar selectedDateTime = Calendar.getInstance();
+                        Calendar currentDateTime = Calendar.getInstance();
+                        selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        selectedDateTime.set(Calendar.MINUTE, minute);
                         if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
+                            //It's after Current
                             switch(time){
                                 case 3:
                                     hour1 = hourOfDay;
                                     minute1 = minute;
                                     binding.time1Tv.setText(hourOfDay + ":" + minute);
+                                    binding.time1Tv.setTextColor(getResources().getColor(R.color.text_black));
                                     break;
                                 case 4:
                                     hour2=hourOfDay;
                                     minute2=minute;
                                     binding.time2Tv.setText(hourOfDay + ":" + minute);
+                                    binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
                                     break;
                             }
                         }else{
+                            //It's before Current
                             switch(time){
                                 case 3:
                                     showToast(getResources().getString(R.string.plzPickValidStartTime_current));
@@ -453,12 +456,14 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                         month1 = month + 1;
                         day1 = dayOfMonth;
                         binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        binding.date1Tv.setTextColor(getResources().getColor(R.color.text_black));
                         break;
                     case 2:
                         year2 = year;
                         month2 = month + 1;
                         day2 = dayOfMonth;
                         binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" +year);
+                        binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
                         break;
                 }
             }

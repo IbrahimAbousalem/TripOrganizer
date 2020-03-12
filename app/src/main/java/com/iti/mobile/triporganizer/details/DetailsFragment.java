@@ -145,6 +145,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 .setText(receivedTripAndLocation.getLocationDataList().getStartTripAddressName());
         ((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input))
                 .setText(receivedTripAndLocation.getLocationDataList().getStartTripEndAddressName());
+        ((EditText)endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
+        ((EditText)startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
+        binding.date1Tv.setTextColor(getResources().getColor(R.color.text_black));
+        binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
+        binding.time1Tv.setTextColor(getResources().getColor(R.color.text_black));
+        binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
     }
 
     private void focusEditButton() {
@@ -398,11 +404,13 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                         hour1 = hourOfDay;
                         minute1 = minute;
                         binding.time1Tv.setText(hourOfDay + ":" + minute);
+                        binding.time1Tv.setTextColor(getResources().getColor(R.color.text_black));
                         break;
                     case 4:
                         hour2=hourOfDay;
                         minute2=minute;
                         binding.time2Tv.setText(hourOfDay + ":" + minute);
+                        binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
                         break;
                 }
             }else{
@@ -433,12 +441,14 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                     month1=month+1;
                     day1=dayOfMonth;
                     binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                    binding.date1Tv.setTextColor(getResources().getColor(R.color.text_black));
                     break;
                 case 2:
                     year2=year;
                     month2=month+1;
                     day2=dayOfMonth;
                     binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                    binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
                     break;
             }
         }, mYear, mMonth, mDay);

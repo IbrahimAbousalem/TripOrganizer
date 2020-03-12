@@ -56,7 +56,12 @@ public class DeleteTripDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
          noButton = view.findViewById(R.id.noButton);
          deleteButton = view.findViewById(R.id.deleteButton);
+         noButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
 
+             }
+         });
          noButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
