@@ -94,6 +94,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     private int mYear, mMonth, mDay, mHour, mMinute;
     private int hour1, minute1, hour2, minute2, year1, year2, month1, month2, day1, day2;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -330,20 +331,22 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             locationData.setStartTripEndPointLng(endPonitLng);
             locationData.setStartTripAddressName(startAddress);
             locationData.setStartTripEndAddressName(endAddress);
+
             locationData.setRoundTripStartPointLat(endPonitLat);
             locationData.setRoundTripStartPointLng(endPonitLng);
             locationData.setRoundTripEndPointLat(startPonitLat);
             locationData.setRoundTripEndPointLng(startPonitLng);
             locationData.setRoundTripStartAddressName(endAddress);
             locationData.setRoundTripEndAddressName(startAddress);
+
             locationData.setRound(isRound);
             trip.setTripName(tripName);
             trip.setUserId(userId);
             trip.setStatus(Constants.UPCOMING);
             trip.setLocationData(locationData);
 
-            isValidData(isRound);
-            if(isValidData(isRound)){
+            isValidData(isRound,dateFormat1,dateFormat2);
+            if(isValidData(isRound,dateFormat1,dateFormat2)){
                 addTripViewModel.addTripAndNotes(trip, notesList).observe(getViewLifecycleOwner(), newTrip -> {
                     AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getStartDate().getTime(),newTrip);
                     if (newTrip.getLocationData().isRound()) {
@@ -353,7 +356,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 });
             }
     }
-    private boolean isValidData(boolean isRound){
+    private boolean isValidData(boolean isRound, Date dateFormat1, Date dateFormat2){
         if(binding.tripNameEt.getText().toString().trim().isEmpty()){
             showToast(getResources().getString(R.string.plzEnterTripName));
             return false;
@@ -383,29 +386,41 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                 showToast(getResources().getString(R.string.plzPickEndDate));
                 return false;
             }
-            /*if (receivedTripAndLocation.getLocationDataList().getStartDate().compareTo(receivedTripAndLocation.getLocationDataList().getRoundDate()) > 0) {
-                binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
-                return false;
+            if(!binding.time2Tv.getText().toString().trim().isEmpty()){
+                Calendar startTime=Calendar.getInstance();
+                startTime.set(Calendar.HOUR_OF_DAY, hour1);
+                startTime.set(Calendar.MINUTE, minute1);
+                Calendar endTime=Calendar.getInstance();
+                endTime.set(Calendar.HOUR_OF_DAY, hour2);
+                endTime.set(Calendar.MINUTE, minute2);
+                if(endTime.getTimeInMillis()<startTime.getTimeInMillis()){
+                    showToast(getResources().getString(R.string.plzPickValidEndTime));
+                    return false;
+                }
             }
-            if (receivedTripAndLocation.getLocationDataList().getStartDate().getTime() > receivedTripAndLocation.getLocationDataList().getRoundDate().getTime()) {
-                binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
-                return false;
-            }*/
+            if(!binding.date2Tv.getText().toString().trim().isEmpty()){
+                if(dateFormat1.compareTo(dateFormat2)>0){
+                    showToast(getResources().getString(R.string.plzPickValidEndDate));
+                    return false;
+                }
+            }
         }
         return true;
     }
+
     private void showToast(String msg) {
         Toast.makeText(getContext(),msg,Toast.LENGTH_SHORT).show();
     }
 
-    //TODO: Go back after adding a trip.
     private void showTime(int time) {
+        Calendar selectedDateTime = Calendar.getInstance();
+        Calendar currentDateTime = Calendar.getInstance();
+        mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
+        mMinute = selectedDateTime.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        Calendar selectedDateTime = Calendar.getInstance();
-                        Calendar currentDateTime = Calendar.getInstance();
                         selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         selectedDateTime.set(Calendar.MINUTE, minute);
                         if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
@@ -418,10 +433,9 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
                                     binding.time1Tv.setTextColor(getResources().getColor(R.color.text_black));
                                     break;
                                 case 4:
-                                    hour2=hourOfDay;
-                                    minute2=minute;
-                                    binding.time2Tv.setText(hourOfDay + ":" + minute);
-                                    binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
+                                    hour2 = hourOfDay;
+                                    minute2 = minute;
+                                    checkFirstTime(hour1,minute1,hour2,minute2);
                                     break;
                             }
                         }else{
@@ -440,30 +454,55 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         timePickerDialog.show();
     }
 
+    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2) {
+        if(binding.time1Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartTimeFirst));
+        }else{
+            Calendar startTime=Calendar.getInstance();
+            startTime.set(Calendar.HOUR_OF_DAY, hour1);
+            startTime.set(Calendar.MINUTE, minute1);
+            Calendar endTime=Calendar.getInstance();
+            endTime.set(Calendar.HOUR_OF_DAY, hour2);
+            endTime.set(Calendar.MINUTE, minute2);
+            checkFirstSecondTime(startTime,endTime,hour2,minute2);
+        }
+        return true;
+    }
+
+    private boolean checkFirstSecondTime(Calendar startTime, Calendar endTime, int hour2, int minute2) {
+        if(endTime.getTimeInMillis()<startTime.getTimeInMillis()){
+            showToast(getResources().getString(R.string.plzPickValidEndTime));
+            return false;
+        }else{
+            binding.time2Tv.setText(hour2 + ":" + minute2);
+            binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
+        }
+        return true;
+    }
+
     private void showDatePicker(int date) {
-        final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        c.getTimeInMillis();
+        Calendar selectedDate = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
+        mYear = selectedDate.get(Calendar.YEAR);
+        mMonth = selectedDate.get(Calendar.MONTH);
+        mDay = selectedDate.get(Calendar.DAY_OF_MONTH);
+        Calendar secondSelectedDate = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 switch (date) {
                     case 1:
-                        c.set(year, month, dayOfMonth);
                         year1 = year;
-                        month1 = month + 1;
+                        month1 = month ;
                         day1 = dayOfMonth;
                         binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                         binding.date1Tv.setTextColor(getResources().getColor(R.color.text_black));
                         break;
                     case 2:
                         year2 = year;
-                        month2 = month + 1;
+                        month2 = month ;
                         day2 = dayOfMonth;
-                        binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" +year);
-                        binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
+                        checkFirstDate(year1,month1,day1,year2,month2,day2);
                         break;
                 }
             }
@@ -471,6 +510,35 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
+
+    private boolean checkFirstDate(int year1, int month1, int day1, int year2, int month2, int day2) {
+        if(binding.date1Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartDateFirst));
+        }else{
+            checkFirstSecondDate(year1,month1,day1,year2,month2,day2);
+        }
+        return true;
+    }
+
+    private boolean checkFirstSecondDate(int year1, int month1, int day1, int year2, int month2, int day2) {
+        Calendar startDate=Calendar.getInstance();
+        startDate.set(Calendar.YEAR,year1);
+        startDate.set(Calendar.MONTH,month1);
+        startDate.set(Calendar.DAY_OF_MONTH,day1);
+        Calendar endDate=Calendar.getInstance();
+        endDate.set(Calendar.YEAR,year2);
+        endDate.set(Calendar.MONTH,month2);
+        endDate.set(Calendar.DAY_OF_MONTH,day2);
+        if(endDate.getTimeInMillis()<startDate.getTimeInMillis()){
+            showToast(getResources().getString(R.string.plzPickValidEndDate));
+            return false;
+        }else{
+            binding.date2Tv.setText(day2 + "-" + (month2 + 1) + "-" +year2);
+            binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
+        }
+        return true;
+    }
+
     private void checkDate1() {
         if(binding.date1Tv.getText().toString().isEmpty()){
             showToast(getResources().getString(R.string.plzPickDateFirst));
