@@ -57,7 +57,7 @@ public class AlarmService extends Service {
             vibrator.vibrate(400);
         }
         //WHY
-        startForeground(foregroundId, NotificationsUtils.makeStatusNotification(trip.getTripName(), getApplicationContext(),trip.getTripName(), String.valueOf(trip.getId()), String.valueOf(trip.getLocationData().getStartTripEndPointLat()), String.valueOf(trip.getLocationData().getStartTripEndPointLng())));
+        startForeground(foregroundId, NotificationsUtils.makeStatusNotification(trip.getTripName(), getApplicationContext(),trip));
         return START_NOT_STICKY;
     }
 

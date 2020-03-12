@@ -7,11 +7,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Parcel;
 
 import androidx.core.app.NotificationCompat;
 
 import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.alarm.AlarmBroadCastReceiver;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
@@ -26,7 +28,7 @@ public class NotificationsUtils {
     public static final String Action_End = "end";
     public static final String Action_Cancel = "cancel";
     private static final int notificationId = 1;
-    public static Notification makeStatusNotification(String message, Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+    public static Notification makeStatusNotification(String message, Context context, Trip trip) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -48,18 +50,18 @@ public class NotificationsUtils {
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.start),
-                        createStartIntent(context, tripId, destnationLatitude, destinatinLongtiude))
+                        createStartIntent(context, trip))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.snooze),
-                        createSnoozeIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude))
+                        createSnoozeIntent(context, trip))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
-                        createCancelIntent(context, tripId))
+                        createCancelIntent(context, String.valueOf(trip.getId())))
 
                 .setVibrate(new long[0]);
 
        // NotificationManagerCompat.from(context).notify(notificationId, builder.build());
         return builder.build();
     }
-    public static Notification makeStatusNotificationForStartedTrip(String message, Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+    public static Notification makeStatusNotificationForStartedTrip(String message, Context context, Trip trip) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -81,50 +83,56 @@ public class NotificationsUtils {
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.end),
-                        createEndIntent(context, tripId, destnationLatitude, destinatinLongtiude))
+                        createEndIntent(context, trip))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
-                        createCancelIntent(context, tripId))
+                        createCancelIntent(context, String.valueOf(trip.getId())))
 
                 .setVibrate(new long[0]);
 
         // NotificationManagerCompat.from(context).notify(notificationId, builder.build());
         return builder.build();
     }
-    private static PendingIntent createSnoozeIntent(Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude){
+    private static PendingIntent createSnoozeIntent(Context context, Trip trip){
         Intent snoozeIntent = new Intent(context, AlarmBroadCastReceiver.class);
-        snoozeIntent.putExtra("tripName", tripName);
-        snoozeIntent.putExtra("tripId", tripId);
-        snoozeIntent.putExtra("destnationLatitude", destnationLatitude);
-        snoozeIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
+        long tripId = trip.getId();
+        Parcel parcel = Parcel.obtain();
+        trip.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+        snoozeIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
         snoozeIntent.setAction(Action_Snooze);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         }
-        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), snoozeIntent, 0);
+        return PendingIntent.getBroadcast(context, (int) tripId, snoozeIntent, 0);
     }
-    private static PendingIntent createStartIntent(Context context, String tripId, String destnationLatitude, String destinatinLongtiude){
+    private static PendingIntent createStartIntent(Context context, Trip trip){
         Intent startIntent = new Intent(context, AlarmBroadCastReceiver.class);
         startIntent.setAction(Action_Start);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
 
         }
-        startIntent.putExtra("tripId",tripId);
-        startIntent.putExtra("destnationLatitude", destnationLatitude);
-        startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
-        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), startIntent, 0);
+        long tripId = trip.getId();
+        Parcel parcel = Parcel.obtain();
+        trip.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+        startIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
+
+        return PendingIntent.getBroadcast(context, (int) tripId, startIntent, 0);
     }
-    private static PendingIntent createEndIntent(Context context, String tripId, String destnationLatitude, String destinatinLongtiude){
+    private static PendingIntent createEndIntent(Context context, Trip trip){
         Intent startIntent = new Intent(context, AlarmBroadCastReceiver.class);
         startIntent.setAction(Action_End);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
 
         }
-        startIntent.putExtra("tripId",tripId);
-        startIntent.putExtra("destnationLatitude", destnationLatitude);
-        startIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
-        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), startIntent, 0);
+        long tripId = trip.getId();
+        Parcel parcel = Parcel.obtain();
+        trip.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+        startIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
+        return PendingIntent.getBroadcast(context, (int) tripId, startIntent, 0);
     }
     private static PendingIntent createCancelIntent(Context context, String tripId){
         Intent cancelIntent = new Intent(context, AlarmBroadCastReceiver.class);
