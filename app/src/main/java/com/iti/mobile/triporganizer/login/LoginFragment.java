@@ -185,7 +185,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void signInWithEmailAndPasswordViewModel(String email,String password){
         loginViewModel.signInWithEmailAndPasswordVM(email,password).observe(this, currentUser->{
-            updateUi(currentUser);
+             updateUi(currentUser);
         });
     }
 //-----------------------------------------------------------------------------------------------------

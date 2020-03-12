@@ -45,6 +45,10 @@ public class TripsRoom {
         return tripDao.getAllHomeTrips(userId);
     }
 
+    public LiveData<List<TripAndLocation>> getAllTrips(String userId){
+        return tripDao.getAllTripsForUser(userId);
+    }
+
     public LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId){
         return tripDao.getAllHistoryTrips(userId);
     }
@@ -120,23 +124,31 @@ public class TripsRoom {
             tripsFirebase.updateTrip(trip);
         });
     }
+
+    public void updateTripStatus(long tripId, String userId, String status){
+        TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
+            tripDao.updateStatus(tripId, userId, status);
+            tripsFirebase.updateTripStatus(tripId, userId, status);
+        });
+    }
     public void deleteTrip(Trip trip){
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{
             int deleted = tripDao.deleteTrip(trip);
             tripsFirebase.deleteTrip(trip);
         });
     }
-    public void getTripsForUser(String userId) {
+    public LiveData<List<Trip>> getTripsForUser(String userId) {
+        MutableLiveData<List<Trip>>tripsData = new MutableLiveData<>();
         db.collection(TRIPS_COLLECTION).document(userId).collection("UserTrips").get().addOnCompleteListener(task -> {
             List<Trip> trips = task.getResult().toObjects(Trip.class);
             if(!trips.isEmpty()){
                 for(Trip tripObj: trips){
                     addTripInRoom(tripObj);
                 }
-
+                tripsData.postValue(trips);
             }
         });
-
+        return tripsData;
     }
     public void addTripInRoom(Trip trip){
         TripOrganizerDatabase.databaseWriteExecutor.execute(()->{

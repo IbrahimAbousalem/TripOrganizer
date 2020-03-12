@@ -91,4 +91,11 @@ public class TripsFirebase {
         return reference.update(mTrip).isSuccessful();
     }
 
+    public void updateTripStatus(long tripId, String userId, String status) {
+        DocumentReference reference = db.collection(TRIPS_COLLECTION).document(userId).collection("UserTrips").document(String.valueOf(tripId));
+        Map<String, Object> mTrip = new HashMap<>();
+        mTrip.put(FirestoreConstatnts.status, status);
+        reference.update(mTrip);
+    }
+
 }

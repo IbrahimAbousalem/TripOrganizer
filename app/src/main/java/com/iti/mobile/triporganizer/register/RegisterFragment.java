@@ -77,7 +77,9 @@ public class RegisterFragment extends Fragment {
         registerViewModel = new ViewModelProvider(this, providerFactory).get(RegisterViewModel.class);
 
         binding.signupBtn.setOnClickListener(v -> registerUser());
-        binding.goToSignInTV.setOnClickListener(v -> getActivity().onBackPressed());
+        binding.goToSignInTV.setOnClickListener(v ->
+                getActivity().onBackPressed()
+        );
     }
 
     private void registerUser() {

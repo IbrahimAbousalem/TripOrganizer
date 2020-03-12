@@ -33,6 +33,7 @@ import com.iti.mobile.triporganizer.R;
 import com.iti.mobile.triporganizer.app.TripOrganizerApp;
 import com.iti.mobile.triporganizer.app.ViewModelProviderFactory;
 import com.iti.mobile.triporganizer.dagger.module.controller.ControllerModule;
+import com.iti.mobile.triporganizer.data.entities.MapperClass;
 import com.iti.mobile.triporganizer.data.entities.Note;
 import com.iti.mobile.triporganizer.data.entities.TripAndLocation;
 import com.iti.mobile.triporganizer.databinding.FragmentDetailsBinding;
@@ -590,9 +591,9 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if(isValidData(isRound)){
             detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList).observe(getViewLifecycleOwner(), s -> {
                 if(s.equals("Updated Successfully!")){
-                    AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(),receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng()));
+                    AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(), MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
                     if (receivedTripAndLocation.getLocationDataList().isRound()) {
-                        AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(), receivedTripAndLocation.getTrip().getTripName(), String.valueOf(receivedTripAndLocation.getTrip().getId()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLat()), String.valueOf(receivedTripAndLocation.getLocationDataList().getRoundTripEndPointLng()));
+                        AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(),MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
                     }
                 }
             });

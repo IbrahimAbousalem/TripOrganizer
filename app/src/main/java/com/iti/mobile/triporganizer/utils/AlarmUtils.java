@@ -9,26 +9,30 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcel;
 import android.text.format.DateUtils;
 
 import androidx.annotation.NonNull;
 
 import com.iti.mobile.triporganizer.alarm.AlarmBroadCastReceiver;
+import com.iti.mobile.triporganizer.data.entities.Trip;
 
 public class AlarmUtils {
 
-    private static PendingIntent createPendingIntent(Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+    private static PendingIntent createPendingIntent(Context context, Trip trip) {
 
         Intent alarmIntent = new Intent(context, AlarmBroadCastReceiver.class);
-        alarmIntent.setData(Uri.parse("custom://" + tripId));
-        alarmIntent.setAction(tripId);
-        alarmIntent.putExtra("tripName", tripName);
-        alarmIntent.putExtra("tripId", tripId);
-        alarmIntent.putExtra("destnationLatitude", destnationLatitude);
-        alarmIntent.putExtra("destinatinLongtiude", destinatinLongtiude);
+        alarmIntent.setData(Uri.parse("custom://" + trip.getId()));
+        alarmIntent.setAction(String.valueOf(trip.getId()));
+
+        long tripId = trip.getId();
+        Parcel parcel = Parcel.obtain();
+        trip.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+        alarmIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
 
         //request code for pending intent must be unique on application level
-        return PendingIntent.getBroadcast(context,  Integer.parseInt(tripId), alarmIntent, 0);
+        return PendingIntent.getBroadcast(context,  (int) tripId, alarmIntent, 0);
     }
 
 
@@ -50,31 +54,31 @@ public class AlarmUtils {
     }
 
 
-    public static void startAlarm(Context context, long triggerAtMillis, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+    public static void startAlarm(Context context, long triggerAtMillis, Trip trip) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
-            }else {alarmManager.setExact(AlarmManager.RTC, triggerAtMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));}
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, createPendingIntent(context, trip));
+            }else {alarmManager.setExact(AlarmManager.RTC, triggerAtMillis, createPendingIntent(context, trip));}
         }
     }
 
-    public static void startAlarmForSnooze(@NonNull Context context, long triggerAtMillis, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+    public static void startAlarmForSnooze(@NonNull Context context, long triggerAtMillis, Trip trip) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             long nextUpdateTimeMillis = System.currentTimeMillis() + 30 * DateUtils.MINUTE_IN_MILLIS;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextUpdateTimeMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextUpdateTimeMillis, createPendingIntent(context, trip));
             }else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdateTimeMillis, createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+                alarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdateTimeMillis, createPendingIntent(context, trip));
             }
         }
     }
 
-    public static void cancelAlarm(Context context, String tripName, String tripId, String destnationLatitude, String destinatinLongtiude) {
+    public static void cancelAlarm(Context context, Trip trip) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            alarmManager.cancel(createPendingIntent(context, tripName, tripId, destnationLatitude, destinatinLongtiude));
+            alarmManager.cancel(createPendingIntent(context, trip));
         }
 
     }

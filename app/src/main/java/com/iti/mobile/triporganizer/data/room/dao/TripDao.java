@@ -37,4 +37,8 @@ public interface TripDao {
     @Transaction
     @Query("SELECT trips.*, locationData.* FROM trips, locationData WHERE trips.userId =:userId AND trips.status != '" + Constants.UPCOMING +"' AND locationData.tripId = trips.id")
     LiveData<List<TripAndLocation>> getAllHistoryTrips(String userId);
+
+    @Transaction
+    @Query("SELECT trips.*, locationData.* FROM trips, locationData WHERE trips.userId =:userId")
+    LiveData<List<TripAndLocation>> getAllTripsForUser(String userId);
 }
