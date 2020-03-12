@@ -97,7 +97,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             context.startActivity(mapIntent);
             tripOrganizerApp.stopSound();
             tripOrganizerApp.getAlarmService().stopForeground(true);
-            tripOrganizerApp.getAlarmService().startForeground(foregroundId, NotificationsUtils.makeStatusNotificationForStartedTrip("started trip", getApplicationContext(),trip.getTripName(), String.valueOf(trip.getId()), String.valueOf(trip.getLocationData().getStartTripStartPointLat()), String.valueOf(trip.getLocationData().getStartTripStartPointLng())));
+            tripOrganizerApp.getAlarmService().startForeground(foregroundId, NotificationsUtils.makeStatusNotificationForStartedTrip("started trip", getApplicationContext(),trip));
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Cancel)){
             tripOrganizerApp.stopAlarmService();
@@ -142,6 +142,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         }
         parcel.setDataPosition(0);
         trip = Trip.CREATOR.createFromParcel(parcel);
+        String s = "sada";
     }
 
 
