@@ -310,4 +310,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:layout_constraintVertical_bias="0.042" />
 
+    <!--<androidx.constraintlayout.widget.Group
+        android:id="@+id/edit_group_general"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tripNameEt,startPointConstraintlayout,endPointConstraintlayout,
+        date1Tv,time1Tv,addNoteImageView,addTripFab"/> -->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

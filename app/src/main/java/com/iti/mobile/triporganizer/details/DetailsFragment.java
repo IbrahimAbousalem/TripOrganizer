@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -70,6 +71,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private AutocompleteSupportFragment endPointAutocompleteFragment;
     private TripAndLocation receivedTripAndLocation;
 
+    private Group edit_group_general;
+
     @Inject
     ViewModelProviderFactory providerFactory;
     private DetailsViewModel detailsViewModel;
@@ -96,6 +99,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -236,29 +240,32 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private void showEditTextHideTextView(boolean round) {
         binding.addNoteImageView.setVisibility(VISIBLE);
         binding.tripNameEt.setVisibility(VISIBLE);
+        binding.startPointConstraintlayout.setVisibility(VISIBLE);
+        binding.endPointConstraintlayout.setVisibility(VISIBLE);
+        binding.date1Tv.setVisibility(VISIBLE);
+        binding.time1Tv.setVisibility(VISIBLE);
+        binding.saveTripFab.setVisibility(VISIBLE);
+        //binding.edit_group_general.setVisibility(VISIBLE);
         binding.tripTitleTv.setVisibility(GONE);
         binding.tripNameTv.setVisibility(GONE);
-        binding.startPointConstraintlayout.setVisibility(VISIBLE);
         binding.startPointTitleTv.setVisibility(GONE);
         binding.startPointTv.setVisibility(GONE);
-        binding.endPointConstraintlayout.setVisibility(VISIBLE);
         binding.endPointTitleTv.setVisibility(GONE);
         binding.endPointTv.setVisibility(GONE);
-        binding.date1Tv.setVisibility(VISIBLE);
         binding.date1TitleTv.setVisibility(GONE);
         binding.date1ViewTv.setVisibility(GONE);
-        binding.time1Tv.setVisibility(VISIBLE);
         binding.time1TitleTv.setVisibility(GONE);
         binding.time1ViewTv.setVisibility(GONE);
-        binding.saveTripFab.setVisibility(VISIBLE);
+
         binding.roundBtn.setEnabled(false);
         binding.singleBtn.setEnabled(false);
         if(round){
             showRoundTrip();
             binding.date2Tv.setVisibility(VISIBLE);
+            binding.time2Tv.setVisibility(VISIBLE);
+
             binding.date2TitleTv.setVisibility(GONE);
             binding.date2ViewTv.setVisibility(GONE);
-            binding.time2Tv.setVisibility(VISIBLE);
             binding.time2TitleTv.setVisibility(GONE);
             binding.time2ViewTv.setVisibility(GONE);
         }else{
@@ -422,7 +429,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 (view, hourOfDay, minute) -> {
                     selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     selectedDateTime.set(Calendar.MINUTE, minute);
-            if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
+           if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
                 switch(time){
                     case 3:
                         hour1 = hourOfDay;
@@ -439,7 +446,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }else{
                 switch(time){
                     case 3:
-                        showToast(getResources().getString(R.string.plzPickValidEndTime));
+                        showToast(getResources().getString(R.string.plzPickValidStartTime_current));
                         break;
                     case 4:
                         showToast(getResources().getString(R.string.plzPickValidEndTime));
@@ -449,7 +456,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2) {
+    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2){
         if(binding.time1Tv.getText().toString().isEmpty()){
             showToast(getResources().getString(R.string.plzPickStartTimeFirst));
         }else{

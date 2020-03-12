@@ -413,6 +413,7 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showTime(int time) {
+        Log.i(TAG,"TTTTTTTTTTTTTTTTTTTTTTTTTTTT"+time);
         Calendar selectedDateTime = Calendar.getInstance();
         Calendar currentDateTime = Calendar.getInstance();
         mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
