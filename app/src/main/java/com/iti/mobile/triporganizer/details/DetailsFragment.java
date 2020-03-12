@@ -47,7 +47,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -108,6 +107,28 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         detailsViewModel = new ViewModelProvider(this, providerFactory).get(DetailsViewModel.class);
         controller = Navigation.findNavController(view);
         receivedTripAndLocation = DetailsFragmentArgs.fromBundle(getArguments()).getTripAndLocation();
+        Calendar startDateCalendar=Calendar.getInstance();
+        Date recievedStartDate=receivedTripAndLocation.getLocationDataList().getStartDate();
+        startDateCalendar.setTime(recievedStartDate);
+        hour1=startDateCalendar.get(Calendar.HOUR_OF_DAY);
+        minute1=startDateCalendar.get(Calendar.MINUTE);
+        year1=startDateCalendar.get(Calendar.YEAR);
+        month1=startDateCalendar.get(Calendar.MONTH);
+        day1=startDateCalendar.get(Calendar.DAY_OF_MONTH);
+        Calendar endDateCalendar=Calendar.getInstance();
+        Date recievedEndDate=receivedTripAndLocation.getLocationDataList().getRoundDate();
+        endDateCalendar.setTime(recievedEndDate);
+        hour2=endDateCalendar.get(Calendar.HOUR_OF_DAY);
+        minute2=endDateCalendar.get(Calendar.MINUTE);
+        year2=endDateCalendar.get(Calendar.YEAR);
+        month2=endDateCalendar.get(Calendar.MONTH);
+        day2=endDateCalendar.get(Calendar.DAY_OF_MONTH);
+        startPonitLat=receivedTripAndLocation.getLocationDataList().getStartTripStartPointLat();
+        startPonitLng=receivedTripAndLocation.getLocationDataList().getStartTripStartPointLng();
+        startAddress=receivedTripAndLocation.getLocationDataList().getStartTripAddressName();
+        endPonitLat=receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat();
+        endPonitLng=receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng();
+        endAddress=receivedTripAndLocation.getLocationDataList().getStartTripEndAddressName();
         notesList=new ArrayList<>();
         setUpViews();
         showViewLayout(receivedTripAndLocation.getLocationDataList().isRound());
@@ -399,6 +420,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 (view, hourOfDay, minute) -> {
+                    selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    selectedDateTime.set(Calendar.MINUTE, minute);
             if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
                 switch(time){
                     case 3:
@@ -410,24 +433,47 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                     case 4:
                         hour2=hourOfDay;
                         minute2=minute;
-                        binding.time2Tv.setText(hourOfDay + ":" + minute);
-                        binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
+                        checkFirstTime(hour1,minute1,hour2,minute2);
                         break;
                 }
             }else{
                 switch(time){
                     case 3:
-                        showToast(getResources().getString(R.string.plzPickValidStartTime));
+                        showToast(getResources().getString(R.string.plzPickValidEndTime));
                         break;
                     case 4:
-                        showToast(getResources().getString(R.string.plzPickValidStartTime));
+                        showToast(getResources().getString(R.string.plzPickValidEndTime));
                         break;
                 }
             }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
+    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2) {
+        if(binding.time1Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartTimeFirst));
+        }else{
+            Calendar startTime=Calendar.getInstance();
+            startTime.set(Calendar.HOUR_OF_DAY, hour1);
+            startTime.set(Calendar.MINUTE, minute1);
+            Calendar endTime=Calendar.getInstance();
+            endTime.set(Calendar.HOUR_OF_DAY, hour2);
+            endTime.set(Calendar.MINUTE, minute2);
+            checkFirstSecondTime(startTime,endTime,hour2,minute2);
+        }
+        return true;
+    }
 
+    private boolean checkFirstSecondTime(Calendar startTime, Calendar endTime, int hour2, int minute2) {
+        if(endTime.getTimeInMillis()<startTime.getTimeInMillis()){
+            showToast(getResources().getString(R.string.plzPickValidEndTime));
+            return false;
+        }else{
+            binding.time2Tv.setText(hour2 + ":" + minute2);
+            binding.time2Tv.setTextColor(getResources().getColor(R.color.text_black));
+        }
+        return true;
+    }
     private void showDatePicker(int date) {
         final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTS"));
         mYear = c.get(Calendar.YEAR);
@@ -439,24 +485,49 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 case 1:
                     c.set(year, month, dayOfMonth);
                     year1=year;
-                    month1=month+1;
+                    month1=month;
                     day1=dayOfMonth;
                     binding.date1Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
                     binding.date1Tv.setTextColor(getResources().getColor(R.color.text_black));
                     break;
                 case 2:
                     year2=year;
-                    month2=month+1;
+                    month2=month;
                     day2=dayOfMonth;
-                    binding.date2Tv.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
-                    binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
+                    checkFirstDate(year1,month1,day1,year2,month2,day2);
                     break;
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
+    private boolean checkFirstDate(int year1, int month1, int day1, int year2, int month2, int day2) {
+        if(binding.date1Tv.getText().toString().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartDateFirst));
+        }else{
+            checkFirstSecondDate(year1,month1,day1,year2,month2,day2);
+        }
+        return true;
+    }
 
+    private boolean checkFirstSecondDate(int year1, int month1, int day1, int year2, int month2, int day2) {
+        Calendar startDate=Calendar.getInstance();
+        startDate.set(Calendar.YEAR,year1);
+        startDate.set(Calendar.MONTH,month1);
+        startDate.set(Calendar.DAY_OF_MONTH,day1);
+        Calendar endDate=Calendar.getInstance();
+        endDate.set(Calendar.YEAR,year2);
+        endDate.set(Calendar.MONTH,month2);
+        endDate.set(Calendar.DAY_OF_MONTH,day2);
+        if(endDate.getTimeInMillis()<startDate.getTimeInMillis()){
+            showToast(getResources().getString(R.string.plzPickValidEndDate));
+            return false;
+        }else{
+            binding.date2Tv.setText(day2 + "-" + (month2 + 1) + "-" +year2);
+            binding.date2Tv.setTextColor(getResources().getColor(R.color.text_black));
+        }
+        return true;
+    }
     private void handleStartPointPlacesSelected(AutocompleteSupportFragment startPointAutocompleteFragment) {
         startPointAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,
                 Place.Field.LAT_LNG,Place.Field.ADDRESS));
@@ -504,17 +575,9 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-    private boolean isValidData(boolean isRound){
+    private boolean isValidData(boolean isRound, Date dateFormat1, Date dateFormat2){
         if(binding.tripNameEt.getText().toString().trim().isEmpty()){
             showToast(getResources().getString(R.string.plzEnterTripName));
-            return false;
-        }
-        if(binding.date1Tv.getText().toString().trim().isEmpty()){
-            showToast(getResources().getString(R.string.plzPickStartDate));
-            return false;
-        }
-        if(binding.time1Tv.getText().toString().trim().isEmpty()){
-            showToast(getResources().getString(R.string.plzPickStartTime));
             return false;
         }
         if (((EditText) startPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
@@ -523,6 +586,15 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         }
         if (((EditText) endPointAutocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).getText().toString().isEmpty()) {
             showToast(getResources().getString(R.string.plzEnterEndPoint));
+            return false;
+        }
+
+        if(binding.date1Tv.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartDate));
+            return false;
+        }
+        if(binding.time1Tv.getText().toString().trim().isEmpty()){
+            showToast(getResources().getString(R.string.plzPickStartTime));
             return false;
         }
         if(isRound){
@@ -534,14 +606,24 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 showToast(getResources().getString(R.string.plzPickEndDate));
                 return false;
             }
-            /*if (receivedTripAndLocation.getLocationDataList().getStartDate().compareTo(receivedTripAndLocation.getLocationDataList().getRoundDate()) > 0) {
-                binding.date1Tv.setError(getResources().getString(R.string.plzPickValidStartDate));
-                return false;
+            if(!binding.time2Tv.getText().toString().trim().isEmpty()){
+                Calendar startTime=Calendar.getInstance();
+                startTime.set(Calendar.HOUR_OF_DAY, hour1);
+                startTime.set(Calendar.MINUTE, minute1);
+                Calendar endTime=Calendar.getInstance();
+                endTime.set(Calendar.HOUR_OF_DAY, hour2);
+                endTime.set(Calendar.MINUTE, minute2);
+                if(endTime.getTimeInMillis()<startTime.getTimeInMillis()){
+                    showToast(getResources().getString(R.string.plzPickValidEndTime));
+                    return false;
+                }
             }
-            if (receivedTripAndLocation.getLocationDataList().getStartDate().getTime() > receivedTripAndLocation.getLocationDataList().getRoundDate().getTime()) {
-                binding.time1Tv.setError(getResources().getString(R.string.plzPickTime));
-                return false;
-            }*/
+            if(!binding.date2Tv.getText().toString().trim().isEmpty()){
+                if(dateFormat1.compareTo(dateFormat2)>0){
+                    showToast(getResources().getString(R.string.plzPickValidEndDate));
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -551,15 +633,16 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         String time1=binding.time1Tv.getText().toString();
         String date2=binding.date2Tv.getText().toString();
         String time2=binding.time2Tv.getText().toString();
-
+        Date dateFormat1=null;
+        Date dateFormat2=null;
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd HH:mm",new Locale("ar_EG"));
+                SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy HH:mm");
                 date1 = date1 + " " + time1;
-                Date formatedDate=format.parse(date1);
-                Log.d(TAG, formatedDate.toString());
-                receivedTripAndLocation.getLocationDataList().setStartDate(formatedDate);
-                Log.d(TAG,"saved formatted///////////////"+formatedDate);
+                Log.d(TAG,"un formatted 1................."+date1);
+                dateFormat1=format.parse(date1);
+                receivedTripAndLocation.getLocationDataList().setStartDate(dateFormat1);
+                Log.d(TAG,"saved formatted 1................."+dateFormat1);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -568,33 +651,65 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm",new Locale("ar_EG"));
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                     date2 = date2 + " " + time2;
-                    Date formatedDate= format.parse(date2);
-                    receivedTripAndLocation.getLocationDataList().setRoundDate(formatedDate);
-                    Log.d(TAG,"saved formatted///////////////"+formatedDate);
+                    dateFormat2= format.parse(date2);
+                    Log.d(TAG,"un formatted 2................."+date2);
+                    receivedTripAndLocation.getLocationDataList().setRoundDate(dateFormat2);
+                    Log.d(TAG, "saved formatted 2................"+dateFormat2);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+
+        Log.d(TAG, "before updateTrip: start point lat(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLat());
+        Log.d(TAG, "before updateTrip: start point lng(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLng());
+        Log.d(TAG, "before updateTrip: start address(start)"+receivedTripAndLocation.getLocationDataList().getStartTripAddressName());
+        Log.d(TAG, "before updateTrip: start point lat(end)"+receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat());
+        Log.d(TAG, "before updateTrip: start point lat(end)"+receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng());
+        Log.d(TAG, "before updateTrip: start address(end)"+receivedTripAndLocation.getLocationDataList().getStartTripEndAddressName());
+
+        Log.d(TAG, "before updateTrip: round address(start)"+receivedTripAndLocation.getLocationDataList().getRoundTripStartAddressName());
+        Log.d(TAG, "before updateTrip: round address(end)"+receivedTripAndLocation.getLocationDataList().getRoundTripEndAddressName());
+
         receivedTripAndLocation.getLocationDataList().setStartTripStartPointLat(startPonitLat);
         receivedTripAndLocation.getLocationDataList().setStartTripStartPointLng(startPonitLng);
         receivedTripAndLocation.getLocationDataList().setStartTripEndPointLat(endPonitLat);
         receivedTripAndLocation.getLocationDataList().setStartTripEndPointLng(endPonitLng);
         receivedTripAndLocation.getLocationDataList().setStartTripAddressName(startAddress);
         receivedTripAndLocation.getLocationDataList().setStartTripEndAddressName(endAddress);
+
+        receivedTripAndLocation.getLocationDataList().setRoundTripStartPointLat(endPonitLat);
+        receivedTripAndLocation.getLocationDataList().setRoundTripStartPointLng(endPonitLng);
+        receivedTripAndLocation.getLocationDataList().setRoundTripEndPointLat(startPonitLat);
+        receivedTripAndLocation.getLocationDataList().setRoundTripEndPointLng(startPonitLng);
+        receivedTripAndLocation.getLocationDataList().setRoundTripStartAddressName(endAddress);
+        receivedTripAndLocation.getLocationDataList().setRoundTripEndAddressName(startAddress);
+
         receivedTripAndLocation.getTrip().setTripName(tripName);
         receivedTripAndLocation.getLocationDataList().setRound(isRound);
 
-        isValidData(isRound);
-        if(isValidData(isRound)){
+        isValidData(isRound,dateFormat1,dateFormat2);
+        Log.d(TAG, "after updateTrip: start point lat(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLat());
+        Log.d(TAG, "after updateTrip: start point lng(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLng());
+        Log.d(TAG, "after updateTrip: start address(start)"+receivedTripAndLocation.getLocationDataList().getStartTripAddressName());
+        Log.d(TAG, "after updateTrip: start point lat(end)"+receivedTripAndLocation.getLocationDataList().getStartTripEndPointLat());
+        Log.d(TAG, "after updateTrip: start point lat(end)"+receivedTripAndLocation.getLocationDataList().getStartTripEndPointLng());
+        Log.d(TAG, "after updateTrip: start address(end)"+receivedTripAndLocation.getLocationDataList().getStartTripEndAddressName());
+
+        Log.d(TAG, "after updateTrip: round address(start)"+receivedTripAndLocation.getLocationDataList().getRoundTripStartAddressName());
+        Log.d(TAG, "after updateTrip: round address(end)"+receivedTripAndLocation.getLocationDataList().getRoundTripEndAddressName());
+        if(isValidData(isRound,dateFormat1,dateFormat2)){
             detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList).observe(getViewLifecycleOwner(), s -> {
                 if(s.equals("Updated Successfully!")){
                     AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(), MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
                     if (receivedTripAndLocation.getLocationDataList().isRound()) {
                         AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(),MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
                     }
+                    Objects.requireNonNull(getActivity()).onBackPressed();
+                }else{
+                    showToast("Updated Failed!");
                 }
             });
         }

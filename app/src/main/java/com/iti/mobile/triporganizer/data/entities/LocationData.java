@@ -83,6 +83,8 @@ public class LocationData implements Parcelable {
         roundTripEndPointLat = in.readDouble();
         roundTripEndPointLng = in.readDouble();
         isRound = in.readByte() != 0;
+        startDate = (Date) in.readSerializable();
+        roundDate = (Date) in.readSerializable();
     }
 
     public static final Creator<LocationData> CREATOR = new Creator<LocationData>() {
@@ -263,5 +265,7 @@ public class LocationData implements Parcelable {
         dest.writeDouble(roundTripEndPointLat);
         dest.writeDouble(roundTripEndPointLng);
         dest.writeByte((byte) (isRound ? 1 : 0));
+        dest.writeSerializable(startDate);
+        dest.writeSerializable(roundDate);
     }
 }

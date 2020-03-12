@@ -39,6 +39,7 @@ public class Trip implements Parcelable{
         userId = in.readString();
         tripName = in.readString();
         status = in.readString();
+        locationData = in.readParcelable(LocationData.class.getClassLoader());
     }
 
     @Override
@@ -47,6 +48,7 @@ public class Trip implements Parcelable{
         dest.writeString(userId);
         dest.writeString(tripName);
         dest.writeString(status);
+        dest.writeParcelable(locationData, Parcelable.CONTENTS_FILE_DESCRIPTOR);
     }
 
     @Override
