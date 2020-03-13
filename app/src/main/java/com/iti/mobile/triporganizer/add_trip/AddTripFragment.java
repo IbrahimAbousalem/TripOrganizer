@@ -244,7 +244,6 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 
