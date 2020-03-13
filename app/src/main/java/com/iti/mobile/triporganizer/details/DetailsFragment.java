@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -90,12 +91,15 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
 
     private int mYear, mMonth, mDay, mHour, mMinute;
     private int hour1, minute1, hour2, minute2, year1, year2, month1, month2, day1, day2;
+    Date dateFormat1;
+    Date dateFormat2;
 
     private PlacesClient placesClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -109,6 +113,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         receivedTripAndLocation = DetailsFragmentArgs.fromBundle(getArguments()).getTripAndLocation();
         Calendar startDateCalendar=Calendar.getInstance();
         Date recievedStartDate=receivedTripAndLocation.getLocationDataList().getStartDate();
+        dateFormat1=recievedStartDate;
+        receivedTripAndLocation.getLocationDataList().setStartDate(dateFormat1);
         startDateCalendar.setTime(recievedStartDate);
         hour1=startDateCalendar.get(Calendar.HOUR_OF_DAY);
         minute1=startDateCalendar.get(Calendar.MINUTE);
@@ -117,6 +123,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         day1=startDateCalendar.get(Calendar.DAY_OF_MONTH);
         Calendar endDateCalendar=Calendar.getInstance();
         Date recievedEndDate=receivedTripAndLocation.getLocationDataList().getRoundDate();
+        dateFormat2=recievedEndDate;
+        receivedTripAndLocation.getLocationDataList().setStartDate(dateFormat2);
         endDateCalendar.setTime(recievedEndDate);
         hour2=endDateCalendar.get(Calendar.HOUR_OF_DAY);
         minute2=endDateCalendar.get(Calendar.MINUTE);
@@ -236,29 +244,32 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
     private void showEditTextHideTextView(boolean round) {
         binding.addNoteImageView.setVisibility(VISIBLE);
         binding.tripNameEt.setVisibility(VISIBLE);
+        binding.startPointConstraintlayout.setVisibility(VISIBLE);
+        binding.endPointConstraintlayout.setVisibility(VISIBLE);
+        binding.date1Tv.setVisibility(VISIBLE);
+        binding.time1Tv.setVisibility(VISIBLE);
+        binding.saveTripFab.setVisibility(VISIBLE);
+        //binding.edit_group_general.setVisibility(VISIBLE);
         binding.tripTitleTv.setVisibility(GONE);
         binding.tripNameTv.setVisibility(GONE);
-        binding.startPointConstraintlayout.setVisibility(VISIBLE);
         binding.startPointTitleTv.setVisibility(GONE);
         binding.startPointTv.setVisibility(GONE);
-        binding.endPointConstraintlayout.setVisibility(VISIBLE);
         binding.endPointTitleTv.setVisibility(GONE);
         binding.endPointTv.setVisibility(GONE);
-        binding.date1Tv.setVisibility(VISIBLE);
         binding.date1TitleTv.setVisibility(GONE);
         binding.date1ViewTv.setVisibility(GONE);
-        binding.time1Tv.setVisibility(VISIBLE);
         binding.time1TitleTv.setVisibility(GONE);
         binding.time1ViewTv.setVisibility(GONE);
-        binding.saveTripFab.setVisibility(VISIBLE);
+
         binding.roundBtn.setEnabled(false);
         binding.singleBtn.setEnabled(false);
         if(round){
             showRoundTrip();
             binding.date2Tv.setVisibility(VISIBLE);
+            binding.time2Tv.setVisibility(VISIBLE);
+
             binding.date2TitleTv.setVisibility(GONE);
             binding.date2ViewTv.setVisibility(GONE);
-            binding.time2Tv.setVisibility(VISIBLE);
             binding.time2TitleTv.setVisibility(GONE);
             binding.time2ViewTv.setVisibility(GONE);
         }else{
@@ -423,7 +434,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 (view, hourOfDay, minute) -> {
                     selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     selectedDateTime.set(Calendar.MINUTE, minute);
-            if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
+           if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
                 switch(time){
                     case 3:
                         hour1 = hourOfDay;
@@ -440,7 +451,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }else{
                 switch(time){
                     case 3:
-                        showToast(getResources().getString(R.string.plzPickValidEndTime));
+                        showToast(getResources().getString(R.string.plzPickValidStartTime_current));
                         break;
                     case 4:
                         showToast(getResources().getString(R.string.plzPickValidEndTime));
@@ -450,7 +461,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2) {
+    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2){
         if(binding.time1Tv.getText().toString().isEmpty()){
             showToast(getResources().getString(R.string.plzPickStartTimeFirst));
         }else{
@@ -634,8 +645,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         String time1=binding.time1Tv.getText().toString();
         String date2=binding.date2Tv.getText().toString();
         String time2=binding.time2Tv.getText().toString();
-        Date dateFormat1=null;
-        Date dateFormat2=null;
         try {
             if(!date1.isEmpty()){
                 date1 = date1 + " " + time1;
@@ -662,6 +671,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }
         }
 
+        Log.d(TAG, "before updateTrip: start date"+receivedTripAndLocation.getLocationDataList().getStartDate());
+        Log.d(TAG, "before updateTrip: end date"+receivedTripAndLocation.getLocationDataList().getRoundDate());
         Log.d(TAG, "before updateTrip: start point lat(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLat());
         Log.d(TAG, "before updateTrip: start point lng(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLng());
         Log.d(TAG, "before updateTrip: start address(start)"+receivedTripAndLocation.getLocationDataList().getStartTripAddressName());
@@ -690,6 +701,9 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         receivedTripAndLocation.getLocationDataList().setRound(isRound);
 
         isValidData(isRound,dateFormat1,dateFormat2);
+        Log.d(TAG, "after updateTrip: start date"+receivedTripAndLocation.getLocationDataList().getStartDate());
+        Log.d(TAG, "after updateTrip: end date"+receivedTripAndLocation.getLocationDataList().getRoundDate());
+
         Log.d(TAG, "after updateTrip: start point lat(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLat());
         Log.d(TAG, "after updateTrip: start point lng(start)"+receivedTripAndLocation.getLocationDataList().getStartTripStartPointLng());
         Log.d(TAG, "after updateTrip: start address(start)"+receivedTripAndLocation.getLocationDataList().getStartTripAddressName());
@@ -702,8 +716,10 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if(isValidData(isRound,dateFormat1,dateFormat2)){
             detailsViewModel.updateTripAndNotes(receivedTripAndLocation, notesList).observe(getViewLifecycleOwner(), s -> {
                 if(s.equals("Updated Successfully!")){
+                    Log.i(TAG,"start alarm start date ...."+receivedTripAndLocation.getLocationDataList().getStartDate());
                     AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(), MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
                     if (receivedTripAndLocation.getLocationDataList().isRound()) {
+                        Log.i(TAG,"start alarm end date ...."+receivedTripAndLocation.getLocationDataList().getRoundDate());
                         AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(),MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
                     }
                     Objects.requireNonNull(getActivity()).onBackPressed();
@@ -713,7 +729,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             });
         }
     }
-
     private void addNote() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         TextView titleTv = new TextView(getContext());
@@ -725,9 +740,9 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         builder.setView(input);
         builder.setPositiveButton("OK", (dialog, which) -> {
             String inputText = input.getText().toString();
-            if(inputText.isEmpty())return;
+            if (inputText.isEmpty()) return;
             Note note = new Note();
-            note.setMessage(input.getText().toString());
+            note.setMessage(inputText);
             note.setStatus(false);
             notesList.add(note);
             if (notesList.size() > 0) {
@@ -738,7 +753,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
     private void deleteNote(int position) {

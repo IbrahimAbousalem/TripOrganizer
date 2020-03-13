@@ -54,7 +54,7 @@ public class NotificationsUtils {
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.snooze),
                         createSnoozeIntent(context, trip))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
-                        createCancelIntent(context, String.valueOf(trip.getId())))
+                        createCancelIntent(context, trip))
 
                 .setVibrate(new long[0]);
 
@@ -85,7 +85,7 @@ public class NotificationsUtils {
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.end),
                         createEndIntent(context, trip))
                 .addAction(R.drawable.ic_arrow_bk_white_48dp, context.getResources().getString(R.string.cancel),
-                        createCancelIntent(context, String.valueOf(trip.getId())))
+                        createCancelIntent(context, trip))
 
                 .setVibrate(new long[0]);
 
@@ -134,13 +134,18 @@ public class NotificationsUtils {
         startIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
         return PendingIntent.getBroadcast(context, (int) tripId, startIntent, 0);
     }
-    private static PendingIntent createCancelIntent(Context context, String tripId){
+    private static PendingIntent createCancelIntent(Context context, Trip trip){
         Intent cancelIntent = new Intent(context, AlarmBroadCastReceiver.class);
         cancelIntent.setAction(Action_Cancel);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cancelIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         }
+        long tripId = trip.getId();
+        Parcel parcel = Parcel.obtain();
+        trip.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+        cancelIntent.putExtra(Constants.TRIP_INTENT, parcel.marshall());
         cancelIntent.putExtra("tripId", tripId);
-        return PendingIntent.getBroadcast(context, Integer.parseInt(tripId), cancelIntent, 0);
+        return PendingIntent.getBroadcast(context, (int) tripId, cancelIntent, 0);
     }
 }
