@@ -29,6 +29,8 @@ import com.iti.mobile.triporganizer.utils.AlarmUtils;
 import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.NotificationsUtils;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -58,26 +60,19 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         tripOrganizerApp = (TripOrganizerApp) context.getApplicationContext();
         tripOrganizerApp.getComponent().newBroadCastReceiverComponent(new BroadCastReceiverModule(this)).inject(this);
-
+        if (intent.hasExtra(Constants.TRIP_INTENT)) {
+            parcelTripObject(intent);
+        }
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Snooze)){
-            if (intent.hasExtra(Constants.TRIP_INTENT)) {
-                parcelTripObject(intent);
-            }
-
-            AlarmUtils.startAlarmForSnooze(context, 30*1000, trip);
+            AlarmUtils.startAlarmForSnooze(context, 2*1000, trip);
             //tripOrganizerApp.stopAlarmService();
             tripOrganizerApp.stopSound();
             tripOrganizerApp.getAlarmService().stopForeground(true);
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Start)){
             //show the chat head
-
-            if (intent.hasExtra(Constants.TRIP_INTENT)) {
-                parcelTripObject(intent);
-            }
-
             if (Settings.canDrawOverlays(context)) {
                 Intent chatHeadIntent = new Intent(context, ChatHeadService.class);
                 Parcel parcel = Parcel.obtain();
@@ -101,17 +96,18 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
 
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Cancel)){
             tripOrganizerApp.stopAlarmService();
-            if (intent.hasExtra(Constants.TRIP_INTENT)) {
-                parcelTripObject(intent);
-            }
             tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.CANCELED);
         } else if (intent.getAction() != null && intent.getAction().equals(Action_End)){
-
-            if (intent.hasExtra(Constants.TRIP_INTENT)) {
-                parcelTripObject(intent);
+            if (trip.getLocationData().isRound()){
+                Date date = new Date();
+                if(date.getTime() > trip.getLocationData().getRoundDate().getTime()){
+                    trip.setStatus(Constants.FINISHED);
+                    tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.FINISHED);
+                }
+            }else{
+                trip.setStatus(Constants.FINISHED);
+                tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.FINISHED);
             }
-            tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.FINISHED);
-
             tripOrganizerApp.getAlarmService().stopForeground(true);
             if (tripOrganizerApp.getAlarmService()!=null){
                 tripOrganizerApp.stopAlarmService();
@@ -120,9 +116,6 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         }
         else {
             //bind service
-            if (intent.hasExtra(Constants.TRIP_INTENT)) {
-                parcelTripObject(intent);
-            }
             Intent serviceIntent = new Intent(context, AlarmService.class);
             Parcel parcel = Parcel.obtain();
             trip.writeToParcel(parcel, 0);
@@ -130,7 +123,6 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             serviceIntent.putExtra(TRIP_INTENT, parcel.marshall());
             tripOrganizerApp.bindAlarmService();
             context.startService(serviceIntent);
-            //context.startActivity(new Intent(context, SetAlarmDummyActivity.class).setFlags(FLAG_ACTIVITY_NEW_TASK));
         }
     }
 
@@ -142,7 +134,6 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         }
         parcel.setDataPosition(0);
         trip = Trip.CREATOR.createFromParcel(parcel);
-        String s = "sada";
     }
 
 

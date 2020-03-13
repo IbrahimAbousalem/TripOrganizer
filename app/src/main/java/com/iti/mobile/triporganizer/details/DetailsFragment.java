@@ -369,6 +369,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.addNoteImageView:
                 addNote();
+                break;
             case R.id.saveTripFab:
                 updateTrip();
                 break;
@@ -637,10 +638,9 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         Date dateFormat2=null;
         try {
             if(!date1.isEmpty()){
-                SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy HH:mm");
                 date1 = date1 + " " + time1;
                 Log.d(TAG,"un formatted 1................."+date1);
-                dateFormat1=format.parse(date1);
+                dateFormat1=DateUtils.simpleDateFormatFullDate.parse(date1);
                 receivedTripAndLocation.getLocationDataList().setStartDate(dateFormat1);
                 Log.d(TAG,"saved formatted 1................."+dateFormat1);
             }
@@ -651,9 +651,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         if (isRound) {
             try {
                 if (!date2.isEmpty()) {
-                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                     date2 = date2 + " " + time2;
-                    dateFormat2= format.parse(date2);
+                    dateFormat2= DateUtils.simpleDateFormatFullDate.parse(date2);
                     Log.d(TAG,"un formatted 2................."+date2);
                     receivedTripAndLocation.getLocationDataList().setRoundDate(dateFormat2);
                     Log.d(TAG, "saved formatted 2................"+dateFormat2);

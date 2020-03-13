@@ -57,19 +57,12 @@ public class ChatHeadService extends Service   {
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((TripOrganizerApp) getApplication()).getComponent().newServiceControllerComponent(new ChatHeadServiceControllerModule(this)).inject(this);
         byte[] byteArrayExtra = intent.getByteArrayExtra(Constants.TRIP_INTENT);
-        byte[] byteArrayExtra2 = intent.getByteArrayExtra("locationData");
         Parcel parcel = Parcel.obtain();
         if (byteArrayExtra != null) {
             parcel.unmarshall(byteArrayExtra, 0, byteArrayExtra.length);
         }
         parcel.setDataPosition(0);
         trip = Trip.CREATOR.createFromParcel(parcel);
-        if (byteArrayExtra2 != null) {
-            parcel.unmarshall(byteArrayExtra2, 0, byteArrayExtra2.length);
-        }
-        parcel.setDataPosition(0);
-        LocationData locationData = LocationData.CREATOR.createFromParcel(parcel);
-        trip.setLocationData(locationData);
         List<Note> noteList = noteDao.getAllNoteNotLive(trip.getId());
         if (noteList != null && noteList.size() > 0) {
             NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), noteList);

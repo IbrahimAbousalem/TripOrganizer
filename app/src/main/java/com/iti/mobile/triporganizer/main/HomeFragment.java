@@ -132,6 +132,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
             final int deletedIndex = viewHolder.getAdapterPosition();
             AlertDialog dialog = confirmDialog(deletedIndex,mdeletedItem);
+            dialog.setCancelable(false);
             dialog.show();
 //            tripAndLocationList.remove(deletedIndex);
   //          tripsAdapter.notifyItemRemoved(deletedIndex);
