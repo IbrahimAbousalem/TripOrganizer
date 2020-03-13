@@ -112,7 +112,7 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
             TripAndLocation trip = getItem(position);
             UpcomingTripsTextViewHolder upcomingTripsTextViewHolder = (UpcomingTripsTextViewHolder) holder;
             upcomingTripsTextViewHolder.setTripNameTv(trip.getTrip().getTripName());
-            upcomingTripsTextViewHolder.setTripDateTv(DateUtils.simpleDateFormatForYears_MonthsHours_Minutes.format(trip.getLocationDataList().getStartDate().toString()));
+            upcomingTripsTextViewHolder.setTripDateTv(DateUtils.simpleDateFormatForYears_MonthsHours_Minutes.format(trip.getLocationDataList().getStartDate()));
             upcomingTripsTextViewHolder.setTripLocTv(trip.getLocationDataList().getStartTripAddressName());
             upcomingTripsTextViewHolder.itemView.setOnClickListener(
                     view -> {

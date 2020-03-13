@@ -718,10 +718,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
                 if(s.equals("Updated Successfully!")){
                     Log.i(TAG,"start alarm start date ...."+receivedTripAndLocation.getLocationDataList().getStartDate());
                     AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getStartDate().getTime(), MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
-                    if (receivedTripAndLocation.getLocationDataList().isRound()) {
-                        Log.i(TAG,"start alarm end date ...."+receivedTripAndLocation.getLocationDataList().getRoundDate());
-                        AlarmUtils.startAlarm(getContext(), receivedTripAndLocation.getLocationDataList().getRoundDate().getTime(),MapperClass.mapTripAndLocationObject(receivedTripAndLocation));
-                    }
                     Objects.requireNonNull(getActivity()).onBackPressed();
                 }else{
                     showToast("Updated Failed!");

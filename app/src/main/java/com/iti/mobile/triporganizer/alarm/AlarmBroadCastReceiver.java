@@ -35,6 +35,7 @@ import javax.inject.Inject;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.facebook.FacebookSdk.isDebugEnabled;
 import static com.iti.mobile.triporganizer.alarm.AlarmService.foregroundId;
 import static com.iti.mobile.triporganizer.utils.Constants.NO_DATA;
 import static com.iti.mobile.triporganizer.utils.Constants.TRIP_INTENT;
@@ -103,6 +104,9 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
                 if(date.getTime() > trip.getLocationData().getRoundDate().getTime()){
                     trip.setStatus(Constants.FINISHED);
                     tripsRoom.updateTripStatus(trip.getId(), trip.getUserId(), Constants.FINISHED);
+                }else if (trip.getLocationData().getRoundDate().getTime() > date.getTime()){
+
+                    AlarmUtils.startAlarm(context, trip.getLocationData().getRoundDate().getTime(), trip);
                 }
             }else{
                 trip.setStatus(Constants.FINISHED);
@@ -113,6 +117,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
                 tripOrganizerApp.stopAlarmService();
             }
             //TODO handle roundTrip logic
+
         }
         else {
             //bind service

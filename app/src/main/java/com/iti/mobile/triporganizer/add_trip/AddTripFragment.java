@@ -348,9 +348,6 @@ public class AddTripFragment extends Fragment implements View.OnClickListener {
             if(isValidData(isRound,dateFormat1,dateFormat2)){
                 addTripViewModel.addTripAndNotes(trip, notesList).observe(getViewLifecycleOwner(), newTrip -> {
                     AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getStartDate().getTime(),newTrip);
-                    if (newTrip.getLocationData().isRound()) {
-                        AlarmUtils.startAlarm(getContext(), newTrip.getLocationData().getRoundDate().getTime(), newTrip);
-                    }
                     Objects.requireNonNull(getActivity()).onBackPressed();
                 });
             }
