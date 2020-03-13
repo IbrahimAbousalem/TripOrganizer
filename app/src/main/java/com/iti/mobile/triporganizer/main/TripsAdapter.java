@@ -129,6 +129,8 @@ public class TripsAdapter extends ListAdapter<TripAndLocation,  RecyclerView.Vie
                 return TYPE_HEADER;
             case 1:
                 return TYPE_Text;
+            case 2:
+                return TYPE_ITEM;
             default:
                 return TYPE_ITEM;
         }

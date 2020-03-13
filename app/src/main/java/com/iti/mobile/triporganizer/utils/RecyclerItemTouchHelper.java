@@ -38,6 +38,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                 case  2:
                     foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
                     break;
+                default:
+                    foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
             }
             if (foregroundView != null)
             getDefaultUIUtil().onSelected(foregroundView);
@@ -59,6 +61,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             case  2:
                 foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
                 break;
+            default:
+                foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
         }
         if (foregroundView != null)
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
@@ -78,6 +82,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             case  2:
                 foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
                 break;
+            default:
+                foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
         }
         if (foregroundView != null)
         getDefaultUIUtil().clearView(foregroundView);
@@ -98,6 +104,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             case  2:
                 foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
                 break;
+            default:
+                foregroundView = ((TripsAdapter.TripsViewHolder) viewHolder).itemView;
         }
         if (foregroundView != null)
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
