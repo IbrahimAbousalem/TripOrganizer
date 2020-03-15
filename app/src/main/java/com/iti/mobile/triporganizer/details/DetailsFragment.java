@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -114,6 +115,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         Calendar startDateCalendar=Calendar.getInstance();
         Date recievedStartDate=receivedTripAndLocation.getLocationDataList().getStartDate();
         dateFormat1=recievedStartDate;
+        Log.d(TAG,"details !!!!!................."+dateFormat1);
         receivedTripAndLocation.getLocationDataList().setStartDate(dateFormat1);
         startDateCalendar.setTime(recievedStartDate);
         hour1=startDateCalendar.get(Calendar.HOUR_OF_DAY);
@@ -121,16 +123,21 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         year1=startDateCalendar.get(Calendar.YEAR);
         month1=startDateCalendar.get(Calendar.MONTH);
         day1=startDateCalendar.get(Calendar.DAY_OF_MONTH);
-        Calendar endDateCalendar=Calendar.getInstance();
-        Date recievedEndDate=receivedTripAndLocation.getLocationDataList().getRoundDate();
-        dateFormat2=recievedEndDate;
-        receivedTripAndLocation.getLocationDataList().setStartDate(dateFormat2);
+
+        Calendar endDateCalendar;
+        Date recievedEndDate;
+        endDateCalendar = Calendar.getInstance();
+        recievedEndDate = receivedTripAndLocation.getLocationDataList().getRoundDate();
+        dateFormat2 = recievedEndDate;
+        Log.d(TAG, "details !!!!!................." + dateFormat2);
+        receivedTripAndLocation.getLocationDataList().setRoundDate(dateFormat2);
         endDateCalendar.setTime(recievedEndDate);
-        hour2=endDateCalendar.get(Calendar.HOUR_OF_DAY);
-        minute2=endDateCalendar.get(Calendar.MINUTE);
-        year2=endDateCalendar.get(Calendar.YEAR);
-        month2=endDateCalendar.get(Calendar.MONTH);
-        day2=endDateCalendar.get(Calendar.DAY_OF_MONTH);
+        hour2 = endDateCalendar.get(Calendar.HOUR_OF_DAY);
+        minute2 = endDateCalendar.get(Calendar.MINUTE);
+        year2 = endDateCalendar.get(Calendar.YEAR);
+        month2 = endDateCalendar.get(Calendar.MONTH);
+        day2 = endDateCalendar.get(Calendar.DAY_OF_MONTH);
+
         startPonitLat=receivedTripAndLocation.getLocationDataList().getStartTripStartPointLat();
         startPonitLng=receivedTripAndLocation.getLocationDataList().getStartTripStartPointLng();
         startAddress=receivedTripAndLocation.getLocationDataList().getStartTripAddressName();
@@ -428,47 +435,77 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
         Calendar selectedDateTime = Calendar.getInstance();
         mHour = selectedDateTime.get(Calendar.HOUR_OF_DAY);
         mMinute = selectedDateTime.get(Calendar.MINUTE);
-        Calendar currentDateTime=Calendar.getInstance();
-        // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-                (view, hourOfDay, minute) -> {
-                    selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    selectedDateTime.set(Calendar.MINUTE, minute);
-           if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
-                switch(time){
-                    case 3:
-                        hour1 = hourOfDay;
-                        minute1 = minute;
-                        binding.time1Tv.setText(hourOfDay + ":" + minute);
-                        binding.time1Tv.setTextColor(getResources().getColor(R.color.text_black));
-                        break;
-                    case 4:
-                        hour2=hourOfDay;
-                        minute2=minute;
-                        checkFirstTime(hour1,minute1,hour2,minute2);
-                        break;
-                }
-            }else{
-                switch(time){
-                    case 3:
-                        showToast(getResources().getString(R.string.plzPickValidStartTime_current));
-                        break;
-                    case 4:
-                        showToast(getResources().getString(R.string.plzPickValidEndTime));
-                        break;
-                }
-            }
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        //It's after Current
+                        switch(time){
+                            case 3:
+                                hour1 = hourOfDay;
+                                minute1 = minute;
+                                if(isValidTime(3)){
+                                    binding.time1Tv.setText(hourOfDay + ":" + minute);
+                                    binding.time1Tv.setTextColor(getResources().getColor(R.color.text_black));
+                                }else{
+                                    showToast(getResources().getString(R.string.plzPickValidStartTime_current));
+                                }
+                                break;
+                            case 4:
+                                hour2 = hourOfDay;
+                                minute2 = minute;
+                                if(isValidTime(4)){
+                                    checkFirstTime(hour1,minute1,hour2,minute2);
+                                }else{
+                                    showToast(getResources().getString(R.string.plzPickValidStartTime_current));
+                                }
+                                break;
+                        }
+                    }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2){
+
+    private boolean isValidTime(int time) {
+        Calendar selectedDateTime = Calendar.getInstance();
+        Calendar currentDateTime = Calendar.getInstance();
+        switch(time){
+            case 3:
+                selectedDateTime.set(Calendar.YEAR, year1);
+                selectedDateTime.set(Calendar.MONTH, month1);
+                selectedDateTime.set(Calendar.DAY_OF_MONTH, day1);
+                selectedDateTime.set(Calendar.HOUR_OF_DAY, hour1);
+                selectedDateTime.set(Calendar.MINUTE, minute1);
+                break;
+            case 4:
+                selectedDateTime.set(Calendar.YEAR, year2);
+                selectedDateTime.set(Calendar.MONTH, month2);
+                selectedDateTime.set(Calendar.DAY_OF_MONTH, day2);
+                selectedDateTime.set(Calendar.HOUR_OF_DAY, hour2);
+                selectedDateTime.set(Calendar.MINUTE, minute2);
+                break;
+        }
+        if(selectedDateTime.getTimeInMillis()>=currentDateTime.getTimeInMillis()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private boolean checkFirstTime(int hour1, int minute1, int hour2, int minute2) {
         if(binding.time1Tv.getText().toString().isEmpty()){
             showToast(getResources().getString(R.string.plzPickStartTimeFirst));
         }else{
             Calendar startTime=Calendar.getInstance();
+            startTime.set(Calendar.YEAR,year1);
+            startTime.set(Calendar.MONTH,month1);
+            startTime.set(Calendar.DAY_OF_MONTH,day1);
             startTime.set(Calendar.HOUR_OF_DAY, hour1);
             startTime.set(Calendar.MINUTE, minute1);
             Calendar endTime=Calendar.getInstance();
+            endTime.set(Calendar.YEAR,year2);
+            endTime.set(Calendar.MONTH,month2);
+            endTime.set(Calendar.DAY_OF_MONTH,day2);
             endTime.set(Calendar.HOUR_OF_DAY, hour2);
             endTime.set(Calendar.MINUTE, minute2);
             checkFirstSecondTime(startTime,endTime,hour2,minute2);
@@ -609,6 +646,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             showToast(getResources().getString(R.string.plzPickStartTime));
             return false;
         }
+        if(!binding.time1Tv.getText().toString().trim().isEmpty()){
+            if(!isValidTime(3)){
+                showToast(getResources().getString(R.string.plzPickValidStartTime_current));
+                return false;
+            }
+        }
         if(isRound){
             if (binding.time2Tv.getText().toString().trim().isEmpty()) {
                 showToast(getResources().getString(R.string.plzPickEndTime));
@@ -620,11 +663,21 @@ public class DetailsFragment extends Fragment implements View.OnClickListener{
             }
             if(!binding.time2Tv.getText().toString().trim().isEmpty()){
                 Calendar startTime=Calendar.getInstance();
+                startTime.set(Calendar.YEAR,year1);
+                startTime.set(Calendar.MONTH,month1);
+                startTime.set(Calendar.DAY_OF_MONTH,day1);
                 startTime.set(Calendar.HOUR_OF_DAY, hour1);
                 startTime.set(Calendar.MINUTE, minute1);
                 Calendar endTime=Calendar.getInstance();
+                endTime.set(Calendar.YEAR,year2);
+                endTime.set(Calendar.MONTH,month2);
+                endTime.set(Calendar.DAY_OF_MONTH,day2);
                 endTime.set(Calendar.HOUR_OF_DAY, hour2);
                 endTime.set(Calendar.MINUTE, minute2);
+                if(!isValidTime(4)){
+                    showToast(getResources().getString(R.string.plzPickValidStartTime_current));
+                    return false;
+                }
                 if(endTime.getTimeInMillis()<startTime.getTimeInMillis()){
                     showToast(getResources().getString(R.string.plzPickValidEndTime));
                     return false;
