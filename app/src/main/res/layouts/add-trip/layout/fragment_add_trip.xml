@@ -19,7 +19,6 @@
             android:theme="?attr/actionBarTheme"
             android:minHeight="?attr/actionBarSize"
             />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/addTripFragmentContainer"
             android:layout_width="match_parent"
@@ -28,7 +27,8 @@
             android:layout_marginTop="@dimen/d_16"
             android:layout_marginEnd="@dimen/d_16"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/rounded_card_no_clr">
+            android:background="@drawable/rounded_card_no_clr"
+            >
 
             <EditText
                 android:id="@+id/tripNameEt"
@@ -37,21 +37,17 @@
                 android:ems="10"
                 android:hint="@string/etitle"
                 android:padding="@dimen/d_10"
-                android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toTopOf="@+id/startPointConstraintlayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></EditText>
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="@dimen/fontsize"></EditText>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/startPointConstraintlayout"
                 style="@style/tripdetails_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                app:layout_constraintBottom_toTopOf="@+id/endPointConstraintlayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tripNameEt">
 
@@ -96,7 +92,6 @@
                 android:layout_marginTop="@dimen/d_8"
                 android:text="@string/single"
                 android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toTopOf="@+id/date1Tv"
                 app:layout_constraintEnd_toStartOf="@+id/roundBtn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -105,71 +100,65 @@
             <Button
                 android:id="@+id/roundBtn"
                 style="@style/trip_type_btn"
+                android:layout_marginTop="@dimen/d_8"
                 android:text="@string/round"
                 android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toBottomOf="@+id/singleBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/singleBtn"
-                app:layout_constraintTop_toTopOf="@+id/singleBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/endPointConstraintlayout" />
 
             <TextView
                 android:id="@+id/date1Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_date_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
                 android:hint="@string/edate"
                 android:padding="@dimen/d_10"
-                android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toTopOf="@+id/time1Tv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/singleBtn"></TextView>
+                app:layout_constraintTop_toBottomOf="@+id/roundBtn"></TextView>
 
             <TextView
                 android:id="@+id/time1Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_time_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
                 android:hint="@string/etime"
                 android:padding="@dimen/d_10"
-                android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toTopOf="@+id/date2Tv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date1Tv" />
 
             <TextView
                 android:id="@+id/date2Tv"
                 style="@style/tripdetails_edittext"
+                android:textSize="@dimen/fontsize"
                 android:drawableLeft="@drawable/ic_date_gray_24dp"
                 android:drawablePadding="@dimen/d_5"
                 android:ems="10"
                 android:hint="@string/edate"
                 android:padding="@dimen/d_10"
-                android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toTopOf="@+id/time2Tv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/time1Tv" />
 
             <TextView
                 android:id="@+id/time2Tv"
+                android:textSize="@dimen/fontsize"
                 style="@style/tripdetails_edittext"
                 android:drawableLeft="@drawable/ic_time_gray_24dp"
                 android:drawablePadding="@dimen/d_15"
                 android:ems="10"
                 android:hint="@string/etime"
                 android:padding="@dimen/d_10"
-                android:textSize="@dimen/fontsize"
-                app:layout_constraintBottom_toTopOf="@+id/textView6"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.187"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date2Tv" />
 
@@ -201,7 +190,6 @@
                 android:layout_marginStart="@dimen/d_32"
                 android:layout_marginTop="@dimen/d_16"
                 android:text="@string/notes"
-                app:layout_constraintBottom_toTopOf="@+id/notesRecyclerview"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/time2Tv" />
 
@@ -215,7 +203,7 @@
                 android:layout_marginBottom="@dimen/d_8"
                 app:layout_constraintBottom_toTopOf="@+id/addTripFab"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
                 app:layout_constraintVertical_bias="0.042" />
