@@ -37,7 +37,6 @@
         android:layout_marginTop="@dimen/d_16"
         android:text="@string/notrips"
         android:textAlignment="center" />
-
 </LinearLayout>
 
 </FrameLayout>

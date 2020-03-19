@@ -70,8 +70,14 @@ public class HistoryFragment extends Fragment {
         controller = Navigation.findNavController(view);
         String userId = historyViewModel.getCurrentUserId();
         historyViewModel.getAllHistoryTrips(userId).observe(getViewLifecycleOwner(), tripAndLocationList -> {
-            adapter.setData(tripAndLocationList);
-            //TODO: get it from firebase.
+            if(tripAndLocationList.isEmpty()){
+                binding.noHistoryLayout.setVisibility(View.VISIBLE);
+                binding.historyRecyclerRV.setVisibility(View.GONE);
+            }else{
+                binding.noHistoryLayout.setVisibility(View.GONE);
+                binding.historyRecyclerRV.setVisibility(View.VISIBLE);
+                adapter.setData(tripAndLocationList);
+            }
         });
 
     }
