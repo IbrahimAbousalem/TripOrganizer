@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -26,6 +27,7 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -38,6 +40,7 @@ import com.iti.mobile.triporganizer.utils.Constants;
 import com.iti.mobile.triporganizer.utils.GoogleConfiguration;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -127,7 +130,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -179,14 +181,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void signInWithEmailAndPasswordView(String email, String password) {
         if(isValidData(email,password)){
             showProgressBar();
-            signInWithEmailAndPasswordViewModel(binding.userEmailEt.getText().toString(),binding.passwordEt.getText().toString());
+            signInWithEmailAndPasswordViewModel(Objects.requireNonNull(binding.userEmailEt.getText()).toString(), Objects.requireNonNull(binding.passwordEt.getText()).toString());
         }
     }
 
     private void signInWithEmailAndPasswordViewModel(String email,String password){
-        loginViewModel.signInWithEmailAndPasswordVM(email,password).observe(this, currentUser->{
-             updateUi(currentUser);
-        });
+        loginViewModel.signInWithEmailAndPasswordVM(email,password).observe(this, this::updateUi);
     }
 //-----------------------------------------------------------------------------------------------------
 

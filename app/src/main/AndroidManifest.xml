@@ -19,8 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".base.MainActivity"></activity>
-        <activity android:name=".appHead.TestChatHeadActivity"></activity>
+        <activity android:name=".base.MainActivity" />
+        <activity android:name=".appHead.TestChatHeadActivity" />
         <activity android:name=".alarm.SetAlarmDummyActivity" />
 
         <meta-data

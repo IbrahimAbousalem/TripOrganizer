@@ -21,12 +21,6 @@ public class ChatHeadServiceControllerModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
-        return mService;
-    }
-
-    @ActivityScope
-    @Provides
     ChatHeadService provideActivity(){
         return mService;
     }

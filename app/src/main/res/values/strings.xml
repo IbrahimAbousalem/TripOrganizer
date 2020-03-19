@@ -97,6 +97,7 @@
 
     <string name="cdelete">Are You sure to delete this trip ?!</string>
     <string name="removed">Removed from trips</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
 
 
 </resources>

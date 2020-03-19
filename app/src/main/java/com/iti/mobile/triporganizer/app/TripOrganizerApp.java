@@ -22,7 +22,6 @@ public class TripOrganizerApp extends Application {
         super.onCreate();
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .roomModule(new RoomModule(this))
                 .build();
         component.inject(this);
         AlarmUtils.enableReceiver(this);

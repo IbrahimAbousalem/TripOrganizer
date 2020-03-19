@@ -29,24 +29,18 @@ import com.iti.mobile.triporganizer.data.room.dao.UserDao;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = ApplicationModule.class)
 public class RoomModule {
 
-    private TripOrganizerDatabase database;
-
-    public RoomModule(Application mApplication) {
-        database = androidx.room.Room.databaseBuilder(mApplication,
+    @ApplicationScope
+    @Provides
+    public TripOrganizerDatabase provideDatabase(Application mApplication){
+        return androidx.room.Room.databaseBuilder(mApplication,
                 TripOrganizerDatabase.class,
                 "TripOrganizerDB")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
-    }
-
-    @ApplicationScope
-    @Provides
-    TripOrganizerDatabase providesRoomDatabase() {
-        return database;
     }
 
     //Daos

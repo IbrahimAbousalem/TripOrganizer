@@ -8,17 +8,17 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class FirebaseModule {
+public abstract class FirebaseModule {
 
     @ApplicationScope
     @Provides
-    FirebaseAuth provideFirebaseAuth(){
+    static FirebaseAuth provideFirebaseAuth(){
         return FirebaseAuth.getInstance();
     }
 
     @ApplicationScope
     @Provides
-    FirebaseFirestore provideFirebaseFireStore(){
+    static FirebaseFirestore provideFirebaseFireStore(){
         return FirebaseFirestore.getInstance();
     }
 

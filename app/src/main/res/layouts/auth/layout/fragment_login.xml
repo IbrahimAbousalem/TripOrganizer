@@ -6,167 +6,174 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".login.LoginFragment">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_logo" />
+        android:layout_gravity="center">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/userEmailTextInputLayout"
-        style="@style/edittext"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="32dp"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:padding="@dimen/d_5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:startIconDrawable="@drawable/ic_user_24dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/userEmailEt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/transparent"
-            android:inputType="textEmailAddress"
-            android:textColor="#090909"
-            android:textSize="18sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextInputLayout"
-        style="@style/edittext"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:hint="@string/pass"
-        android:padding="@dimen/d_5"
-        app:layout_constraintEnd_toEndOf="@+id/userEmailTextInputLayout"
-        app:layout_constraintStart_toStartOf="@+id/userEmailTextInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/userEmailTextInputLayout"
-        app:passwordToggleEnabled="true"
-        app:startIconDrawable="@drawable/ic_lock_24dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordEt"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/transparent"
-            android:inputType="textPassword"
-            android:textColor="#090909"
-            android:textSize="18sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_logo" />
 
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/forgetPasswordTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="right"
-        android:text="@string/fpass"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="@+id/passwordTextInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userEmailTextInputLayout"
+            style="@style/edittext"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/d_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:startIconDrawable="@drawable/ic_user_24dp">
 
-    <Button
-        android:id="@+id/signInBtn"
-        style="@style/signinup_btn"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/signin"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/forgetPasswordTv"
-        app:layout_constraintStart_toStartOf="@+id/passwordTextInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/forgetPasswordTv" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userEmailEt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/transparent"
+                android:inputType="textEmailAddress"
+                android:textColor="#090909"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/connect"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/signInBtn"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="@+id/signInBtn"
-        app:layout_constraintTop_toBottomOf="@+id/signInBtn" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextInputLayout"
+            style="@style/edittext"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/pass"
+            android:padding="@dimen/d_5"
+            app:layout_constraintEnd_toEndOf="@+id/userEmailTextInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/userEmailTextInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/userEmailTextInputLayout"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/ic_lock_24dp">
 
-    <ImageView
-        android:id="@+id/facebookImageView"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/googleImageView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar"
-        app:srcCompat="@drawable/ic_fb" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/transparent"
+                android:inputType="textPassword"
+                android:textColor="#090909"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d_8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/facebookImageView"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar"
-        app:srcCompat="@drawable/ic_google" />
+        <TextView
+            android:id="@+id/forgetPasswordTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="right"
+            android:text="@string/fpass"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/passwordTextInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/donthave"
-        app:layout_constraintStart_toStartOf="@+id/signInBtn"
-        app:layout_constraintTop_toBottomOf="@+id/googleImageView" />
+        <Button
+            android:id="@+id/signInBtn"
+            style="@style/signinup_btn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/signin"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/forgetPasswordTv"
+            app:layout_constraintStart_toStartOf="@+id/passwordTextInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/forgetPasswordTv" />
 
-    <TextView
-        android:id="@+id/signUpTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="@string/signup"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/connect"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/signInBtn"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@+id/signInBtn"
+            app:layout_constraintTop_toBottomOf="@+id/signInBtn" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <com.shobhitpuri.custombuttons.GoogleSignInButton
+            android:id="@+id/googleImageView"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/d_8"
+            android:text="@string/google_sign_in"
+            app:isDarkTheme="true"
+            app:layout_constraintEnd_toEndOf="@+id/signInBtn"
+            app:layout_constraintStart_toStartOf="@+id/signInBtn"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/facebookImageView"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:background="#4267B2"
+            android:drawableStart="@drawable/ic_facebook"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/sign_in_with_facebook"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/googleImageView"
+            app:layout_constraintStart_toStartOf="@+id/googleImageView"
+            app:layout_constraintTop_toBottomOf="@+id/googleImageView" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/donthave"
+            app:layout_constraintStart_toStartOf="@+id/signInBtn"
+            app:layout_constraintTop_toBottomOf="@+id/facebookImageView" />
+
+        <TextView
+            android:id="@+id/signUpTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/signup"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
