@@ -65,7 +65,7 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
             parcelTripObject(intent);
         }
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-
+            //set all alarms so that the alarms can survive the boot process
         }else if (intent.getAction() != null && intent.getAction().equals(Action_Snooze)){
             AlarmUtils.startAlarmForSnooze(context, 2*1000, trip);
             //tripOrganizerApp.stopAlarmService();

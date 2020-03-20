@@ -45,7 +45,7 @@ public class NotificationsUtils {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(notificationTitle)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -78,7 +78,7 @@ public class NotificationsUtils {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(notificationTitleForStartedTrip)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -110,7 +110,6 @@ public class NotificationsUtils {
         startIntent.setAction(Action_Start);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-
         }
         long tripId = trip.getId();
         Parcel parcel = Parcel.obtain();

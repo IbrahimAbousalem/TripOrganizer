@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/d_16"
             app:elevation="@dimen/d_8"
+            android:clipToPadding="true"
             android:layout_gravity="bottom"
             android:background="@drawable/bottom_navigation_shape"
             android:foreground="?attr/selectableItemBackground"
@@ -44,6 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:itemRippleColor="@color/blue"
             app:menu="@menu/main_navigaion_menu">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>

@@ -54,7 +54,7 @@ public class AlarmUtils {
     }
 
 
-    public static void startAlarm(Context context, long triggerAtMillis, Trip trip) {
+    public static void startAlarm(@NonNull Context context, long triggerAtMillis,@NonNull Trip trip) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -63,7 +63,7 @@ public class AlarmUtils {
         }
     }
 
-    public static void startAlarmForSnooze(@NonNull Context context, long triggerAtMillis, Trip trip) {
+    public static void startAlarmForSnooze(@NonNull Context context, long triggerAtMillis,@NonNull Trip trip) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             long nextUpdateTimeMillis = System.currentTimeMillis() + 30 * DateUtils.MINUTE_IN_MILLIS;
@@ -75,7 +75,7 @@ public class AlarmUtils {
         }
     }
 
-    public static void cancelAlarm(Context context, Trip trip) {
+    public static void cancelAlarm(@NonNull Context context,@NonNull Trip trip) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.cancel(createPendingIntent(context, trip));
