@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -135,7 +136,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             Log.i(TAG,"...........................(OBSERVE PROVIDER CURRENT ID) "+provider_id);
             switch (provider_id){
                 case "google.com":
-                    signOutGoogle();
+                    goToSignIn();
                     break;
                 case "password":
                     goToSignIn();
@@ -143,15 +144,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void signOutGoogle(){
-        GoogleConfiguration.getInstance(getContext()).getGoogleClient().signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(getApplicationContext(), "you signed out successfully!", Toast.LENGTH_SHORT).show();
-                goToSignIn();
-            }
+   /* private void signOutGoogle(){
+        GoogleConfiguration googleConfiguration = GoogleConfiguration.getInstance(getContext());
+        GoogleSignInClient client = googleConfiguration.getGoogleClient();
+        client.signOut().addOnCompleteListener(task -> {
+            Toast.makeText(getApplicationContext(), "you signed out successfully!", Toast.LENGTH_SHORT).show();
+            goToSignIn();
         });
-    }
+    }*/
 
     private void saveProfile() {
         isValidData();
